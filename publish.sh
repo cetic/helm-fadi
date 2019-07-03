@@ -66,14 +66,14 @@ helm repo add cetic https://cetic.github.io/helm-charts
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
 
+echo '>>> helm dependency update'
+helm dep up "$HELM_CHARTS_SOURCE"
+
 echo '>> Building chart...'
 echo ">>> helm lint $HELM_CHARTS_SOURCE"
 helm lint "$HELM_CHARTS_SOURCE"
 
 mkdir -p "$HELM_CHART"
-
-echo '>>> helm dependency update'
-helm dep up "$HELM_CHARTS_SOURCE"
 
 echo ">>> helm package -d $HELM_CHART $HELM_CHARTS_SOURCE"
 helm package -d "$HELM_CHART" "$HELM_CHARTS_SOURCE"
