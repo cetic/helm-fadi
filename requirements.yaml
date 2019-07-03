@@ -13,7 +13,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: postgresql.enabled
 - name: minio
-  version: ~2.4.16
+  version: ~2.4.17
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: minio.enabled
 - name: grafana

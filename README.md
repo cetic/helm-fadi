@@ -15,7 +15,7 @@ You can optionally enable/disable big data frameworks of fadi.
 
 ## Chart Details
 
-See [fadi](https://github.com/fadi) for the documentation.
+See the [fadi](https://github.com/cetic/fadi) repository for documentation and default 
 
 ## Installation
 
@@ -47,7 +47,21 @@ Deletion of the StatefulSet doesn't cascade to deleting associated PVCs. To dele
 ```bash
 kubectl delete pvc -l release=my-release,component=data
 ```
-
 ## Configuration
 
 Each requirement is configured with the options provided by that Chart. Please consult the relevant charts for their configuration options.
+
+| Parameter                                                                   | Description                                                                                                        | Default                         |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------| ------------------------------- |
+| **FADI tools**                                                              |
+| `spark.enabled`                                                             | Enable Spark                                                                                                       | `true`                          |
+| `superset.enabled`                                                          | Enable Superset                                                                                                    | `true`                          |
+| `postgresql.enabled`                                                        | Enable PostgreSQL                                                                                                  | `true`                          |
+| `minio.enabled`                                                             | Enable Minio                                                                                                       | `true`                          |
+| `grafana.enabled`                                                           | Enable Grafana                                                                                                     | `true`                          |
+| `spark.enabled`                                                             | Enable Spark                                                                                                       | `true`                          |
+| `jupyterhub.enabled`                                                        | JupyterHub Security Token. See the [preparation of the configuration file](https://z2jh.jupyter.org/en/latest/setup-jupyterhub.html#prepare-configuration-file). | `af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19`|
+| `jupyterhub.proxy.secretToken`                                              | Enable JupyterHub                                                                                                  | `true`                          |
+| `nifi.enabled`                                                              | Enable Nifi                                                                                                        | `true`                          |
+| `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
+

@@ -4,6 +4,14 @@
 # Declare variables to be passed into your templates.
 spark:
   enabled: true
+  Master:
+    Name: spark-master
+  WebUi:
+    Name: spark-webui
+  Worker:
+    Name: spark-worker
+  Zeppelin:
+    Name: spark-zeppelin
 
 superset:
   enabled: true

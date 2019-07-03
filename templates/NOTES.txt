@@ -1,1 +1,265 @@
-Congratulations! FADI has been installed.
+Thank you for installing FADI!
+
+{{- if .Values.grafana.enabled }}
+
+#####      GRAFANA - FADI         #####
+#######################################
+
+The Grafana server can be accessed via port {{ .Values.grafana.service.port }} on the following DNS name from within your cluster:
+   {{ template "grafana.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+{{ if .Values.grafana.ingress.enabled }}
+   From outside the cluster, the server URL(s) are:
+{{- range .Values.grafana.ingress.hosts }}
+     http://{{ . }}
+{{- end }}
+{{ else }}
+   Get the Grafana URL to visit by running these commands in the same shell:
+{{ if contains "NodePort" .Values.grafana.service.type -}}
+     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana.fullname" . }})
+     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+     echo http://$NODE_IP:$NODE_PORT
+{{ else if contains "LoadBalancer" .Values.grafana.service.type -}}
+   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status of by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "grafana.fullname" . }}'
+     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "grafana.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+     http://$SERVICE_IP:{{ .Values.grafana.service.port -}}
+{{ else if contains "ClusterIP"  .Values.grafana.service.type }}
+     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "grafana.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 3000
+{{- end }}
+{{- end }}
+
+Login with the username: {{ .Values.grafana.adminUser }} and get your 'admin' user password by running:
+
+   kubectl get secret --namespace default fadi -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+{{- if not .Values.grafana.persistence.enabled }}
+WARNING: Persistence is DISABLED !
+{{- end }}
+{{- end }}
+
+
+{{- if .Values.superset.enabled }}
+
+#####      SUPERSET - FADI       #####
+######################################
+
+Superset can be accessed via port {{ .Values.superset.service.port }} on the following DNS name from within your cluster:
+{{ include "superset.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+Initially you can login with username/password: admin/admin.
+
+{{- if not .Values.superset.persistence.enabled }}
+WARNING: Persistence is DISABLED !
+{{- end }}
+{{- end }}
+
+{{- if .Values.pgadmin.enabled }}
+
+#####      PGADMIN - FADI        #####
+######################################
+
+Get the pgAdmin URL by running these commands:
+{{- if .Values.pgadmin.ingress.enabled }}
+  You should be able to access your new pgAdmin installation through
+  http{{ if $.Values.pgadmin.ingress.tls }}s{{ end }}://{{ if $.Values.pgadmin.ingress.host }}{{.Values.pgadmin.ingress.host}}{{else}}your-cluster-ip{{end}}{{ $.Values.pgadmin.ingress.path }}
+  {{if not $.Values.pgadmin.ingress.host}}
+
+  Find out your cluster ip address by running:
+  $ kubectl cluster-info
+  {{ end }}
+
+{{- else if contains "NodePort" .Values.pgadmin.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "pgAdmin URL: http://$NODE_IP:$NODE_PORT"
+
+{{- else if contains "LoadBalancer" .Values.pgadmin.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+         You can watch the status of by running 'kubectl get svc -w {{ template "fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo "pgAdmin URL: http://$SERVICE_IP:{{ .Values.pgadmin.service.port }}"
+
+{{- else if contains "ClusterIP" .Values.pgadmin.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "pgAdmin URL: http://127.0.0.1:8080"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "fullname" . }} 8080:{{ .Values.pgadmin.service.port }}
+{{- end }}
+{{- end }}
+
+
+{{- if .Values.minio.enabled }}
+
+#####      MINIO - FADI          #####
+######################################
+
+{{- if eq .Values.minio.service.type "ClusterIP" "NodePort" }}
+Minio can be accessed via port {{ .Values.minio.service.port }} on the following DNS name from within your cluster:
+{{ template "minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+To access Minio from localhost, run the below commands:
+
+  1. export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+
+  2. kubectl port-forward $POD_NAME 9000 --namespace {{ .Release.Namespace }}
+
+Read more about port forwarding here: http://kubernetes.io/docs/user-guide/kubectl/kubectl_port-forward/
+
+You can now access Minio server on http://localhost:9000. Follow the below steps to connect to Minio server with mc client:
+
+  1. Download the Minio mc client - https://docs.minio.io/docs/minio-client-quickstart-guide
+
+  2. mc config host add {{ template "minio.fullname" . }}-local http://localhost:9000 {{ .Values.minio.accessKey }} {{ .Values.minio.secretKey }} S3v4
+
+  3. mc ls {{ template "minio.fullname" . }}-local
+
+Alternately, you can use your browser or the Minio SDK to access the server - https://docs.minio.io/categories/17
+{{- end }}
+{{- if eq .Values.minio.service.type "LoadBalancer" }}
+Minio can be accessed via port {{ .Values.minio.service.port }} on an external IP address. Get the service external IP address by:
+kubectl get svc --namespace {{ .Release.Namespace }} -l app={{ template "minio.fullname" . }}
+
+Note that the public IP may take a couple of minutes to be available.
+
+You can now access Minio server on http://<External-IP>:9000. Follow the below steps to connect to Minio server with mc client:
+
+  1. Download the Minio mc client - https://docs.minio.io/docs/minio-client-quickstart-guide
+
+  2. mc config host add {{ template "minio.fullname" . }}-local http://<External-IP>:{{ .Values.minio.service.port }} {{ .Values.minio.accessKey }} {{ .Values.minio.secretKey }} S3v4
+
+  3. mc ls {{ template "minio.fullname" . }}-local
+
+Alternately, you can use your browser or the Minio SDK to access the server - https://docs.minio.io/categories/17
+{{- end }}
+
+{{ if and (.Values.minio.networkPolicy.enabled) (not .Values.minio.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with label
+{{ template "minio.fullname" . }}-client=true"
+will be able to connect to this minio cluster.
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.jupyterhub.enabled }}
+#####   JUPYTERHUB - FADI      #####
+####################################
+
+Your release is named {{ .Release.Name }} and installed into the namespace {{ .Release.Namespace }}.
+
+You can find if the hub and proxy is ready by doing:
+
+ kubectl --namespace={{ .Release.Namespace }} get pod
+
+and watching for both those pods to be in status 'Running'.
+
+You can find the public IP of the JupyterHub by doing:
+
+ kubectl --namespace={{ .Release.Namespace }} get svc proxy-public
+
+It might take a few minutes for it to appear!
+
+Note that this is still an alpha release! If you have questions, feel free to
+  1. Read the guide at https://z2jh.jupyter.org
+  2. Chat with us at https://gitter.im/jupyterhub/jupyterhub
+  3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+
+{{- if .Values.jupyterhub.hub.extraConfigMap }}
+
+DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
+Use top-level `custom` instead:
+
+---
+custom:
+{{- (merge dict .Values.jupyterhub.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
+---
+{{- end }}
+
+{{- if and (not .Values.jupyterhub.scheduling.podPriority.enabled) (and .Values.jupyterhub.scheduling.userPlaceholder.enabled .Values.jupyterhub.scheduling.userPlaceholder.replicas) }}
+
+WARNING: You are using user placeholders without pod priority enabled, either
+enable pod priority or stop using the user placeholders to avoid wasting cloud
+resources.
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.spark.enabled }}
+
+#####      SPARK - FADI        #####
+####################################
+
+Get the Spark URL to visit by running these commands in the same shell:
+  
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+  You can watch the status of by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }}'
+  
+  export SPARK_SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SPARK_SERVICE_IP:{{ .Values.spark.WebUi.ServicePort }}
+
+Get the Zeppelin URL to visit by running these commands in the same shell:
+  
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+  You can watch the status of by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }}'
+
+  export ZEPPELIN_SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo http://$ZEPPELIN_SERVICE_IP:{{ .Values.spark.Zeppelin.ServicePort }}
+
+{{- end }}
+
+#####    POSTGRESQL - FADI     #####
+####################################
+
+
+PostgreSQL can be accessed via port {{ .Values.postgresql.service.port }} on the following DNS name from within your cluster:
+
+    {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
+{{- if .Values.postgresql.replication.enabled }}
+    {{ template "fullname" . }}-read.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
+{{- end }}
+To get the password for "{{ .Values.postgresql.postgresqlUsername }}" run:
+
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.postgresql.existingSecret }}{{ .Values.postgresql.existingSecret }}{{ else }}{{ template "fullname" . }}{{ end }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+
+To connect to your database run the following command:
+
+    kubectl run {{ template "fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
+   --labels="{{ template "fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "fullname" . }} -U {{ .Values.postgresql.postgresqlUsername }}{{- if .Values.postgresql.postgresqlDatabase }} -d {{ .Values.postgsql.postgresqlDatabase }}{{- end }} -p {{ .Values.postgresql.service.port }}
+
+{{ if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with label {{ template "fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
+{{- end }}
+
+To connect to your database from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.postgresql.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
+    {{ if (include "postgresql.password" . )  }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $NODE_IP --port $NODE_PORT -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end }}
+
+{{- else if contains "LoadBalancer" .Values.postgresql.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    {{ if (include "postgresql.password" . ) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $SERVICE_IP --port {{ template "postgresql.port" . }} -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end }}
+
+{{- else if contains "ClusterIP" .Values.postgresql.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "fullname" . }} {{ .Values.postgresql.service.port }}:{{ .Values.postgresql.service.port }} &
+    {{ if .Values.postgresql.postgresqlPassword }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host 127.0.0.1 -U {{ .Values.postgresql.postgresqlUsername }}{{- if .Values.postgresql.postgresqlDatabase }} -d {{ .Values.postgresql.postgresqlDatabase }}{{- end }} -p {{ .Values.postgresql.service.port }}
+
+{{- end }}
+
+{{- if and (contains "bitnami/" .Values.postgresql.image.repository) (not (.Values.postgresql.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}
+
+
+CONGRATULATIONS! FADI has been installed.
