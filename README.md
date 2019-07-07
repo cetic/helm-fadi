@@ -4,8 +4,8 @@
 
 ## Introduction
 
-This [Helm](https://github.com/kubernetes/helm) chart installs [fadi](https://github.com/fadi) in a Kubernetes cluster.
-You can optionally enable/disable big data frameworks of fadi.
+This [Helm](https://github.com/kubernetes/helm) chart installs [fadi](https://github.com/cetic/fadi) in a Kubernetes cluster.
+You can optionally enable/disable components of fadi.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ You can optionally enable/disable big data frameworks of fadi.
 
 ## Chart Details
 
-See the [fadi](https://github.com/cetic/fadi) repository for documentation and default 
+See the [fadi](https://github.com/cetic/fadi) repository for documentation and defaults.
 
 ## Installation
 
@@ -47,6 +47,7 @@ Deletion of the StatefulSet doesn't cascade to deleting associated PVCs. To dele
 ```bash
 kubectl delete pvc -l release=my-release,component=data
 ```
+
 ## Configuration
 
 Each requirement is configured with the options provided by that Chart. Please consult the relevant charts for their configuration options.
