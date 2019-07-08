@@ -3,7 +3,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 spark:
-  enabled: true
+  enabled: false
   Master:
     Name: spark-master
   WebUi:
@@ -14,25 +14,27 @@ spark:
     Name: spark-zeppelin
 
 superset:
-  enabled: true
+  enabled: false
 
 postgresql:
-  enabled: true
+  enabled: false
 
 minio:
-  enabled: true
+  enabled: false
 
 grafana:
-  enabled: true
+  enabled: false
 
 jupyterhub:
-  enabled: true
+  enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
 
 nifi:
-  enabled: true
+  enabled: false
 
 pgadmin:
-  enabled: true
+  enabled: false
 
+pulsar:
+  enabled: true

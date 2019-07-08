@@ -8,6 +8,7 @@ keywords:
   - nifi
   - spark
   - grafana
+  - pulsar
 home: https://github.com/cetic/fadi
 icon: https://github.com/cetic/fadi/blob/master/doc/logo.png
 source:

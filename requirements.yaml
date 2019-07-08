@@ -32,3 +32,7 @@ dependencies:
   version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
   condition: pgadmin.enabled
+- name: pulsar
+  version: ~1.0.0
+  repository: "file://../dependency_chart/pulsar"
+  condition: pulsar.enabled

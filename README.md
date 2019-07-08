@@ -64,4 +64,5 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `jupyterhub.proxy.secretToken`                                              | Enable JupyterHub                                                                                                  | `true`                          |
 | `nifi.enabled`                                                              | Enable Nifi                                                                                                        | `true`                          |
 | `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
+| `pulsar.enabled`                                                            | Enable Pulsar                                                                                                      | `true`                          |
 
