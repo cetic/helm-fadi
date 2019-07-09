@@ -208,6 +208,8 @@ echo http://$ZEPPELIN_SERVICE_IP:{{ .Values.spark.Zeppelin.ServicePort }}
 
 {{- end }}
 
+{{- if .Values.postgresql.enabled }}
+
 #####    POSTGRESQL - FADI     #####
 ####################################
 
@@ -261,5 +263,6 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 
 {{- end }}
 
+{{- end }}
 
 CONGRATULATIONS! FADI has been installed.
