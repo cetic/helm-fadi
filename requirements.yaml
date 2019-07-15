@@ -34,5 +34,5 @@ dependencies:
   condition: pgadmin.enabled
 - name: pulsar
   version: ~1.0.0
-  repository: "file://../dependency_chart/pulsar"
+  repository: "file://./dependency_chart/pulsar"
   condition: pulsar.enabled

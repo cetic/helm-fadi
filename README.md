@@ -65,4 +65,3 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `nifi.enabled`                                                              | Enable Nifi                                                                                                        | `true`                          |
 | `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
 | `pulsar.enabled`                                                            | Enable Pulsar                                                                                                      | `true`                          |
-
