@@ -29,6 +29,6 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: nifi.enabled
 - name: pgadmin
-  version: ~0.1.5
+  version: ~0.1.6
   repository: https://cetic.github.io/helm-charts/
   condition: pgadmin.enabled
