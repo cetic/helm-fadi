@@ -265,4 +265,54 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 
 {{- end }}
 
+{{- if .Values.openldap.enabled }}
+
+#####      Openldap - FADI         #####
+#######################################
+
+OpenLDAP has been installed. You can access the server from within the k8s cluster using:
+
+  {{ template "openldap.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ldapPort }}
+
+
+You can access the LDAP adminPassword and configPassword using:
+
+  kubectl get secret --namespace {{ .Release.Namespace }} {{ template "openldap.secretName" . }} -o jsonpath="{.data.LDAP_ADMIN_PASSWORD}" | base64 --decode; echo
+  kubectl get secret --namespace {{ .Release.Namespace }} {{ template "openldap.secretName" . }} -o jsonpath="{.data.LDAP_CONFIG_PASSWORD}" | base64 --decode; echo
+
+
+You can access the LDAP service, from within the cluster (or with kubectl port-forward) with a command like (replace password and domain):
+  ldapsearch -x -H ldap://{{ template "openldap.fullname" . }}-service.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ldapPort }} -b dc=example,dc=org -D "cn=admin,dc=example,dc=org" -w $LDAP_ADMIN_PASSWORD
+
+
+Test server health using Helm test:
+  helm test {{ .Release.Name }}
+
+
+{{- if .Values.phpldap-admin.enabled }}
+
+#####      phpLDAPadmin - FADI         #####
+#######################################
+
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.ingress.path }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "phpldapadmin.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get svc -w {{ template "phpldapadmin.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "phpldapadmin.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "phpldapadmin.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward $POD_NAME 8080:80
+{{- end }}
+
+
 CONGRATULATIONS! FADI has been installed.

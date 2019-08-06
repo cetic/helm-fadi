@@ -33,10 +33,10 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: pgadmin.enabled
 - name: openldap
-  version: ~1.1.10
+  version: ~1.1.0
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: openldap.enabled
 - name: phpldap-admin
-  version: ~0.1.6
+  version: ~0.1.1
   repository: https://cetic.github.io/helm-charts/
   condition: phpldap-admin.enabled
