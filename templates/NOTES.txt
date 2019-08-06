@@ -289,7 +289,7 @@ Test server health using Helm test:
   helm test {{ .Release.Name }}
 
 
-{{- if .Values.phpldap-admin.enabled }}
+{{- if .Values.phpldapadmin.enabled }}
 
 #####      phpLDAPadmin - FADI         #####
 #######################################
