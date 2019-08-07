@@ -39,5 +39,5 @@ pgadmin:
 openldap:
   enabled: true
 
-phpldap-admin:
+phpldapadmin:
   enabled: true
