@@ -294,4 +294,4 @@ You can access the LDAP adminPassword and configPassword using:
           
 {{- end }}
 
-CONGRATULATIONS! FADI has been installed.
+CONGRATULATIONS! FADI is being installed.
