@@ -39,4 +39,4 @@ dependencies:
 - name: phpldapadmin
   version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
-  condition: phpldap-admin.enabled
+  condition: phpldapadmin.enabled
