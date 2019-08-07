@@ -36,3 +36,8 @@ nifi:
 pgadmin:
   enabled: true
 
+openldap:
+  enabled: true
+
+phpldapadmin:
+  enabled: true
