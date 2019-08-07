@@ -280,7 +280,7 @@ You can access the LDAP adminPassword and configPassword using:
 
 {{- end }}
 
-{{- if .Values.phpldap-admin.enabled }}
+{{- if .Values.phpldapadmin.enabled }}
 
 #####      phpLDAPadmin - FADI         #####
 #######################################
