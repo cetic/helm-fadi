@@ -287,7 +287,7 @@ You can access the LDAP service, from within the cluster (or with kubectl port-f
 
 Test server health using Helm test:
   helm test {{ .Release.Name }}
-
+{{- end }}
 
 {{- if .Values.phpldapadmin.enabled }}
 
@@ -313,6 +313,6 @@ Test server health using Helm test:
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
-
+{{- end }}
 
 CONGRATULATIONS! FADI has been installed.
