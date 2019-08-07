@@ -286,9 +286,10 @@ You can access the LDAP adminPassword and configPassword using:
 #######################################
 
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+     
            You can watch the status of by running 'kubectl get svc -w {{ template "phpldapadmin.fullname" . }}'
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "phpldapadmin.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
+  
           You can access the service by running ' minikube service {{ template "phpldapadmin.fullname" . }} -n {{ .Release.Namespace }} '
           
 {{- end }}
