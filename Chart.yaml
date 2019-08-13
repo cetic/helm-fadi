@@ -1,6 +1,6 @@
 name: fadi
-version: 0.1.5
-appVersion: 0.1.5
+version: 0.1.6
+appVersion: 0.1.6
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -9,7 +9,7 @@ keywords:
   - spark
   - grafana
 home: https://github.com/cetic/fadi
-icon: https://github.com/cetic/fadi/blob/master/doc/images/logo.png
+icon: https://raw.githubusercontent.com/cetic/fadi/master/doc/images/logo.png
 source:
   - https://github.com/cetic/fadi
 maintainers:
