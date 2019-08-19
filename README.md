@@ -66,5 +66,5 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
 | `openldap.enabled`                                                          | Enable openldap                                                                                                    | `true`                          |
 | `phpldapadmin.enabled`                                                      | Enable phpLDAPadmin                                                                                                | `true`                          |
-| `elastic-stack.enabled`                                                      | Enable Elastic-stack                                                                                                | `true`                          |
+| `ElasticStack.enabled`                                                      | Enable Elastic-stack                                                                                                | `true`                          |
 

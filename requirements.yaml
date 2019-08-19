@@ -43,4 +43,4 @@ dependencies:
 - name: elastic-stack
   version: ~1.8.0
   repository: https://kubernetes-charts.storage.googleapis.com/
-  condition: elastic-stack.enabled
+  condition: ElasticStack.enabled

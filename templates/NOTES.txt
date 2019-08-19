@@ -294,7 +294,7 @@ You can access the LDAP adminPassword and configPassword using:
           
 {{- end }}
 
-{{- if .Values.elastic-stack.enabled }}
+{{- if .Values.ElasticStack.enabled }}
 
 #####      Elastic-stack - FADI         #####
 #######################################
