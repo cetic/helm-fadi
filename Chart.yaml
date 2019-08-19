@@ -1,6 +1,6 @@
 name: fadi
-version: 0.1.6
-appVersion: 0.1.6
+version: 0.1.7
+appVersion: 0.1.7
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
