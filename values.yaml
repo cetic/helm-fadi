@@ -42,5 +42,5 @@ openldap:
 phpldapadmin:
   enabled: true
 
-ElasticStack:
+elasticstack:
   enabled: true
