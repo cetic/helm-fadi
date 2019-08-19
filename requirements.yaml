@@ -40,3 +40,7 @@ dependencies:
   version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
   condition: phpldapadmin.enabled
+- name: elastic-stack
+  version: ~1.8.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: elasticstack.enabled

@@ -290,8 +290,32 @@ You can access the LDAP adminPassword and configPassword using:
            You can watch the status of by running 'kubectl get svc -w {{ template "phpldapadmin.fullname" . }}'
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "phpldapadmin.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   
-          You can access the service by running ' minikube service {{ template "phpldapadmin.fullname" . }} -n {{ .Release.Namespace }} '
+          You can access the service by running ' minikube service <service_name> -n {{ .Release.Namespace }} '
           
+{{- end }}
+
+{{- if .Values.elasticstack.enabled }}
+
+#####      Elastic-stack - FADI         #####
+#######################################
+
+
+******* The elasticsearch cluster and associated extras have been installed. *********
+
+
+==> Kibana can be accessed:
+
+	' minikube service <service_name> -n {{ .Release.Namespace }} '
+
+
+              WARNING: You have likely exposed your Elasticsearch cluster direct to the internet.
+              Elasticsearch does not implement any security for public facing clusters by default.
+              As a minimum level of security; switch to ClusterIP/NodePort and place an Nginx gateway infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
+
+
+           NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get svc -w {{ template "kibana.fullname" . }}'
+
 {{- end }}
 
 CONGRATULATIONS! FADI is being installed.
