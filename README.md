@@ -15,7 +15,7 @@ You can optionally enable/disable components of fadi.
 
 ## Chart Details
 
-See the [fadi](https://github.com/cetic/fadi) repository for documentation and defaults.
+See the [fadi](https://github.com/cetic/fadi) repository for documentation and userguide.
 
 ## Installation
 
