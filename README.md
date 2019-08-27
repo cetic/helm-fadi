@@ -65,11 +65,11 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
 | `openldap.enabled`                                                          | Enable openldap                                                                                                    | `true`                          |
 | `phpldapadmin.enabled`                                                      | Enable phpLDAPadmin                                                                                                | `true`                          |
-| `elasticstack.enabled`                                                      | Enable Elastic-stack                                                                                               | `true`                          |
+| `elasticstack.enabled`                                                      | Enable Elastic-stack                                                                                               | `false`                         |
+| `kafka.enabled`                                                             | Enable Kafka                                                                                                       | `false`                         |
 
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).
 
 Please read the official [Contribution Guide](https://github.com/helm/charts/blob/master/CONTRIBUTING.md) from Helm for more information on how you can contribute to this Chart.
-

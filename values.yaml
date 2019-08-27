@@ -257,3 +257,16 @@ phpldapadmin:
 elasticstack:
   enabled: false
 
+kafka:
+  enabled: false
+  replicas: 1
+  affinity: {}
+  external:
+    enabled: true
+  persistence:
+    enabled: false
+  zookeeper:
+    replicaCount: 1
+    affinity: {}
+    persistence:
+      enabled: false
