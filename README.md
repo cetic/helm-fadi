@@ -67,6 +67,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `phpldapadmin.enabled`                                                      | Enable phpLDAPadmin                                                                                                | `true`                          |
 | `elasticstack.enabled`                                                      | Enable Elastic-stack                                                                                               | `false`                         |
 | `kafka.enabled`                                                             | Enable Kafka                                                                                                       | `false`                         |
+| `cassandra.enabled`                                                         | Enable Cassandra                                                                                                   | `false`                         |
 
 ## Contributing
 
