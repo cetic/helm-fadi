@@ -212,6 +212,7 @@ nifi:
     tls: []
     hosts: [nifi.fadi.minikube]
     path: /
+  postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
 
 pgadmin:
   enabled: true
