@@ -3,7 +3,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 spark:
-  enabled: true
+  enabled: false
   Master:
     Name: spark-master
   WebUi:
@@ -15,7 +15,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   service:
@@ -72,9 +72,70 @@ postgresql:
   enabled: true
   persistence:
     enabled: true
-
+  ldap:
+    enabled: true
+    pgldapconfig: |-
+      # Reference: https://github.com/larskanis/pg-ldap-sync/blob/master/config/sample-config.yaml
+      # Connection parameters to LDAP server
+      ldap_connection:
+        host: fadi-openldap
+        port: 389
+        auth:
+          method: :simple
+          username: CN=admin,DC=ldap,DC=cetic,DC=be
+          password: password1
+        # Search parameters for LDAP users which should be synchronized
+      ldap_users:
+        base: DC=ldap,DC=cetic,DC=be
+        # LDAP filter (according to RFC 2254)
+        # defines to users in LDAP to be synchronized
+        filter: (cn=*)
+        # this attribute is used as PG role name
+        name_attribute: cn
+        # lowercase name for use as PG role name
+        lowercase_name: true
+      ldap_groups:
+          base: dc=ldap,dc=cetic,dc=be
+          filter: (|(cn=group1)(cn=group2)(cn=group3))
+          # this attribute is used as PG role name
+          name_attribute: cn
+          # this attribute must reference to all member DN's of the given group
+          member_attribute: member
+      # Connection parameters to PostgreSQL server
+      # see also: http://rubydoc.info/gems/pg/PG/Connection#initialize-instance_method
+      pg_connection:
+        host: fadi-postgresql
+        dbname: postgres # the db name is usually "postgres"
+        user: postgres # the user name is usually "postgres"
+        password: postgres # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
+      pg_users:
+        # Filter for identifying LDAP generated users in the database.
+        # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
+        filter: rolcanlogin AND NOT rolsuper
+        # Options for CREATE RULE statements
+        create_options: LOGIN
+      pg_groups:
+        # Filter for identifying LDAP generated groups in the database.
+        # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
+        filter: NOT rolcanlogin AND NOT rolsuper
+        # Options for CREATE RULE statements
+        create_options: NOLOGIN
+        grant_options:
+    cron:
+      schedule: "*/1 * * * *"
+      repo: ceticasbl/pg-ldap-sync
+      #repo: ayadi05/pgldaptest
+      tag: latest
+      restartPolicy: Never
+      mountPath: /workspace
+      subPath: ""
+  pghba: |-
+     #local all all trust
+     #host all all localhost trust
+     #host mydatabase mysuser 192.168.0.0/24 md5
+     host  all         all      0.0.0.0/0  ldap ldapserver=fadi-openldap ldapbasedn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapsearchattribute=cn
 minio:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   service:
@@ -86,7 +147,7 @@ minio:
     hosts: [minio.fadi.minikube]
 
 grafana:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   ingress:
@@ -153,7 +214,7 @@ grafana:
    # ----- auth -----
 
 jupyterhub:
-  enabled: true
+  enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -201,7 +262,7 @@ jupyterhub:
     pathSuffix: ''
 
 nifi:
-  enabled: true
+  enabled: false
   service:
     loadBalancer:
       enabled: true

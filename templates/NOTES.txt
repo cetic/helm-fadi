@@ -208,62 +208,6 @@ echo http://$ZEPPELIN_SERVICE_IP:{{ .Values.spark.Zeppelin.ServicePort }}
 
 {{- end }}
 
-{{- if .Values.postgresql.enabled }}
-
-#####    POSTGRESQL - FADI     #####
-####################################
-
-
-PostgreSQL can be accessed via port {{ .Values.postgresql.service.port }} on the following DNS name from within your cluster:
-
-    {{ template "postgresql.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
-{{- if .Values.postgresql.replication.enabled }}
-    {{ template "postgresql.fullname" . }}-read.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
-{{- end }}
-To get the password for "{{ .Values.postgresql.postgresqlUsername }}" run:
-
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.postgresql.existingSecret }}{{ .Values.postgresql.existingSecret }}{{ else }}{{ template "postgresql.fullname" . }}{{ end }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-
-To connect to your database run the following command:
-
-    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
-   --labels="{{ template "postgresql.fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresql.postgresqlUsername }}{{- if .Values.postgresql.postgresqlDatabase }} -d {{ .Values.postgsql.postgresqlDatabase }}{{- end }} -p {{ .Values.postgresql.service.port }}
-
-{{ if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
-Note: Since NetworkPolicy is enabled, only pods with label {{ template "fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
-{{- end }}
-
-To connect to your database from outside the cluster execute the following commands:
-
-{{- if contains "NodePort" .Values.postgresql.service.type }}
-
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "postgresql.fullname" . }})
-    {{ if (include "postgresql.password" . )  }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $NODE_IP --port $NODE_PORT -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end }}
-
-{{- else if contains "LoadBalancer" .Values.postgresql.service.type }}
-
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "postgresql.fullname" . }}'
-
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "postgresql.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    {{ if (include "postgresql.password" . ) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $SERVICE_IP --port {{ template "postgresql.port" . }} -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end }}
-
-{{- else if contains "ClusterIP" .Values.postgresql.service.type }}
-
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "postgresql.fullname" . }} {{ .Values.postgresql.service.port }}:{{ .Values.postgresql.service.port }} &
-    {{ if .Values.postgresql.postgresqlPassword }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host 127.0.0.1 -U {{ .Values.postgresql.postgresqlUsername }}{{- if .Values.postgresql.postgresqlDatabase }} -d {{ .Values.postgresql.postgresqlDatabase }}{{- end }} -p {{ .Values.postgresql.service.port }}
-
-{{- end }}
-
-{{- if and (contains "bitnami/" .Values.postgresql.image.repository) (not (.Values.postgresql.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
-
-{{- end }}
 
 {{- if .Values.openldap.enabled }}
 
