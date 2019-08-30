@@ -111,20 +111,21 @@ postgresql:
       pg_users:
         # Filter for identifying LDAP generated users in the database.
         # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
-        filter: rolcanlogin AND NOT rolsuper
+        # filter: rolcanlogin AND NOT rolsuper
+        filter: oid IN (SELECT pam.member FROM pg_auth_members pam JOIN pg_roles pr ON pr.oid=pam.roleid WHERE pr.rolname='ldap_users')
         # Options for CREATE RULE statements
         create_options: LOGIN
       pg_groups:
         # Filter for identifying LDAP generated groups in the database.
         # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
-        filter: NOT rolcanlogin AND NOT rolsuper
+        # filter: NOT rolcanlogin AND NOT rolsuper
+        filter: oid IN (SELECT pam.member FROM pg_auth_members pam JOIN pg_roles pr ON pr.oid=pam.roleid WHERE pr.rolname='ldap_groups')
         # Options for CREATE RULE statements
         create_options: NOLOGIN
         grant_options:
     cron:
       schedule: "*/1 * * * *"
       repo: ceticasbl/pg-ldap-sync
-      #repo: ayadi05/pgldaptest
       tag: latest
       restartPolicy: Never
       mountPath: /workspace
@@ -133,7 +134,7 @@ postgresql:
      #local all all trust
      #host all all localhost trust
      #host mydatabase mysuser 192.168.0.0/24 md5
-     host  all         all      0.0.0.0/0  ldap ldapserver=fadi-openldap ldapbasedn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapsearchattribute=cn
+     host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap ldapbasedn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapsearchattribute=cn
 minio:
   enabled: false
   persistence:
