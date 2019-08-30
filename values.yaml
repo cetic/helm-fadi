@@ -130,11 +130,12 @@ postgresql:
       restartPolicy: Never
       mountPath: /workspace
       subPath: ""
-  pghba: |-
-     #local all all trust
-     #host all all localhost trust
-     #host mydatabase mysuser 192.168.0.0/24 md5
-     host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap ldapbasedn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapsearchattribute=cn
+  postgresql:
+    pghba: |-
+      local all all trust
+      host all all localhost trust
+      #host mydatabase mysuser 192.168.0.0/24 md5
+      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap ldapbasedn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapsearchattribute=cn
 minio:
   enabled: false
   persistence:
