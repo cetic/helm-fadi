@@ -3,7 +3,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 spark:
-  enabled: false
+  enabled: true
   Master:
     Name: spark-master
   WebUi:
@@ -15,7 +15,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -86,16 +86,16 @@ postgresql:
           password: password1
         # Search parameters for LDAP users which should be synchronized
       ldap_users:
-        base: DC=ldap,DC=cetic,DC=be
+        base: CN=admin,DC=ldap,DC=cetic,DC=be
         # LDAP filter (according to RFC 2254)
         # defines to users in LDAP to be synchronized
-        filter: (cn=*)
+        filter: (!(cn=admin))
         # this attribute is used as PG role name
         name_attribute: cn
         # lowercase name for use as PG role name
         lowercase_name: true
       ldap_groups:
-          base: dc=ldap,dc=cetic,dc=be
+          base: DC=ldap,DC=cetic,DC=be
           filter: (|(cn=group1)(cn=group2)(cn=group3))
           # this attribute is used as PG role name
           name_attribute: cn
@@ -106,23 +106,23 @@ postgresql:
       pg_connection:
         host: fadi-postgresql
         dbname: postgres # the db name is usually "postgres"
-        user: postgres # the user name is usually "postgres"
-        password: postgres # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
+        user: admin # the user name is usually "postgres"
+        password: password1 # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
       pg_users:
         # Filter for identifying LDAP generated users in the database.
         # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
         # filter: rolcanlogin AND NOT rolsuper
         filter: oid IN (SELECT pam.member FROM pg_auth_members pam JOIN pg_roles pr ON pr.oid=pam.roleid WHERE pr.rolname='ldap_users')
         # Options for CREATE RULE statements
-        create_options: LOGIN
+        create_options: LOGIN IN ROLE ldap_users
       pg_groups:
         # Filter for identifying LDAP generated groups in the database.
         # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
         # filter: NOT rolcanlogin AND NOT rolsuper
         filter: oid IN (SELECT pam.member FROM pg_auth_members pam JOIN pg_roles pr ON pr.oid=pam.roleid WHERE pr.rolname='ldap_groups')
         # Options for CREATE RULE statements
-        create_options: NOLOGIN
-        grant_options:
+        create_options: NOLOGIN IN ROLE ldap_groups
+        #grant_options:
     cron:
       schedule: "*/1 * * * *"
       repo: ceticasbl/pg-ldap-sync
@@ -131,13 +131,18 @@ postgresql:
       mountPath: /workspace
       subPath: ""
   postgresql:
+    username: admin
+    password: password1
+    database: postgres
     pghba: |-
-      local all all trust
-      host all all localhost trust
-      #host mydatabase mysuser 192.168.0.0/24 md5
-      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap ldapbasedn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapsearchattribute=cn
+      local all all ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
+      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
+    initdbscripts: |-
+      #!/bin/sh
+      psql -c "create role ldap_users;" postgres admin
+      psql -c "create role ldap_groups;" postgres admin
 minio:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -149,7 +154,7 @@ minio:
     hosts: [minio.fadi.minikube]
 
 grafana:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   ingress:
@@ -216,7 +221,7 @@ grafana:
    # ----- auth -----
 
 jupyterhub:
-  enabled: false
+  enabled: true
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -264,7 +269,7 @@ jupyterhub:
     pathSuffix: ''
 
 nifi:
-  enabled: false
+  enabled: true
   service:
     loadBalancer:
       enabled: true
