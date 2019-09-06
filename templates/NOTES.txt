@@ -214,24 +214,19 @@ echo http://$ZEPPELIN_SERVICE_IP:{{ .Values.spark.Zeppelin.ServicePort }}
 ####################################
 
 
-PostgreSQL can be accessed via port {{ .Values.postgresql.service.port }} on the following DNS name from within your cluster:
+** Please be patient while the chart is being deployed **
+
+PostgreSQL can be accessed via port {{ .Values.postgresql.postgresql.port }} on the following DNS name from within your cluster:
 
     {{ template "postgresql.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
-{{- if .Values.postgresql.replication.enabled }}
-    {{ template "postgresql.fullname" . }}-read.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
-{{- end }}
-To get the password for "{{ .Values.postgresql.postgresqlUsername }}" run:
+
+To get the password for "{{ .Values.postgresql.postgresql.username  }}" run:
 
     export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.postgresql.existingSecret }}{{ .Values.postgresql.existingSecret }}{{ else }}{{ template "postgresql.fullname" . }}{{ end }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 
 To connect to your database run the following command:
 
-    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
-   --labels="{{ template "postgresql.fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresql.postgresqlUsername }}{{- if .Values.postgresql.postgresqlDatabase }} -d {{ .Values.postgsql.postgresqlDatabase }}{{- end }} -p {{ .Values.postgresql.service.port }}
-
-{{ if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
-Note: Since NetworkPolicy is enabled, only pods with label {{ template "fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
-{{- end }}
+    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ .Values.postgresql.image.repository }} --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresql.postgresql.username }}{{- if .Values.postgresql.postgresql.database }} -d {{ .Values.postgresql.postgresql.database }}{{- end }} -p {{ .Values.postgresql.postgresql.port }}
 
 To connect to your database from outside the cluster execute the following commands:
 
@@ -239,7 +234,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "postgresql.fullname" . }})
-    {{ if (include "postgresql.password" . )  }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $NODE_IP --port $NODE_PORT -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end }}
+    {{ if (.Values.postgresql.postgresql.password)  }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $NODE_IP --port $NODE_PORT -U {{ .Values.postgresql.postgresql.username }}{{- if .Values.postgresql.postgresql.database }} -d {{ .Values.postgresql.postgresql.database }}{{- end }}
 
 {{- else if contains "LoadBalancer" .Values.postgresql.service.type }}
 
@@ -247,19 +242,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "postgresql.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "postgresql.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    {{ if (include "postgresql.password" . ) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $SERVICE_IP --port {{ template "postgresql.port" . }} -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end }}
+    {{ if (.Values.postgresql.postgresql.password) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $SERVICE_IP --port {{ .Values.postgresql.postgresql.port }} -U {{ .Values.postgresql.postgresql.username }}{{- if .Values.postgresql.postgresql.database }} -d {{ .Values.postgresql.postgresql.database }}{{- end }}
 
 {{- else if contains "ClusterIP" .Values.postgresql.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "postgresql.fullname" . }} {{ .Values.postgresql.service.port }}:{{ .Values.postgresql.service.port }} &
-    {{ if .Values.postgresql.postgresqlPassword }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host 127.0.0.1 -U {{ .Values.postgresql.postgresqlUsername }}{{- if .Values.postgresql.postgresqlDatabase }} -d {{ .Values.postgresql.postgresqlDatabase }}{{- end }} -p {{ .Values.postgresql.service.port }}
-
-{{- end }}
-
-{{- if and (contains "bitnami/" .Values.postgresql.image.repository) (not (.Values.postgresql.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "postgresql.fullname" . }} {{ .Values.postgresql.postgresql.port }}:{{ .Values.postgresql.postgresql.port }} &
+    {{ if (.Values.postgresql.postgresql.password) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host 127.0.0.1 -U {{ .Values.postgresql.postgresql.username  }}{{- if .Values.postgresql.postgresql.database }} -d {{ .Values.postgresql.postgresql.database  }}{{- end }} -p {{ .Values.postgresql.postgresql.port}}
 
 {{- end }}
 
@@ -270,13 +258,23 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 #####      Openldap - FADI         #####
 #######################################
 
-OpenLDAP has been installed. 
+OpenLDAP has been installed. You can access the server from within the k8s cluster using:
+
+  {{ template "openldap.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.openldap.service.ldapPort }}
 
 
 You can access the LDAP adminPassword and configPassword using:
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ template "openldap.secretName" . }} -o jsonpath="{.data.LDAP_ADMIN_PASSWORD}" | base64 --decode; echo
   kubectl get secret --namespace {{ .Release.Namespace }} {{ template "openldap.secretName" . }} -o jsonpath="{.data.LDAP_CONFIG_PASSWORD}" | base64 --decode; echo
+
+
+You can access the LDAP service, from within the cluster (or with kubectl port-forward) with a command like (replace password and domain):
+  ldapsearch -x -H ldap://{{ template "openldap.fullname" . }}-service.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.openldap.service.ldapPort }} -b dc=example,dc=org -D "cn=admin,dc=example,dc=org" -w $LDAP_ADMIN_PASSWORD
+
+
+Test server health using Helm test:
+  helm test {{ .Release.Name }}
 
 {{- end }}
 
@@ -285,12 +283,25 @@ You can access the LDAP adminPassword and configPassword using:
 #####      phpLDAPadmin - FADI         #####
 #######################################
 
+1. Get the application URL by running these commands:
+{{- if .Values.phpldapadmin.ingress.enabled }}
+{{- range .Values.phpldapadmin.ingress.hosts }}
+  http{{ if $.Values.phpldapadmin.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.phpldapadmin.ingress.path }}
+{{- end }}
+{{- else if contains "NodePort" .Values.phpldapadmin.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "phpldapadmin.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.phpldapadmin.service.type }}
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-     
            You can watch the status of by running 'kubectl get svc -w {{ template "phpldapadmin.fullname" . }}'
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "phpldapadmin.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  
-          You can access the service by running ' minikube service <service_name> -n {{ .Release.Namespace }} '
+  echo http://$SERVICE_IP:{{ .Values.phpldapadmin.service.port }}
+{{- else if contains "ClusterIP" .Values.phpldapadmin.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "phpldapadmin.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward $POD_NAME 8080:80
+{{- end }}
           
 {{- end }}
 

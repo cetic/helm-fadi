@@ -72,7 +72,75 @@ postgresql:
   enabled: true
   persistence:
     enabled: true
-
+  ldap:
+    enabled: true
+    pgldapconfig: |-
+      # Reference: https://github.com/larskanis/pg-ldap-sync/blob/master/config/sample-config.yaml
+      # Connection parameters to LDAP server
+      ldap_connection:
+        host: fadi-openldap
+        port: 389
+        auth:
+          method: :simple
+          username: CN=admin,DC=ldap,DC=cetic,DC=be
+          password: password1
+        # Search parameters for LDAP users which should be synchronized
+      ldap_users:
+        base: CN=admin,DC=ldap,DC=cetic,DC=be
+        # LDAP filter (according to RFC 2254)
+        # defines to users in LDAP to be synchronized
+        filter: (!(cn=admin))
+        # this attribute is used as PG role name
+        name_attribute: cn
+        # lowercase name for use as PG role name
+        lowercase_name: true
+      ldap_groups:
+          base: DC=ldap,DC=cetic,DC=be
+          filter: (|(cn=group1)(cn=group2)(cn=group3))
+          # this attribute is used as PG role name
+          name_attribute: cn
+          # this attribute must reference to all member DN's of the given group
+          member_attribute: member
+      # Connection parameters to PostgreSQL server
+      # see also: http://rubydoc.info/gems/pg/PG/Connection#initialize-instance_method
+      pg_connection:
+        host: fadi-postgresql
+        dbname: postgres # the db name is usually "postgres"
+        user: admin # the user name is usually "postgres"
+        password: password1 # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
+      pg_users:
+        # Filter for identifying LDAP generated users in the database.
+        # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
+        # filter: rolcanlogin AND NOT rolsuper
+        filter: oid IN (SELECT pam.member FROM pg_auth_members pam JOIN pg_roles pr ON pr.oid=pam.roleid WHERE pr.rolname='ldap_users')
+        # Options for CREATE RULE statements
+        create_options: LOGIN IN ROLE ldap_users
+      pg_groups:
+        # Filter for identifying LDAP generated groups in the database.
+        # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
+        # filter: NOT rolcanlogin AND NOT rolsuper
+        filter: oid IN (SELECT pam.member FROM pg_auth_members pam JOIN pg_roles pr ON pr.oid=pam.roleid WHERE pr.rolname='ldap_groups')
+        # Options for CREATE RULE statements
+        create_options: NOLOGIN IN ROLE ldap_groups
+        #grant_options:
+    cron:
+      schedule: "*/1 * * * *"
+      repo: ceticasbl/pg-ldap-sync
+      tag: latest
+      restartPolicy: Never
+      mountPath: /workspace
+      subPath: ""
+  postgresql:
+    username: admin
+    password: password1
+    database: postgres
+    pghba: |-
+      local all all ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
+      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
+    initdbscripts: |-
+      #!/bin/sh
+      psql -c "create role ldap_users;" postgres admin
+      psql -c "create role ldap_groups;" postgres admin
 minio:
   enabled: true
   persistence:

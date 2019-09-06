@@ -9,8 +9,8 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: superset.enabled
 - name: postgresql
-  version: ~5.3.11
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: ~0.1.2
+  repository: https://cetic.github.io/helm-charts/
   condition: postgresql.enabled
 - name: minio
   version: ~2.4.18
