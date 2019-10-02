@@ -3,7 +3,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 spark:
-  enabled: false
+  enabled: true
   Master:
     Name: spark-master
   WebUi:
@@ -15,7 +15,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -69,7 +69,7 @@ superset:
     AUTH_LDAP_UID_FIELD = "cn"
 
 postgresql:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   ldap:
@@ -142,7 +142,7 @@ postgresql:
       psql -c "create role ldap_users;" postgres admin
       psql -c "create role ldap_groups;" postgres admin
 minio:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -154,7 +154,7 @@ minio:
     hosts: [minio.fadi.minikube]
 
 grafana:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   ingress:
@@ -221,7 +221,7 @@ grafana:
    # ----- auth -----
 
 jupyterhub:
-  enabled: false
+  enabled: true
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -269,7 +269,7 @@ jupyterhub:
     pathSuffix: ''
 
 nifi:
-  enabled: false
+  enabled: true
   service:
     loadBalancer:
       enabled: true
@@ -283,7 +283,7 @@ nifi:
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
 
 pgadmin:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   ingress:
@@ -293,7 +293,7 @@ pgadmin:
     hosts: [pgadmin.fadi.minikube]
 
 openldap:
-  enabled: false
+  enabled: true
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -311,7 +311,7 @@ openldap:
       # You can find an example ldif file.
 
 phpldapadmin:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   env:
@@ -345,20 +345,20 @@ cassandra:
     start_rpc: true
 
 elasticsearch:
-  enabled: true
+  enabled: false
 
 kibana:
-  enabled: true
+  enabled: false
   env:
     ELASTICSEARCH_HOSTS: http://{{ .Release.Name }}-elasticsearch-client:9200
 
 logstash:
-  enabled: true
+  enabled: false
   elasticsearch:
     host: fadi-elasticsearch-client
 
 filebeat:
-  enabled: true
+  enabled: false
   config:
     output.file.enabled: false
     output.logstash:

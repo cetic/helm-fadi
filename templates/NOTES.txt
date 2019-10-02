@@ -350,6 +350,20 @@ Get the Logstash HTTP Input URL by running these commands:
 
 {{- end }}
 
+{{- if .Values.elasticsearch.enabled }}
+
+#####      elasticsearch - FADI         #####
+#######################################
+
+The elasticsearch cluster has been installed.
+
+     WARNING: You have likely exposed your Elasticsearch cluster direct to the internet.
+              Elasticsearch does not implement any security for public facing clusters by default.
+              As a minimum level of security;  place an Nginx gateway infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
+
+{{- end }}
+
+
 {{- if .Values.kibana.enabled }}
 
 #####      kibana - FADI         #####
@@ -375,7 +389,6 @@ Kibana can be accessed:
     {{- end }}
 
 {{- end }}
-
 
 
 CONGRATULATIONS! FADI is being installed.
