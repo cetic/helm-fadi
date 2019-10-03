@@ -65,9 +65,12 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
 | `openldap.enabled`                                                          | Enable openldap                                                                                                    | `true`                          |
 | `phpldapadmin.enabled`                                                      | Enable phpLDAPadmin                                                                                                | `true`                          |
-| `elasticstack.enabled`                                                      | Enable Elastic-stack                                                                                               | `false`                         |
 | `kafka.enabled`                                                             | Enable Kafka                                                                                                       | `false`                         |
 | `cassandra.enabled`                                                         | Enable Cassandra                                                                                                   | `false`                         |
+| `filebeat.enabled`                                                         | Enable Filebeat                                                                                                   | `false`                         |
+| `logstash.enabled`                                                         | Enable Logstash                                                                                                   | `false`                         |
+| `elasticsearch.enabled`                                                         | Enable Elasticsearch                                                                                                   | `false`                         |
+| `kibana.enabled`                                                         | Enable Kibana                                                                                                   | `false`                         |
 
 ## Contributing
 

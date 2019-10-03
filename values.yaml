@@ -322,9 +322,6 @@ phpldapadmin:
     path: /
     hosts: [phpldapadmin.fadi.minikube]
 
-elasticstack:
-  enabled: false
-
 kafka:
   enabled: false
   replicas: 1
@@ -346,3 +343,25 @@ cassandra:
     cluster_size: 1
     seed_size: 1
     start_rpc: true
+
+elasticsearch:
+  enabled: false
+
+kibana:
+  enabled: false
+  env:
+    ELASTICSEARCH_HOSTS: http://{{ .Release.Name }}-elasticsearch-client:9200
+
+logstash:
+  enabled: false
+  elasticsearch:
+    host: fadi-elasticsearch-client
+
+filebeat:
+  enabled: false
+  config:
+    output.file.enabled: false
+    output.logstash:
+      hosts: ["fadi-logstash:5044"]
+  indexTemplateLoad:
+   - fadi-elasticsearch-client:9200

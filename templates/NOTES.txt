@@ -305,28 +305,90 @@ Test server health using Helm test:
           
 {{- end }}
 
-{{- if .Values.elasticstack.enabled }}
+{{- if .Values.filebeat.enabled }}
 
-#####      Elastic-stack - FADI         #####
+#####      Filebeat - FADI         #####
 #######################################
 
 
-******* The elasticsearch cluster and associated extras have been installed. *********
+******* Filebeat will work once all the Elasticsearch pods are running, it might take a while. *********
 
+To verify that Filebeat has started, run:
 
-==> Kibana can be accessed:
+  kubectl --namespace={{ .Release.Namespace }} get pods -l "app={{ template "filebeat.name" . }},release={{ .Release.Name }}"
 
-	' minikube service <service_name> -n {{ .Release.Namespace }} '
-
-
-              WARNING: You have likely exposed your Elasticsearch cluster direct to the internet.
-              Elasticsearch does not implement any security for public facing clusters by default.
-              As a minimum level of security; switch to ClusterIP/NodePort and place an Nginx gateway infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
-
-
-           NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get svc -w {{ template "kibana.fullname" . }}'
 
 {{- end }}
+
+
+{{- if .Values.logstash.enabled }}
+
+#####      logstash - FADI         #####
+#######################################
+
+{{- if .Values.logstash.service.ports.http }}
+Get the Logstash HTTP Input URL by running these commands:
+  {{- if .Values.logstash.ingress.enabled }}
+    {{- range .Values.logstash.ingress.hosts }}
+  http{{ if $.Values.logstash.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.logstash.ingress.path }}
+    {{- end }}
+  {{- else if contains "NodePort" .Values.logstash.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "logstash.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+  {{- else if contains "LoadBalancer" .Values.logstash.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get svc -w {{ template "logstash.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "logstash.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:{{ .Values.logstash.service.ports.http.port }}
+  {{- else if contains "ClusterIP" .Values.logstash.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "logstash.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward $POD_NAME 8080:{{ .Values.logstash.service.ports.http.port }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.elasticsearch.enabled }}
+
+#####      elasticsearch - FADI         #####
+#######################################
+
+The elasticsearch cluster has been installed.
+
+     WARNING: You have likely exposed your Elasticsearch cluster direct to the internet.
+              Elasticsearch does not implement any security for public facing clusters by default.
+              As a minimum level of security;  place an Nginx gateway infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
+
+{{- end }}
+
+
+{{- if .Values.kibana.enabled }}
+
+#####      kibana - FADI         #####
+#######################################
+
+To verify that {{ template "kibana.fullname" . }} has started, run:
+
+  kubectl --namespace={{ .Release.Namespace }} get pods -l "app={{ template "kibana.name" . }}"
+
+Kibana can be accessed:
+
+  * From outside the cluster, run these commands in the same shell:
+    {{- if contains "NodePort" .Values.kibana.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "kibana.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+    {{- else if contains "ClusterIP"  .Values.kibana.service.type }}
+
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kibana.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+    echo "Visit http://127.0.0.1:5601 to use Kibana"
+    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 5601:5601
+    {{- end }}
+
+{{- end }}
+
 
 CONGRATULATIONS! FADI is being installed.
