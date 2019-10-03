@@ -25,11 +25,11 @@ dependencies:
   repository: https://jupyterhub.github.io/helm-chart/
   condition: jupyterhub.enabled
 - name: nifi
-  version: ~0.1.6
+  version: ~0.2.0
   repository: https://cetic.github.io/helm-charts/
   condition: nifi.enabled
 - name: pgadmin
-  version: ~0.1.8
+  version: ~0.1.10
   repository: https://cetic.github.io/helm-charts/
   condition: pgadmin.enabled
 - name: openldap
