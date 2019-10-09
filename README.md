@@ -1,6 +1,7 @@
 # Helm Chart for FADI
 
 [![CircleCI](https://circleci.com/gh/cetic/helm-fadi.svg?style=svg)](https://circleci.com/gh/cetic/helm-fadi/tree/master) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![version](https://img.shields.io/github/tag/cetic/helm-fadi.svg?label=release)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcetic%2Fhelm-fadi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcetic%2Fhelm-fadi?ref=badge_shield)
 
 ## Introduction
 
@@ -77,3 +78,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).
 
 Please read the official [Contribution Guide](https://github.com/helm/charts/blob/master/CONTRIBUTING.md) from Helm for more information on how you can contribute to this Chart.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcetic%2Fhelm-fadi.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcetic%2Fhelm-fadi?ref=badge_large)
