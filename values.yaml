@@ -58,11 +58,11 @@ superset:
     DEBUG=True
     LOG_FORMAT = '%(asctime)s:%(levelname)s:%(name)s:%(message)s'
     LOG_LEVEL = 'DEBUG'
-    
+
     AUTH_TYPE = AUTH_LDAP
     AUTH_LDAP_SERVER = "ldap://fadi-openldap:389"
     AUTH_LDAP_USE_TLS = False
-    AUTH_USER_REGISTRATION = True 
+    AUTH_USER_REGISTRATION = True
     AUTH_LDAP_SEARCH = "dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_PASSWORD = "password1"
@@ -167,7 +167,7 @@ grafana:
       data: /var/lib/grafana/data
       logs: /var/log/grafana
       plugins: /var/lib/grafana/plugins
-      provisioning: /etc/grafana/provisioning  
+      provisioning: /etc/grafana/provisioning
     analytics:
       check_for_updates: true
     log:
@@ -180,7 +180,7 @@ grafana:
     auth.ldap:
       enabled: true
       allow_sign_up: true
-      config_file: /etc/grafana/ldap.toml  
+      config_file: /etc/grafana/ldap.toml
   # Enable persistence
   persistence:
     enabled: true
@@ -217,7 +217,7 @@ grafana:
       group_dn = "*"
       org_role = "Admin"
       ##grafana_admin = true
-     
+
    # ----- auth -----
 
 jupyterhub:
@@ -247,7 +247,7 @@ jupyterhub:
         description: "The Jupyter Stacks spark image"
         kubespawner_override:
           image: jupyter/all-spark-notebook:latest
-  # ---- auth ----  
+  # ---- auth ----
   auth:
     type: ldap
     ldap:
@@ -258,7 +258,7 @@ jupyterhub:
           - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
           - 'uid={username},cn=admin,dc=ldap,dc=cetic,dc=be'
           - 'cn={username},dc=ldap,dc=cetic,dc=be'
-  # ---- auth ----  
+  # ---- auth ----
   prePuller:
     hook:
       enabled: false
@@ -281,6 +281,8 @@ nifi:
     hosts: [nifi.fadi.minikube]
     path: /
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
+  zookeeper:
+    replicaCount: 1
 
 pgadmin:
   enabled: true
@@ -307,7 +309,7 @@ openldap:
 
   customLdifFiles:
     1-default-users.ldif: |-
-      
+
       # You can find an example ldif file.
 
 phpldapadmin:
@@ -332,9 +334,7 @@ kafka:
     enabled: false
   zookeeper:
     replicaCount: 1
-    affinity: {}
-    persistence:
-      enabled: false
+    fullnameOverride: fadi-kafka-zookeeper
 
 cassandra:
   enabled: false
