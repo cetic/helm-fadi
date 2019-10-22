@@ -299,7 +299,6 @@ openldap:
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
-    LDAP_BASE_DN: "cn=admin,dc=ldap,dc=cetic,dc=be"
     LDAP_BACKEND: "hdb"
     LDAP_TLS: "true"
     LDAP_TLS_ENFORCE: "false"
