@@ -391,4 +391,19 @@ Kibana can be accessed:
 {{- end }}
 
 
+{{- if .Values.tsaas.enabled }}
+
+#####      TSAAS - FADI           #####
+#######################################
+
+{{- end }}
+
+{{- if .Values.swaggerui.enabled }}
+
+#####      SWAGGERUI - FADI       #####
+#######################################
+
+{{- end }}
+
+
 CONGRATULATIONS! FADI is being installed.

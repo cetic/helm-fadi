@@ -64,3 +64,11 @@ dependencies:
   version: ^1.6.0
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: logstash.enabled
+- name: tsaas
+  version: ^0.1.2
+  repository: https://cetic.github.io/helm-charts/
+  condition: tsaas.enabled
+- name: swaggerui
+  version: ^0.1.0
+  repository: https://cetic.github.io/helm-charts/
+  condition: swaggerui.enabled

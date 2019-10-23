@@ -364,3 +364,32 @@ filebeat:
       hosts: ["fadi-logstash:5044"]
   indexTemplateLoad:
    - fadi-elasticsearch-client:9200
+
+tsaas:
+  enabled: true
+  ingress:
+    enabled: true
+    annotations: {}
+    path: /
+    hosts: [api-tsimulus.fadi.minikube]
+    tls: []
+
+swaggerui:
+  enabled: true
+  swaggerui :
+    jsonPath : ""
+    jsonUrl : https://raw.githubusercontent.com/cetic/tsimulus-saas/master/oas/api-doc/openapi.json
+    server :
+      url: http://api-tsimulus.fadi.minikube
+      description: "TSIMULUS API"
+  ingress:
+    enabled: true
+    annotations: {}
+    path: /
+    hosts: [swagger-tsimulus.fadi.minikube]
+    tls: []
+
+
+
+
+
