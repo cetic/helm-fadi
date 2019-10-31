@@ -56,29 +56,30 @@ Each requirement is configured with the options provided by that Chart. Please c
 | Parameter                                                                   | Description                                                                                                        | Default                         |
 | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------| ------------------------------- |
 | **FADI tools**                                                              |
-| `spark.enabled`                                                             | Enable Spark                                                                                                       | `true`                          |
-| `superset.enabled`                                                          | Enable Superset                                                                                                    | `true`                          |
-| `postgresql.enabled`                                                        | Enable PostgreSQL                                                                                                  | `true`                          |
-| `minio.enabled`                                                             | Enable Minio                                                                                                       | `true`                          |
-| `grafana.enabled`                                                           | Enable Grafana                                                                                                     | `true`                          |
-| `jupyterhub.enabled`                                                        | Enable JupyterHub                                                                                                  | `true`                          |
-| `nifi.enabled`                                                              | Enable Nifi                                                                                                        | `true`                          |
-| `pgadmin.enabled`                                                           | Enable PgAdmin                                                                                                     | `true`                          |
-| `openldap.enabled`                                                          | Enable openldap                                                                                                    | `true`                          |
-| `phpldapadmin.enabled`                                                      | Enable phpLDAPadmin                                                                                                | `true`                          |
-| `kafka.enabled`                                                             | Enable Kafka                                                                                                       | `false`                         |
-| `cassandra.enabled`                                                         | Enable Cassandra                                                                                                   | `false`                         |
-| `filebeat.enabled`                                                         | Enable Filebeat                                                                                                   | `false`                         |
-| `logstash.enabled`                                                         | Enable Logstash                                                                                                   | `false`                         |
-| `elasticsearch.enabled`                                                         | Enable Elasticsearch                                                                                                   | `false`                         |
-| `kibana.enabled`                                                         | Enable Kibana                                                                                                   | `false`                         |
+| `spark.enabled`                                                             | Enable [Spark](https://github.com/helm/charts/tree/master/stable/spark)                                            | `true`                          |
+| `superset.enabled`                                                          | Enable [Superset](https://github.com/helm/charts/tree/master/stable/superset)                                      | `true`                          |
+| `postgresql.enabled`                                                        | Enable [PostgreSQL](https://github.com/cetic/helm-postgresql)                                                      | `true`                          |
+| `minio.enabled`                                                             | Enable [Minio](https://github.com/helm/charts/tree/master/stable/minio)                                            | `true`                          |
+| `grafana.enabled`                                                           | Enable [Grafana](https://github.com/helm/charts/tree/master/stable/grafana)                                        | `true`                          |
+| `jupyterhub.enabled`                                                        | Enable [JupyterHub](https://github.com/jupyterhub/helm-chart)                                                      | `true`                          |
+| `nifi.enabled`                                                              | Enable [Nifi](https://github.com/cetic/helm-nifi)                                                                  | `true`                          |
+| `pgadmin.enabled`                                                           | Enable [PgAdmin](https://github.com/cetic/helm-pgadmin)                                                            | `true`                          |
+| `openldap.enabled`                                                          | Enable [Openldap](https://github.com/helm/charts/tree/master/stable/openldap)                                      | `true`                          |
+| `phpldapadmin.enabled`                                                      | Enable [PhpLDAPadmin](https://github.com/cetic/helm-phpLDAPadmin)                                                  | `true`                          |
+| `kafka.enabled`                                                             | Enable [Kafka](https://github.com/helm/charts/tree/master/incubator/kafka)                                         | `false`                         |
+| `cassandra.enabled`                                                         | Enable [Cassandra](https://github.com/helm/charts/tree/master/incubator/cassandra)                                 | `false`                         |
+| `filebeat.enabled`                                                          | Enable [Filebeat](https://github.com/helm/charts/tree/master/stable/filebeat)                                      | `false`                         |
+| `logstash.enabled`                                                          | Enable [Logstash](https://github.com/helm/charts/tree/master/stable/logstash)                                      | `false`                         |
+| `elasticsearch.enabled`                                                     | Enable [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)                            | `false`                         |
+| `kibana.enabled`                                                            | Enable [Kibana](https://github.com/helm/charts/tree/master/stable/kibana)                                          | `false`                         |
+| `tsaas.enabled`                                                             | Enable [Tsimulus-saas](https://github.com/cetic/helm-tsimulus-saas)                                                | `false`                         |
+| `swaggerui.enabled`                                                         | Enable [Swaggerui](https://github.com/cetic/helm-swagger-ui)                                                       | `false`                         |
 
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).
 
 Please read the official [Contribution Guide](https://github.com/helm/charts/blob/master/CONTRIBUTING.md) from Helm for more information on how you can contribute to this Chart.
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcetic%2Fhelm-fadi.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcetic%2Fhelm-fadi?ref=badge_large)
