@@ -141,6 +141,7 @@ postgresql:
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
       psql -c "create role ldap_groups;" postgres admin
+
 minio:
   enabled: true
   persistence:
@@ -281,6 +282,8 @@ nifi:
     hosts: [nifi.fadi.minikube]
     path: /
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
+  persistence:
+    enabled: true
   zookeeper:
     replicaCount: 1
 
@@ -366,7 +369,7 @@ filebeat:
    - fadi-elasticsearch-client:9200
 
 tsaas:
-  enabled: true
+  enabled: false
   ingress:
     enabled: true
     annotations: {}
@@ -375,7 +378,7 @@ tsaas:
     tls: []
 
 swaggerui:
-  enabled: true
+  enabled: false
   swaggerui :
     jsonPath : ""
     jsonUrl : https://raw.githubusercontent.com/cetic/tsimulus-saas/master/oas/api-doc/openapi.json
