@@ -391,4 +391,61 @@ Kibana can be accessed:
 {{- end }}
 
 
+{{- if .Values.tsaas.enabled }}
+
+#####      TSAAS - FADI           #####
+#######################################
+
+1. Get the application URL by running these commands:
+{{- if .Values.tsaas.ingress.enabled }}
+  http{{ if $.Values.tsaas.ingress.tls }}s{{ end }}://{{ if $.Values.tsaas.ingress.hosts }}{{.Values.tsaas.ingress.hosts}}{{else}}your-cluster-ip{{end}}{{ $.Values.tsaas.ingress.path }}
+  {{if not $.Values.tsaas.ingress.hosts}}
+  Find out your cluster ip address by running:
+  $ kubectl cluster-info
+  {{ end }}
+{{- else if contains "NodePort" .Values.tsaas.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "tsaas.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.tsaas.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "tsaas.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "tsaas.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:{{ .Values.tsaas.service.port }}
+{{- else if contains "ClusterIP" .Values.tsaas.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "tsaas.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward $POD_NAME 8080:80
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.swaggerui.enabled }}
+
+#####   TSAAS SWAGGERUI - FADI    #####
+#######################################
+
+1. Get the application URL by running these commands:
+{{- if contains "NodePort" .Values.swaggerui.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "swagger-ui.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "swagger-ui URL: http://$NODE_IP:$NODE_PORT"
+
+{{- else if contains "LoadBalancer" .Values.swaggerui.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+         You can watch the status of by running 'kubectl get svc -w {{ template "swagger-ui.fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "swagger-ui.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo "swagger-ui URL: http://$SERVICE_IP:{{ .Values.swaggerui.service.port }}"
+
+{{- else if contains "ClusterIP" .Values.swaggerui.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "swagger-ui.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "swagger-ui URL: http://127.0.0.1:8080"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "swagger-ui.fullname" . }} 8080:{{ .Values.service.port }}
+{{- end }}
+
+** Please be patient while the chart is being deployed **
+
+{{- end }}
+
 CONGRATULATIONS! FADI is being installed.
