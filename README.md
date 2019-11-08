@@ -72,6 +72,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `logstash.enabled`                                                          | Enable [Logstash](https://github.com/helm/charts/tree/master/stable/logstash)                                      | `false`                         |
 | `elasticsearch.enabled`                                                     | Enable [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)                            | `false`                         |
 | `kibana.enabled`                                                            | Enable [Kibana](https://github.com/helm/charts/tree/master/stable/kibana)                                          | `false`                         |
+| `nginx-ldapauth-proxy.enabled`                                                             | Enable [nginx-ldapauth-proxy](https://github.com/helm/charts/tree/master/stable/nginx-ldapauth-proxy)                                                | `false`                         |
 | `tsaas.enabled`                                                             | Enable [Tsimulus-saas](https://github.com/cetic/helm-tsimulus-saas)                                                | `false`                         |
 | `swaggerui.enabled`                                                         | Enable [Swaggerui](https://github.com/cetic/helm-swagger-ui)                                                       | `false`                         |
 
