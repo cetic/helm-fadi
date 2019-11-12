@@ -26,13 +26,10 @@ superset:
     path: /
     hosts: [superset.fadi.minikube]
   configFile: |-
-
     from flask_appbuilder.security.manager import AUTH_DB,AUTH_LDAP
-
     #---------------------------------------------------------
     # Superset specific config
     #---------------------------------------------------------
-
     ROW_LIMIT = 5000
     SUPERSET_WORKERS = 2
     SUPERSET_WEBSERVER_PORT = 8088
@@ -54,11 +51,9 @@ superset:
     WTF_CSRF_EXEMPT_LIST = []
     # Set this API key to enable Mapbox visualizations
     MAPBOX_API_KEY = ''
-
     DEBUG=True
     LOG_FORMAT = '%(asctime)s:%(levelname)s:%(name)s:%(message)s'
     LOG_LEVEL = 'DEBUG'
-
     AUTH_TYPE = AUTH_LDAP
     AUTH_LDAP_SERVER = "ldap://fadi-openldap:389"
     AUTH_LDAP_USE_TLS = False
@@ -67,7 +62,6 @@ superset:
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_PASSWORD = "password1"
     AUTH_LDAP_UID_FIELD = "cn"
-
 postgresql:
   enabled: true
   persistence:
@@ -141,7 +135,6 @@ postgresql:
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
       psql -c "create role ldap_groups;" postgres admin
-
 minio:
   enabled: true
   persistence:
@@ -200,9 +193,7 @@ grafana:
     # `config` is the content of `ldap.toml` that will be stored in the created secret
     config: |-
       verbose_logging = true
-
       [[servers]]
-
       host = "fadi-openldap"
       port = 389
       use_ssl = false
@@ -212,13 +203,10 @@ grafana:
       ##bind_password = 'password1'
       search_filter = "(cn=%s)"
       search_base_dns = ["DC=ldap,DC=cetic,DC=be"]
-
       [[servers.group_mappings]]
-
       group_dn = "*"
       org_role = "Admin"
       ##grafana_admin = true
-
    # ----- auth -----
 
 jupyterhub:
@@ -311,9 +299,7 @@ openldap:
 
   customLdifFiles:
     1-default-users.ldif: |-
-
       # You can find an example ldif file.
-
 phpldapadmin:
   enabled: true
   service:
@@ -354,6 +340,31 @@ kibana:
   env:
     ELASTICSEARCH_HOSTS: http://{{ .Release.Name }}-elasticsearch-client:9200
 
+nginx_ldapauth_proxy:
+  enabled: false
+  service:
+    type: NodePort
+    externalPort: 5601
+  proxy:
+    port: 443
+    host: "fadi-kibana"
+    authName: "admin"
+    ldapHost: "fadi-openldap"
+    ldapDN: "dc=ldap,dc=cetic,dc=be"
+    ldapFilter: "objectClass=organizationalPerson"
+    ldapBindDN: "cn=admin,dc=ldap,dc=cetic,dc=be"
+    requires:
+      - name: "admin"
+        filter: "cn=admin,dc=ldap,dc=cetic,dc=be"
+  ingress:
+    enabled: false
+    hosts:
+      - "fadikibana.com"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+  secrets:
+    ldapBindPassword: "password1"
+
 logstash:
   enabled: false
   elasticsearch:
@@ -391,8 +402,3 @@ swaggerui:
     path: /
     hosts: [swagger-tsimulus.fadi.minikube]
     tls: []
-
-
-
-
-
