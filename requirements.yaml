@@ -17,7 +17,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: minio.enabled
 - name: grafana
-  version: ~3.5.4
+  version: ~4.1.1
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: grafana.enabled
 - name: jupyterhub
