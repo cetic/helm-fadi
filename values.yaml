@@ -62,6 +62,7 @@ superset:
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_PASSWORD = "password1"
     AUTH_LDAP_UID_FIELD = "cn"
+
 postgresql:
   enabled: true
   persistence:
@@ -135,6 +136,7 @@ postgresql:
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
       psql -c "create role ldap_groups;" postgres admin
+
 minio:
   enabled: true
   persistence:
@@ -187,6 +189,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
+    enabled: true
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -199,14 +202,27 @@ grafana:
       use_ssl = false
       start_tls = false
       ssl_skip_verify = false
-      bind_dn = "cn=%s,DC=ldap,DC=cetic,DC=be"
-      ##bind_password = 'password1'
-      search_filter = "(cn=%s)"
-      search_base_dns = ["DC=ldap,DC=cetic,DC=be"]
+      bind_dn = "cn=admin,DC=ldap,DC=cetic,DC=be"
+      bind_password = 'password1'
+      search_filter = "(|(cn=%s)(&(cn=%s)(memberOf=cn=admin,DC=ldap,DC=cetic,DC=be)))"
+      search_base_dns = ["cn=admin,dc=ldap,dc=cetic,dc=be"]
+      group_search_base_dns = ["ou=Groups,dc=ldap,dc=cetic,dc=be"]
+
       [[servers.group_mappings]]
       group_dn = "*"
       org_role = "Admin"
       ##grafana_admin = true
+
+      #group_dn = "cn=amen,DC=ldap,DC=cetic,DC=be"
+      #org_role = "Viewer"
+
+      [servers.attributes]
+      name = "givenName"
+      surname = "sn"
+      username = "cn"
+      member_of = "memberOf"
+      email =  "email"
+
    # ----- auth -----
 
 jupyterhub:
@@ -260,9 +276,7 @@ jupyterhub:
 nifi:
   enabled: true
   service:
-    loadBalancer:
-      enabled: true
-      type: NodePort
+    type: NodePort
   ingress:
     enabled: true
     annotations: {}

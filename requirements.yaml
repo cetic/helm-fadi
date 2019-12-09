@@ -9,7 +9,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: superset.enabled
 - name: postgresql
-  version: ~0.1.2
+  version: ~0.1.3
   repository: https://cetic.github.io/helm-charts/
   condition: postgresql.enabled
 - name: minio
@@ -17,7 +17,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: minio.enabled
 - name: grafana
-  version: ~3.5.4
+  version: ~4.1.1
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: grafana.enabled
 - name: jupyterhub
@@ -25,11 +25,11 @@ dependencies:
   repository: https://jupyterhub.github.io/helm-chart/
   condition: jupyterhub.enabled
 - name: nifi
-  version: ~0.2.0
+  version: ~0.3.1
   repository: https://cetic.github.io/helm-charts/
   condition: nifi.enabled
 - name: pgadmin
-  version: ~0.1.10
+  version: ~0.1.12
   repository: https://cetic.github.io/helm-charts/
   condition: pgadmin.enabled
 - name: openldap
@@ -37,7 +37,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: openldap.enabled
 - name: phpldapadmin
-  version: ~0.1.2
+  version: ~0.1.3
   repository: https://cetic.github.io/helm-charts/
   condition: phpldapadmin.enabled
 - name: kafka
@@ -69,7 +69,7 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: tsaas.enabled
 - name: swaggerui
-  version: ^0.1.0
+  version: ^0.2.0
   repository: https://cetic.github.io/helm-charts/
   condition: swaggerui.enabled
 - name: nginx-ldapauth-proxy
