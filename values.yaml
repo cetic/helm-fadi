@@ -62,6 +62,7 @@ superset:
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_PASSWORD = "password1"
     AUTH_LDAP_UID_FIELD = "cn"
+
 postgresql:
   enabled: true
   persistence:
@@ -135,6 +136,7 @@ postgresql:
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
       psql -c "create role ldap_groups;" postgres admin
+
 minio:
   enabled: true
   persistence:
@@ -274,9 +276,7 @@ jupyterhub:
 nifi:
   enabled: true
   service:
-    loadBalancer:
-      enabled: true
-      type: NodePort
+    type: NodePort
   ingress:
     enabled: true
     annotations: {}
