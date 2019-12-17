@@ -314,6 +314,7 @@ openldap:
   customLdifFiles:
     1-default-users.ldif: |-
       # You can find an example ldif file.
+
 phpldapadmin:
   enabled: true
   service:
@@ -416,3 +417,22 @@ swaggerui:
     path: /
     hosts: [swagger-tsimulus.fadi.minikube]
     tls: []
+
+node-red:
+  enabled: true
+  service:
+    type: NodePort
+    port: 1880
+    nodePort: 31880
+  ingress:
+    enabled: false
+    annotations: {}
+    path: /
+    hosts:
+      - chart-example.local
+    tls: []
+  persistence:
+    enabled: true
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 5Gi
