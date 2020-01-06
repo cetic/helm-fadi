@@ -20,11 +20,6 @@ superset:
     enabled: true
   service:
     type: NodePort
-  ingress:
-    enabled: true
-    annotations: {}
-    path: /
-    hosts: [superset.fadi.minikube]
   configFile: |-
     from flask_appbuilder.security.manager import AUTH_DB,AUTH_LDAP
     #---------------------------------------------------------
@@ -143,21 +138,11 @@ minio:
     enabled: true
   service:
     type: NodePort
-  ingress:
-    enabled: true
-    annotations: {}
-    path: /
-    hosts: [minio.fadi.minikube]
 
 grafana:
   enabled: true
   service:
     type: NodePort
-  ingress:
-    enabled: true
-    annotations: {}
-    path: /
-    hosts: [grafana.fadi.minikube]
   grafana.ini:
     paths:
       data: /var/lib/grafana/data
@@ -267,22 +252,11 @@ jupyterhub:
   prePuller:
     hook:
       enabled: false
-  ingress:
-    enabled: true
-    annotations: {}
-    hosts: [jupyterhub.fadi.minikube]
-    pathSuffix: ''
 
 nifi:
   enabled: true
   service:
     type: NodePort
-  ingress:
-    enabled: true
-    annotations: {}
-    tls: []
-    hosts: [nifi.fadi.minikube]
-    path: /
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
     enabled: true
@@ -293,11 +267,6 @@ pgadmin:
   enabled: true
   service:
     type: NodePort
-  ingress:
-    enabled: true
-    annotations: {traefik.ingress.kubernetes.io/rule-type: Path}
-    path: /
-    hosts: [pgadmin.fadi.minikube]
 
 openldap:
   enabled: true
@@ -321,11 +290,6 @@ phpldapadmin:
     type: NodePort
   env:
     PHPLDAPADMIN_LDAP_HOSTS: "fadi-openldap"
-  ingress:
-    enabled: true
-    annotations: {}
-    path: /
-    hosts: [phpldapadmin.fadi.minikube]
 
 kafka:
   enabled: false
@@ -371,12 +335,6 @@ nginx_ldapauth_proxy:
     requires:
       - name: "admin"
         filter: "cn=admin,dc=ldap,dc=cetic,dc=be"
-  ingress:
-    enabled: false
-    hosts:
-      - "fadikibana.com"
-    annotations:
-      kubernetes.io/ingress.class: nginx
   secrets:
     ldapBindPassword: "password1"
 
@@ -396,12 +354,6 @@ filebeat:
 
 tsaas:
   enabled: false
-  ingress:
-    enabled: true
-    annotations: {}
-    path: /
-    hosts: [api-tsimulus.fadi.minikube]
-    tls: []
 
 swaggerui:
   enabled: false
@@ -411,12 +363,6 @@ swaggerui:
     server :
       url: http://api-tsimulus.fadi.minikube
       description: "TSIMULUS API"
-  ingress:
-    enabled: true
-    annotations: {}
-    path: /
-    hosts: [swagger-tsimulus.fadi.minikube]
-    tls: []
 
 node-red:
   enabled: false
@@ -424,15 +370,14 @@ node-red:
     type: NodePort
     port: 1880
     nodePort: 31880
-  ingress:
-    enabled: false
-    annotations: {}
-    path: /
-    hosts:
-      - chart-example.local
-    tls: []
   persistence:
     enabled: true
-    # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 5Gi
+
+adminer:
+  enabled: false
+  config:
+    design: "pepa-linha"
+  service:
+    type: NodePort
