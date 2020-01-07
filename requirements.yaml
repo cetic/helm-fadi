@@ -81,6 +81,6 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: node-red.enabled
 - name: adminer
-  version: ~0.1.1
+  version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
   condition: adminer.enabled
