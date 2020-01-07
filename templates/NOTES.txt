@@ -1,9 +1,8 @@
 Thank you for installing FADI!
 
+You have installed the following tools inside FADI:
 {{- if .Values.grafana.enabled }}
-
-#####      GRAFANA - FADI         #####
-#######################################
+|*Grafana*|
 
 The Grafana server can be accessed via port {{ .Values.grafana.service.port }} on the following DNS name from within your cluster:
    {{ template "grafana.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
@@ -28,38 +27,17 @@ The Grafana server can be accessed via port {{ .Values.grafana.service.port }} o
      kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 3000
 {{- end }}
 {{- end }}
-
-Login with the username: {{ .Values.grafana.adminUser }} and get your 'admin' user password by running:
-
-   kubectl get secret --namespace default fadi -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-
-{{- if not .Values.grafana.persistence.enabled }}
-WARNING: Persistence is DISABLED !
-{{- end }}
 {{- end }}
 
 
 {{- if .Values.superset.enabled }}
-
-#####      SUPERSET - FADI       #####
-######################################
-
+|*Superset*|
 Superset can be accessed via port {{ .Values.superset.service.port }} on the following DNS name from within your cluster:
 {{ include "superset.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
-
-Initially you can login with username/password: admin/admin.
-
-{{- if not .Values.superset.persistence.enabled }}
-WARNING: Persistence is DISABLED !
-{{- end }}
 {{- end }}
 
 {{- if .Values.pgadmin.enabled }}
-
-#####      PGADMIN - FADI        #####
-######################################
-
+|*pgAdmin*|
 Get the pgAdmin URL by running these commands:
 {{- if .Values.pgadmin.ingress.enabled }}
   You should be able to access your new pgAdmin installation through
@@ -91,10 +69,7 @@ Get the pgAdmin URL by running these commands:
 
 
 {{- if .Values.minio.enabled }}
-
-#####      MINIO - FADI          #####
-######################################
-
+|*Minio*|
 {{- if eq .Values.minio.service.type "ClusterIP" "NodePort" }}
 Minio can be accessed via port {{ .Values.minio.service.port }} on the following DNS name from within your cluster:
 {{ template "minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
@@ -104,8 +79,6 @@ To access Minio from localhost, run the below commands:
   1. export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
 
   2. kubectl port-forward $POD_NAME 9000 --namespace {{ .Release.Namespace }}
-
-Read more about port forwarding here: http://kubernetes.io/docs/user-guide/kubectl/kubectl_port-forward/
 
 You can now access Minio server on http://localhost:9000. Follow the below steps to connect to Minio server with mc client:
 
@@ -134,19 +107,10 @@ You can now access Minio server on http://<External-IP>:9000. Follow the below s
 Alternately, you can use your browser or the Minio SDK to access the server - https://docs.minio.io/categories/17
 {{- end }}
 
-{{ if and (.Values.minio.networkPolicy.enabled) (not .Values.minio.networkPolicy.allowExternal) }}
-Note: Since NetworkPolicy is enabled, only pods with label
-{{ template "minio.fullname" . }}-client=true"
-will be able to connect to this minio cluster.
-{{- end }}
-
 {{- end }}
 
 {{- if .Values.jupyterhub.enabled }}
-#####   JUPYTERHUB - FADI      #####
-####################################
-
-Your release is named {{ .Release.Name }} and installed into the namespace {{ .Release.Namespace }}.
+|*JupyterHub*|
 
 You can find if the hub and proxy is ready by doing:
 
@@ -158,37 +122,10 @@ You can find the public IP of the JupyterHub by doing:
 
  kubectl --namespace={{ .Release.Namespace }} get svc proxy-public
 
-It might take a few minutes for it to appear!
-
-Note that this is still an alpha release! If you have questions, feel free to
-  1. Read the guide at https://z2jh.jupyter.org
-  2. Chat with us at https://gitter.im/jupyterhub/jupyterhub
-  3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
-
-{{- if .Values.jupyterhub.hub.extraConfigMap }}
-
-DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
-Use top-level `custom` instead:
-
----
-custom:
-{{- (merge dict .Values.jupyterhub.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
----
-{{- end }}
-
-{{- if and (not .Values.jupyterhub.scheduling.podPriority.enabled) (and .Values.jupyterhub.scheduling.userPlaceholder.enabled .Values.jupyterhub.scheduling.userPlaceholder.replicas) }}
-
-WARNING: You are using user placeholders without pod priority enabled, either
-enable pod priority or stop using the user placeholders to avoid wasting cloud
-resources.
-{{- end }}
-
 {{- end }}
 
 {{- if .Values.spark.enabled }}
-
-#####      SPARK - FADI        #####
-####################################
+|*Spark*|
 
 Get the Spark URL to visit by running these commands in the same shell:
   
@@ -197,24 +134,10 @@ Get the Spark URL to visit by running these commands in the same shell:
   
   export SPARK_SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "name" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   echo http://$SPARK_SERVICE_IP:{{ .Values.spark.WebUi.ServicePort }}
-
-Get the Zeppelin URL to visit by running these commands in the same shell:
-  
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-  You can watch the status of by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "name" . }}'
-
-  export ZEPPELIN_SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "name" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo http://$ZEPPELIN_SERVICE_IP:{{ .Values.spark.Zeppelin.ServicePort }}
-
 {{- end }}
 
 {{- if .Values.postgresql.enabled }}
-
-#####    POSTGRESQL - FADI     #####
-####################################
-
-
-** Please be patient while the chart is being deployed **
+|*PostgreSQL*|
 
 PostgreSQL can be accessed via port {{ .Values.postgresql.postgresql.port }} on the following DNS name from within your cluster:
 
@@ -254,35 +177,23 @@ To connect to your database from outside the cluster execute the following comma
 {{- end }}
 
 {{- if .Values.openldap.enabled }}
+|*OpenLDAP*|
 
-#####      Openldap - FADI         #####
-#######################################
-
-OpenLDAP has been installed. You can access the server from within the k8s cluster using:
+You can access the server from within the k8s cluster using:
 
   {{ template "openldap.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.openldap.service.ldapPort }}
-
 
 You can access the LDAP adminPassword and configPassword using:
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ template "openldap.secretName" . }} -o jsonpath="{.data.LDAP_ADMIN_PASSWORD}" | base64 --decode; echo
   kubectl get secret --namespace {{ .Release.Namespace }} {{ template "openldap.secretName" . }} -o jsonpath="{.data.LDAP_CONFIG_PASSWORD}" | base64 --decode; echo
 
-
 You can access the LDAP service, from within the cluster (or with kubectl port-forward) with a command like (replace password and domain):
   ldapsearch -x -H ldap://{{ template "openldap.fullname" . }}-service.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.openldap.service.ldapPort }} -b dc=example,dc=org -D "cn=admin,dc=example,dc=org" -w $LDAP_ADMIN_PASSWORD
-
-
-Test server health using Helm test:
-  helm test {{ .Release.Name }}
-
 {{- end }}
 
 {{- if .Values.phpldapadmin.enabled }}
-
-#####      phpLDAPadmin - FADI         #####
-#######################################
-
+|*phpLDAPadmin*|
 1. Get the application URL by running these commands:
 {{- if .Values.phpldapadmin.ingress.enabled }}
 {{- range .Values.phpldapadmin.ingress.hosts }}
@@ -302,29 +213,20 @@ Test server health using Helm test:
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
-          
 {{- end }}
 
 {{- if .Values.filebeat.enabled }}
-
-#####      Filebeat - FADI         #####
-#######################################
-
+|*FileBeat*|
 
 ******* Filebeat will work once all the Elasticsearch pods are running, it might take a while. *********
-
 To verify that Filebeat has started, run:
-
   kubectl --namespace={{ .Release.Namespace }} get pods -l "app={{ template "filebeat.name" . }},release={{ .Release.Name }}"
-
 
 {{- end }}
 
 
 {{- if .Values.logstash.enabled }}
-
-#####      logstash - FADI         #####
-#######################################
+|*LogStash*|
 
 {{- if .Values.logstash.service.ports.http }}
 Get the Logstash HTTP Input URL by running these commands:
@@ -351,30 +253,17 @@ Get the Logstash HTTP Input URL by running these commands:
 {{- end }}
 
 {{- if .Values.elasticsearch.enabled }}
-
-#####      elasticsearch - FADI         #####
-#######################################
-
+|*ElasticSearch*|
 The elasticsearch cluster has been installed.
-
-     WARNING: You have likely exposed your Elasticsearch cluster direct to the internet.
-              Elasticsearch does not implement any security for public facing clusters by default.
-              As a minimum level of security;  place an Nginx gateway infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
-
 {{- end }}
 
 
 {{- if .Values.kibana.enabled }}
-
-#####      kibana - FADI         #####
-#######################################
+|*Kibana*|
 
 To verify that {{ template "kibana.fullname" . }} has started, run:
-
   kubectl --namespace={{ .Release.Namespace }} get pods -l "app={{ template "kibana.name" . }}"
-
 Kibana can be accessed:
-
   * From outside the cluster, run these commands in the same shell:
     {{- if contains "NodePort" .Values.kibana.service.type }}
 
@@ -387,13 +276,10 @@ Kibana can be accessed:
     echo "Visit http://127.0.0.1:5601 to use Kibana"
     kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 5601:5601
     {{- end }}
-
 {{- end }}
 
 {{- if .Values.nginx_ldapauth_proxy.enabled }}
-
-#####      nginx_ldapauth_proxy - FADI         #####
-###################################################
+|*Nginx_ldapauth_proxy*|
 
 1. Get the application URL by running these commands:
 {{- if .Values.nginx_ldapauth_proxy.ingress.enabled }}
@@ -417,11 +303,8 @@ Kibana can be accessed:
 
 {{- end }}
 
-
 {{- if .Values.tsaas.enabled }}
-
-#####      TSAAS - FADI           #####
-#######################################
+|*TSimulus as a Service*|
 
 1. Get the application URL by running these commands:
 {{- if .Values.tsaas.ingress.enabled }}
@@ -444,13 +327,10 @@ Kibana can be accessed:
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
-
 {{- end }}
 
 {{- if .Values.swaggerui.enabled }}
-
-#####   TSAAS SWAGGERUI - FADI    #####
-#######################################
+|*SwaggerUI*|
 
 1. Get the application URL by running these commands:
 {{- if contains "NodePort" .Values.swaggerui.service.type }}
@@ -470,11 +350,6 @@ Kibana can be accessed:
   echo "swagger-ui URL: http://127.0.0.1:8080"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "swagger-ui.fullname" . }} 8080:{{ .Values.service.port }}
 {{- end }}
-
-** Please be patient while the chart is being deployed **
-
 {{- end }}
-
-
 
 CONGRATULATIONS! FADI is being installed.
