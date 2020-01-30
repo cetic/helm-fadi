@@ -28,10 +28,6 @@ dependencies:
   version: ~0.3.1
   repository: https://cetic.github.io/helm-charts/
   condition: nifi.enabled
-- name: pgadmin
-  version: ~0.1.12
-  repository: https://cetic.github.io/helm-charts/
-  condition: pgadmin.enabled
 - name: openldap
   version: ~1.2.1
   repository: https://kubernetes-charts.storage.googleapis.com/

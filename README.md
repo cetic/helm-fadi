@@ -62,8 +62,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `minio.enabled`                                                             | Enable [Minio](https://github.com/helm/charts/tree/master/stable/minio)                                            | `true`                          |
 | `grafana.enabled`                                                           | Enable [Grafana](https://github.com/helm/charts/tree/master/stable/grafana)                                        | `true`                          |
 | `jupyterhub.enabled`                                                        | Enable [JupyterHub](https://github.com/jupyterhub/helm-chart)                                                      | `true`                          |
-| `nifi.enabled`                                                              | Enable [Nifi](https://github.com/cetic/helm-nifi)                                                                  | `true`                          |
-| `pgadmin.enabled`                                                           | Enable [PgAdmin](https://github.com/cetic/helm-pgadmin)                                                            | `true`                          |
+| `nifi.enabled`                                                              | Enable [Nifi](https://github.com/cetic/helm-nifi)                                                                  | `true`                          |                          |
 | `openldap.enabled`                                                          | Enable [Openldap](https://github.com/helm/charts/tree/master/stable/openldap)                                      | `true`                          |
 | `phpldapadmin.enabled`                                                      | Enable [PhpLDAPadmin](https://github.com/cetic/helm-phpLDAPadmin)                                                  | `true`                          |
 | `kafka.enabled`                                                             | Enable [Kafka](https://github.com/helm/charts/tree/master/incubator/kafka)                                         | `false`                         |
@@ -76,7 +75,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `tsaas.enabled`                                                             | Enable [Tsimulus-saas](https://github.com/cetic/helm-tsimulus-saas)                                                | `false`                         |
 | `swaggerui.enabled`                                                         | Enable [Swaggerui](https://github.com/cetic/helm-swagger-ui)                                                       | `false`                         |
 | `node-red.enabled`                                                          | Enable [Node-red](https://github.com/helm/charts/tree/master/stable/node-red)                                      | `false`                         |
-| `adminer.enabled`                                                           | Enable [Adminer](https://github.com/cetic/helm-adminer)                                                            | `false`                         |
+| `adminer.enabled`                                                           | Enable [Adminer](https://github.com/cetic/helm-adminer)                                                            | `true`                         |
 
 ## Contributing
 
