@@ -263,11 +263,6 @@ nifi:
   zookeeper:
     replicaCount: 1
 
-pgadmin:
-  enabled: true
-  service:
-    type: NodePort
-
 openldap:
   enabled: true
   env:
@@ -376,7 +371,7 @@ node-red:
     size: 5Gi
 
 adminer:
-  enabled: false
+  enabled: true
   config:
     design: "pepa-linha"
   service:
