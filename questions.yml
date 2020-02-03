@@ -14,7 +14,7 @@ questions:
     type: boolean
     label: Enable data persistence for PostgreSQL Database
     show_subquestion_if: true
-    group: "Data persistence"
+    group: "Test"
     subquestions:
     - variable: postgresql.persistence.size
       default: "10Gi"
