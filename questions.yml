@@ -13,10 +13,12 @@ questions:
   group: "PostgreSQL Database"
   subquestions:
   - variable: postgresql.persistence.size
+    show_if: "postgresql.enabled=true"
     default: "10Gi"
     type: string
     label: PostgreSQL database Volume Size
   - variable: postgresql.persistence.storageClass
+    show_if: "postgresql.enabled=true"
     default: ""
     description: "If undefined or null, uses the default StorageClass. Default to null"
     type: storageclass
