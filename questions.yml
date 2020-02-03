@@ -5,6 +5,7 @@ questions:
   type: boolean
   label: Enable PostgreSQL Database
 - variable: postgresql.persistence.enabled
+  show_if: "postgresql.enabled=true"
   default: "false"
   type: boolean
   label: Enable data persistence for PostgreSQL Database
