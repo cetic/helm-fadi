@@ -2,117 +2,117 @@ categories:
 - Blog
 - CMS
 questions:
-- variable: spark.enabled
+- variable: postgresql.enabled
   default: "false"
-  description: "Enable Spark service"
   type: boolean
   required: true
   label: Enable Spark
-- variable: superset.enabled
-  default: "false"
-  description: "Enable Superset"
-  type: boolean
-  required: true
-  label: Enable Superset
-- variable: postgresql.enabled
-  default: "false"
-  description: "Enable PostgreSQL Database"
-  type: boolean
-  required: true
-  label: Enable PostgreSQL Database
-- variable: minio.enabled
-  default: "false"
-  description: "Enable Minio object storage server"
-  type: boolean
-  required: true
-  label: Enable Minio object storage server
-- variable: grafana.enabled
-  default: "false"
-  description: "Enable Grafana"
-  type: boolean
-  required: true
-  label: Enable Grafana
-- variable: jupyterhub.enabled
-  default: "false"
-  description: "Enable Jupyterhub"
-  type: boolean
-  required: true
-  label: Enable Jupyterhub
-- variable: nifi.enabled
-  default: "false"
-  description: "Enable Nifi"
-  type: boolean
-  required: true
-  label: Enable Nifi
-- variable: openldap.enabled
-  default: "false"
-  description: "Enable Openldap"
-  type: boolean
-  required: true
-  label: Enable Openldap
-- variable: phpldapadmin.enabled
-  default: "false"
-  description: "Enable Phpldapadmin"
-  type: boolean
-  required: true
-  label: Enable Phpldapadmin
-- variable: kafka.enabled
-  default: "false"
-  description: "Enable kafka"
-  type: boolean
-  required: true
-  label: Enable kafka
-- variable: cassandra.enabled
-  default: "false"
-  description: "Enable cassandra"
-  type: boolean
-  required: true
-  label: Enable cassandra
-- variable: elasticsearch.enabled
-  default: "false"
-  description: "Enable elasticsearch"
-  type: boolean
-  required: true
-  label: Enable elasticsearch
-- variable: kibana.enabled
-  default: "false"
-  description: "Enable kibana"
-  type: boolean
-  required: true
-  label: Enable kibana
-- variable: nginx_ldapauth_proxy.enabled
-  default: "false"
-  description: "Enable nginx_ldapauth_proxy"
-  type: boolean
-  required: true
-  label: Enable nginx_ldapauth_proxy
-- variable: logstash.enabled
-  default: "false"
-  description: "Enable logstash"
-  type: boolean
-  required: true
-  label: Enable logstash
-- variable: filebeat.enabled
-  default: "false"
-  description: "Enable filebeat"
-  type: boolean
-  required: true
-  label: Enable filebeat
-- variable: swaggerui.enabled
-  default: "false"
-  description: "Enable swaggerui"
-  type: boolean
-  required: true
-  label: Enable swaggerui
-- variable: node-red.enabled
-  default: "false"
-  description: "Enable node-red"
-  type: boolean
-  required: true
-  label: Enable node-red
-- variable: adminer.enabled
-  default: "false"
-  description: "Enable adminer service"
-  type: boolean
-  required: true
-  label: Enable Adminer
+# - variable: superset.enabled
+#   default: "false"
+#   description: "Enable Superset"
+#   type: boolean
+#   required: true
+#   label: Enable Superset
+# - variable: postgresql.enabled
+#   default: "false"
+#   description: "Enable PostgreSQL Database"
+#   type: boolean
+#   required: true
+#   label: Enable PostgreSQL Database
+# - variable: minio.enabled
+#   default: "false"
+#   description: "Enable Minio object storage server"
+#   type: boolean
+#   required: true
+#   label: Enable Minio object storage server
+# - variable: grafana.enabled
+#   default: "false"
+#   description: "Enable Grafana"
+#   type: boolean
+#   required: true
+#   label: Enable Grafana
+# - variable: jupyterhub.enabled
+#   default: "false"
+#   description: "Enable Jupyterhub"
+#   type: boolean
+#   required: true
+#   label: Enable Jupyterhub
+# - variable: nifi.enabled
+#   default: "false"
+#   description: "Enable Nifi"
+#   type: boolean
+#   required: true
+#   label: Enable Nifi
+# - variable: openldap.enabled
+#   default: "false"
+#   description: "Enable Openldap"
+#   type: boolean
+#   required: true
+#   label: Enable Openldap
+# - variable: phpldapadmin.enabled
+#   default: "false"
+#   description: "Enable Phpldapadmin"
+#   type: boolean
+#   required: true
+#   label: Enable Phpldapadmin
+# - variable: kafka.enabled
+#   default: "false"
+#   description: "Enable kafka"
+#   type: boolean
+#   required: true
+#   label: Enable kafka
+# - variable: cassandra.enabled
+#   default: "false"
+#   description: "Enable cassandra"
+#   type: boolean
+#   required: true
+#   label: Enable cassandra
+# - variable: elasticsearch.enabled
+#   default: "false"
+#   description: "Enable elasticsearch"
+#   type: boolean
+#   required: true
+#   label: Enable elasticsearch
+# - variable: kibana.enabled
+#   default: "false"
+#   description: "Enable kibana"
+#   type: boolean
+#   required: true
+#   label: Enable kibana
+# - variable: nginx_ldapauth_proxy.enabled
+#   default: "false"
+#   description: "Enable nginx_ldapauth_proxy"
+#   type: boolean
+#   required: true
+#   label: Enable nginx_ldapauth_proxy
+# - variable: logstash.enabled
+#   default: "false"
+#   description: "Enable logstash"
+#   type: boolean
+#   required: true
+#   label: Enable logstash
+# - variable: filebeat.enabled
+#   default: "false"
+#   description: "Enable filebeat"
+#   type: boolean
+#   required: true
+#   label: Enable filebeat
+# - variable: swaggerui.enabled
+#   default: "false"
+#   description: "Enable swaggerui"
+#   type: boolean
+#   required: true
+#   label: Enable swaggerui
+# - variable: node-red.enabled
+#   default: "false"
+#   description: "Enable node-red"
+#   type: boolean
+#   required: true
+#   label: Enable node-red
+# - variable: adminer.enabled
+#   default: "false"
+#   description: "Enable adminer service"
+#   type: boolean
+#   required: true
+#   label: Enable Adminer
+#   adminer.ingress.enabled
