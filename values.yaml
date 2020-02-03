@@ -3,7 +3,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 spark:
-  enabled: true
+  enabled: false
   Master:
     Name: spark-master
   WebUi:
@@ -15,7 +15,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   service:
@@ -59,7 +59,7 @@ superset:
     AUTH_LDAP_UID_FIELD = "cn"
 
 postgresql:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   ldap:
@@ -133,14 +133,14 @@ postgresql:
       psql -c "create role ldap_groups;" postgres admin
 
 minio:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   service:
     type: NodePort
 
 grafana:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   grafana.ini:
@@ -211,7 +211,7 @@ grafana:
    # ----- auth -----
 
 jupyterhub:
-  enabled: true
+  enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -254,7 +254,7 @@ jupyterhub:
       enabled: false
 
 nifi:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
@@ -264,7 +264,7 @@ nifi:
     replicaCount: 1
 
 openldap:
-  enabled: true
+  enabled: false
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -280,7 +280,7 @@ openldap:
       # You can find an example ldif file.
 
 phpldapadmin:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   env:
@@ -371,7 +371,7 @@ node-red:
     size: 5Gi
 
 adminer:
-  enabled: true
+  enabled: false
   config:
     design: "pepa-linha"
   service:
