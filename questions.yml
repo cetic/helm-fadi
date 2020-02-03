@@ -3,28 +3,26 @@ categories:
 - CMS
 questions:
 - variable: postgresql.enabled
+  group: "PostgreSQL Database"
   default: "false"
   type: boolean
   label: Enable PostgreSQL Database
+- variable: postgresql.persistence.enabled
+  default: "false"
+  type: boolean
+  label: Enable data persistence for PostgreSQL Database
   show_subquestion_if: true
-  group: "Data persistence"
+  group: "Test"
   subquestions:
-  - variable: postgresql.persistence.enabled
-    default: "false"
-    type: boolean
-    label: Enable data persistence for PostgreSQL Database
-    show_subquestion_if: true
-    group: "Test"
-    subquestions:
-    - variable: postgresql.persistence.size
-      default: "10Gi"
-      type: string
-      label: PostgreSQL database Volume Size
-    - variable: postgresql.persistence.storageClass
-      default: ""
-      description: "If undefined or null, uses the default StorageClass. Default to null"
-      type: storageclass
-      label: Default StorageClass for PostgreSQL Database
+  - variable: postgresql.persistence.size
+    default: "10Gi"
+    type: string
+    label: PostgreSQL database Volume Size
+  - variable: postgresql.persistence.storageClass
+    default: ""
+    description: "If undefined or null, uses the default StorageClass. Default to null"
+    type: storageclass
+    label: Default StorageClass for PostgreSQL Database]]
 # - variable: superset.enabled
 #   default: "false"
 #   description: "Enable Superset"
