@@ -24,6 +24,7 @@ questions:
     type: storageclass
     label: Default StorageClass for PostgreSQL Database
 - variable: adminer.enabled
+  group: "Adminer"
   default: "false"
   type: boolean
   required: true
@@ -35,83 +36,40 @@ questions:
     type: boolean
     label: Enable adminer ingress
   - variable: adminer.ingress.path
+    show_if: "adminer.ingress.enabled=true"
     default: "/"
     type: string
     label: Enable adminer ingress path
   - variable: adminer.ingress.host
+    show_if: "adminer.ingress.enabled=true"
     default: "[]"
     type: enum
     label: Enable adminer ingress host(s)
-  - variable: adminer.ingress.enabled
-    default: "false"
-    type: boolean
-    label: Enable adminer ingress
-- variable: grafana.enabled
-  group: "Grafana"
+- variable: minio.enabled
+  group: "Minio"
+  default: "false"
+  description: "Enable Minio object storage server"
+  type: boolean
+  required: true
+  label: Enable Minio object storage server
+- variable: jupyterhub.enabled
+  group: "JupyterHub"
   default: "false"
   type: boolean
-  label: Enable Grafana
-- variable: grafana.persistence.enabled
+  required: true
+  label: Enable Jupyterhub
+- variable: openldap.enabled
+  group: "LDAP"
   default: "false"
   type: boolean
-  label: Enable data persistence for PostgreSQL Database
-  show_subquestion_if: true
-  group: "Grafana"
-  subquestions:
-  - variable: postgresql.persistence.size
-    default: "10Gi"
-    type: string
-    label: PostgreSQL database Volume Size
-  - variable: postgresql.persistence.storageClass
-    default: ""
-    description: "If undefined or null, uses the default StorageClass. Default to null"
-    type: storageclass
-    label: Default StorageClass for PostgreSQL Database
-
-# - variable: superset.enabled
-#   default: "false"
-#   description: "Enable Superset"
-#   type: boolean
-#   required: true
-#   label: Enable Superset
-
-# - variable: minio.enabled
-#   default: "false"
-#   description: "Enable Minio object storage server"
-#   type: boolean
-#   required: true
-#   label: Enable Minio object storage server
-
-# - variable: grafana.enabled
-#   default: "false"
-#   description: "Enable Grafana"
-#   type: boolean
-#   required: true
-#   label: Enable Grafana
-# - variable: jupyterhub.enabled
-#   default: "false"
-#   description: "Enable Jupyterhub"
-#   type: boolean
-#   required: true
-#   label: Enable Jupyterhub
-# - variable: nifi.enabled
-#   default: "false"
-#   description: "Enable Nifi"
-#   type: boolean
-#   required: true
-#   label: Enable Nifi
-# - variable: openldap.enabled
-#   default: "false"
-#   description: "Enable Openldap"
-#   type: boolean
-#   required: true
-#   label: Enable Openldap
-# - variable: phpldapadmin.enabled
-#   default: "false"
-#   description: "Enable Phpldapadmin"
-#   type: boolean
-#   required: true
-#   label: Enable Phpldapadmin
+  required: true
+  label: Enable Openldap
+- variable: phpldapadmin.enabled
+  group: "LDAP"
+  default: "false"
+  type: boolean
+  required: true
+  label: Enable Phpldapadmin
 # - variable: kafka.enabled
 #   default: "false"
 #   description: "Enable kafka"
