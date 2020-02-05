@@ -237,6 +237,10 @@ jupyterhub:
         description: "The Jupyter Stacks spark image"
         kubespawner_override:
           image: jupyter/all-spark-notebook:latest
+      - display_name: "tensorflow environment"
+        description: "TensorFlow Notebook"
+        kubespawner_override:
+          image: jupyter/tensorflow-notebook:latest
   # ---- auth ----
   auth:
     type: ldap
