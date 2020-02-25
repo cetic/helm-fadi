@@ -391,28 +391,4 @@ adminer:
 
 mlflow:
   enabled: false
-  #
-  #
-  # Example using minio as a backing store for both artifacts and runs.
-  #
-  # replicas: 2
-  # containerPort: 80
-  # env:
-  # - name: WAIT_FOR_DATA_FOLDER
-  #   value: /export/datalake/mlflow
-  # - name: MLFLOW_S3_ENDPOINT_URL
-  #   value: http://minio.default.svc.cluster.local
-  # - name: AWS_ACCESS_KEY_ID
-  #   value: secret
-  # - name: AWS_SECRET_ACCESS_KEY
-  #   value: secret
-  command: '["mlflow"]'
-  args: '["server","--backend-store-uri", "postgresql://admin:password1@10.100.129.63:5432", "--default-artifact-root", "192.168.99.118:31311"]'
-  # # Using minio
-  # volumeMounts:
-  #   - mountPath: "/export"
-  #     name: minio
-  # volumes:
-  #   - name: minio
-  #     persistentVolumeClaim:
-  #       claimName: minio
+  backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
