@@ -264,17 +264,11 @@ nifi:
   zookeeper:
     replicaCount: 1
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 pgadmin:
   enabled: false
   service:
     type: NodePort
 
-=======
->>>>>>> 512bb2251eb0f4a2c57a992c2b5f3fc8f1cd5801
-=======
->>>>>>> 512bb2251eb0f4a2c57a992c2b5f3fc8f1cd5801
 openldap:
   enabled: true
   env:
