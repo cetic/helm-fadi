@@ -140,7 +140,7 @@ swaggerui:
 ## Data Manipulation Module
 jupyterhub:
   enabled: true
-  peristence:
+  persistence:
     enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
@@ -199,6 +199,8 @@ nifi:
   persistence:
     enabled: false
   zookeeper:
+    persistence:
+      enabled: false
     replicaCount: 1
 
 

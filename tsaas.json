@@ -40,8 +40,8 @@
         "frequency": 5000
       }
     ],
-    "from": "2020-02-17 00:00:00.000",
-    "to": "2020-02-20 00:00:00.000"
+    "from": "2020-02-26 00:00:00.000",
+    "to": "2020-02-29 00:00:00.000"
   },
   "templates": [
     {
@@ -57,3 +57,8 @@
   "speed": "realtime",
   "type": "tsimulus"
 }
+
+
+
+
+curl -X POST "http://fadi-tsaas.fadi.svc.cluster.local:8080/stream" -H "accept: */*" -H "Content-Type: application/json" -d "{\"config\":{\"generators\":[{\"name\":\"daily-generator\",\"type\":\"daily\",\"points\":{\"6:00:00.000\":11,\"12:00:00.000\":12,\"18:00:00.000\":11,\"0:00:00.000\":12}},{\"name\":\"daily-generator2\",\"type\":\"daily\",\"points\":{\"6:00:00.000\":7,\"12:00:00.000\":8,\"18:00:00.000\":9,\"0:00:00.000\":6}},{\"name\":\"noisy-daily\",\"type\":\"aggregate\",\"aggregator\":\"sum\",\"generators\":[\"daily-generator\",{\"type\":\"arma\",\"model\":{\"phi\":[0.5],\"std\":0.25,\"c\":0,\"seed\":159357},\"timestep\":180000,\"origin\":\"2018-10-01 0:00:00.000\"}]}],\"exported\":[{\"name\":\"tlm_1\",\"generator\":\"noisy-daily\",\"frequency\":30000},{\"name\":\"tlm_2\",\"generator\":\"daily-generator2\",\"frequency\":15000}],\"from\":\"2018-10-01 00:00:00.000\",\"to\":\"2018-12-06 00:00:00.000\"},\"templates\":[],\"speed\":\"realtime\",\"type\":\"tsimulus\"}"
