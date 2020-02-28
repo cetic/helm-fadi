@@ -123,18 +123,7 @@ phpldapadmin:
 tsaas:
   enabled: true
   service:
-    type: ClusterIP
-
-swaggerui:
-  enabled: true
-  swaggerui :
-    jsonPath : ""
-    jsonUrl : https://raw.githubusercontent.com/cetic/tsimulus-saas/master/oas/api-doc/openapi.json
-    server :
-      url: http://fadi-tsaas.fadi.svc.cluster.local:8080
-      description: "TSIMULUS API"
-
-
+    type: NodePort
 
 
 ## Data Manipulation Module
@@ -283,6 +272,9 @@ grafana:
 
 
 # Not Used Modules
+swaggerui:
+  enabled: false
+
 pgadmin:
   enabled: false
 
