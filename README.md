@@ -75,7 +75,8 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `tsaas.enabled`                                                             | Enable [Tsimulus-saas](https://github.com/cetic/helm-tsimulus-saas)                                                | `false`                         |
 | `swaggerui.enabled`                                                         | Enable [Swaggerui](https://github.com/cetic/helm-swagger-ui)                                                       | `false`                         |
 | `node-red.enabled`                                                          | Enable [Node-red](https://github.com/helm/charts/tree/master/stable/node-red)                                      | `false`                         |
-| `adminer.enabled`                                                           | Enable [Adminer](https://github.com/cetic/helm-adminer)                                                            | `true`                         |
+| `adminer.enabled`                                                           | Enable [Adminer](https://github.com/cetic/helm-adminer)                                                            | `true`                          |
+| `zabbix.enabled`                                                            | Enable [Zabbix](https://github.com/cetic/helm-zabbix)                                                              | `false`                         |
 
 ## Contributing
 
