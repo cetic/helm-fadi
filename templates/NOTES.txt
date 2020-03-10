@@ -318,6 +318,30 @@ Kibana can be accessed:
   echo "swagger-ui URL: http://127.0.0.1:8080"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "swagger-ui.fullname" . }} 8080:{{ .Values.service.port }}
 {{- end }}
+
+{{- if .Values.zabbix.enabled }}
+|*Zabbix*|
+
+1. Get the application URL by running these commands:
+{{- if .Values.zabbix.zabbixweb.ingress.enabled }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ if $.Values.ingress.host }}{{.Values.ingress.host}}{{else}}your-cluster-ip{{end}}{{ $.Values.ingress.path }}
+  {{if not $.Values.ingress.host}}
+{{- end }}
+{{- else if contains "NodePort" .Values.zabbix.zabbixweb.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services zabbix-web)
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w zabbix-web'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} zabbix-web -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:{{ .Values.zabbix.zabbixweb.service.port }}
+{{- else if contains "ClusterIP" .Values.zabbix.zabbixweb.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name=zabbix-web,app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward $POD_NAME 8080:80
+{{- end }}
+{{- end }}
 {{- end }}
 
 CONGRATULATIONS! FADI is being installed.
