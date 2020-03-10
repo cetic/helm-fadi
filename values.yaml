@@ -257,6 +257,7 @@ jupyterhub:
     hook:
       enabled: false
 
+
 nifi:
   enabled: true
   service:
@@ -295,7 +296,7 @@ kafka:
   replicas: 1
   affinity: {}
   external:
-    enabled: true
+    enabled: false
   persistence:
     enabled: false
   zookeeper:
@@ -380,3 +381,33 @@ adminer:
     design: "pepa-linha"
   service:
     type: NodePort
+
+mlflow:
+  enabled: false
+  backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
+
+zabbix:
+  enabled: false
+  postgresql:
+    enabled: false
+  zabbixServer:
+    DB_SERVER_HOST: "fadi-postgresql"
+    POSTGRES_USER: "admin"
+    POSTGRES_PASSWORD: "password1"
+    POSTGRES_DB: "postgres"
+  zabbixagent:
+    enabled: true
+    ZBX_SERVER_HOST: 127.0.01
+    ZBX_SERVER_PORT: 10051
+    ZBX_PASSIVE_ALLOW: true
+    ZBX_PASSIVESERVERS: 127.0.0.1
+    ZBX_ACTIVE_ALLOW: true
+  zabbixweb:
+    enabled: true
+    ZBX_SERVER_HOST: zabbix-server
+    ZBX_SERVER_PORT: 10051
+    DB_SERVER_HOST: fadi-postgresql
+    DB_SERVER_PORT: 5432
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: password1
+    POSTGRES_DB: postgres
