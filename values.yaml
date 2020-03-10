@@ -257,6 +257,7 @@ jupyterhub:
     hook:
       enabled: false
 
+
 nifi:
   enabled: true
   service:
@@ -295,7 +296,7 @@ kafka:
   replicas: 1
   affinity: {}
   external:
-    enabled: true
+    enabled: false
   persistence:
     enabled: false
   zookeeper:
@@ -380,6 +381,10 @@ adminer:
     design: "pepa-linha"
   service:
     type: NodePort
+
+mlflow:
+  enabled: false
+  backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
 
 zabbix:
   enabled: false
