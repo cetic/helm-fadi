@@ -3,7 +3,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 spark:
-  enabled: false
+  enabled: true
   Master:
     Name: spark-master
   WebUi:
@@ -15,7 +15,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -140,7 +140,7 @@ minio:
     type: NodePort
 
 grafana:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   grafana.ini:
@@ -255,7 +255,7 @@ jupyterhub:
 
 
 nifi:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
@@ -263,11 +263,6 @@ nifi:
     enabled: true
   zookeeper:
     replicaCount: 1
-
-pgadmin:
-  enabled: false
-  service:
-    type: NodePort
 
 openldap:
   enabled: true
