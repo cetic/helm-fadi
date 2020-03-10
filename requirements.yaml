@@ -80,3 +80,7 @@ dependencies:
   version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
   condition: adminer.enabled
+- name: mlflow
+  version: ~1.4.0
+  repository: https://cetic.github.io/helm-charts/
+  condition: mlflow.enabled

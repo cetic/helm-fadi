@@ -76,7 +76,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `swaggerui.enabled`                                                         | Enable [Swaggerui](https://github.com/cetic/helm-swagger-ui)                                                       | `false`                         |
 | `node-red.enabled`                                                          | Enable [Node-red](https://github.com/helm/charts/tree/master/stable/node-red)                                      | `false`                         |
 | `adminer.enabled`                                                           | Enable [Adminer](https://github.com/cetic/helm-adminer)                                                            | `true`                         |
-
+| `mlflow.enabled`                                                           | Enable [MLFlow](https://github.com/cetic/helm-mlflow)                                                            | `false`                         |
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).
