@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: fadi
 version: 0.2.0
@@ -21,40 +22,44 @@ maintainers:
   - name: banzo
   - name: AyadiAmen
 dependencies:
+- name: spark
+  version: ~1.0.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: spark.enabled
+- name: superset
+  version: ~1.1.6
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: superset.enabled
 - name: postgresql
-  version: ~0.1.2
+  version: ~0.1.3
   repository: https://cetic.github.io/helm-charts/
   condition: postgresql.enabled
 - name: minio
-  version: ~2.4.18
+  version: ~5.0.6
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: minio.enabled
 - name: grafana
-  version: ~3.5.4
+  version: ~4.1.1
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: grafana.enabled
 - name: jupyterhub
-  version: ~0.8.0
+  version: ~0.8.2
   repository: https://jupyterhub.github.io/helm-chart/
   condition: jupyterhub.enabled
 - name: nifi
-  version: ~0.2.0
+  version: ~0.3.1
   repository: https://cetic.github.io/helm-charts/
   condition: nifi.enabled
-- name: pgadmin
-  version: ~0.1.10
-  repository: https://cetic.github.io/helm-charts/
-  condition: pgadmin.enabled
 - name: openldap
   version: ~1.2.1
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: openldap.enabled
 - name: phpldapadmin
-  version: ~0.1.2
+  version: ~0.1.3
   repository: https://cetic.github.io/helm-charts/
   condition: phpldapadmin.enabled
 - name: kafka
-  version: ~0.19.0
+  version: ~0.20.8
   repository: https://kubernetes-charts-incubator.storage.googleapis.com
   condition: kafka.enabled
 - name: cassandra
@@ -70,22 +75,38 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: kibana.enabled
 - name: filebeat
-  version: ^1.7.0
+  version: ^4.0.0
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: filebeat.enabled
 - name: logstash
-  version: ^1.6.0
+  version: ^2.4.0
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: logstash.enabled
 - name: tsaas
-  version: ^0.1.2
+  version: ^0.1.3
   repository: https://cetic.github.io/helm-charts/
   condition: tsaas.enabled
 - name: swaggerui
-  version: ^0.1.0
+  version: ^0.2.0
   repository: https://cetic.github.io/helm-charts/
   condition: swaggerui.enabled
 - name: nginx-ldapauth-proxy
   version: ^0.1.3
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: nginx_ldapauth_proxy.enabled
+- name: node-red
+  version: ^1.4.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: node-red.enabled
+- name: adminer
+  version: ~0.1.2
+  repository: https://cetic.github.io/helm-charts/
+  condition: adminer.enabled
+- name: mlflow
+  version: ~1.4.0
+  repository: https://cetic.github.io/helm-charts/
+  condition: mlflow.enabled
+- name: zabbix
+  version: ~0.1.2
+  repository: https://cetic.github.io/helm-charts/
+  condition: zabbix.enabled
