@@ -208,8 +208,6 @@ grafana:
       member_of = "memberOf"
       email =  "email"
 
-   # ----- auth -----
-
 jupyterhub:
   enabled: true
   proxy:
@@ -256,7 +254,6 @@ jupyterhub:
   prePuller:
     hook:
       enabled: false
-
 
 nifi:
   enabled: true

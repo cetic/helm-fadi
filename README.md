@@ -11,7 +11,7 @@ You can optionally enable/disable components of fadi.
 ## Prerequisites
 
 - Kubernetes cluster 1.10+
-- Helm 2.8.0+
+- Helm 3.0.0+
 - PV provisioner support in the underlying infrastructure.
 
 ## Chart Details
@@ -32,7 +32,21 @@ helm repo update
 Install the fadi helm chart with a release name `my-release`:
 
 ```bash
-helm install --name my-release cetic/fadi
+helm install my-release cetic/fadi
+```
+
+### Install from local clone
+
+```bash
+git clone https://github.com/cetic/helm-fadi.git fadi
+cd fadi
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+helm repo add cetic https://cetic.github.io/helm-charts
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo update
+helm dep up
+helm install fadi .
 ```
 
 ## Uninstallation
@@ -40,7 +54,7 @@ helm install --name my-release cetic/fadi
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-helm delete --purge my-release
+helm uninstall my-release
 ```
 
 Deletion of the StatefulSet doesn't cascade to deleting associated PVCs. To delete them:
