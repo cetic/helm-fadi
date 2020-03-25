@@ -1,4 +1,4 @@
-apiVersion: "v2"
+apiVersion: v2
 name: fadi
 version: 0.2.0
 appVersion: 0.2.0
