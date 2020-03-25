@@ -60,7 +60,7 @@ helm uninstall my-release
 Deletion of the StatefulSet doesn't cascade to deleting associated PVCs. To delete them:
 
 ```bash
-kubectl delete pvc -l release=my-release,component=data
+kubectl delete pvc -l release=my-release
 ```
 
 ## Configuration
