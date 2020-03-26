@@ -91,6 +91,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `node-red.enabled`                                                          | Enable [Node-red](https://github.com/helm/charts/tree/master/stable/node-red)                                      | `false`                         |
 | `adminer.enabled`                                                           | Enable [Adminer](https://github.com/cetic/helm-adminer)                                                            | `true`                          |
 | `mlflow.enabled`                                                            | Enable [MLFlow](https://github.com/cetic/helm-mlflow)                                                              | `false`                         |
+| `seldon-core-operator.enabled`                                              | Enable [Seldon-core](https://github.com/SeldonIO/seldon-core/tree/master/helm-charts/seldon-core-operator)         | `false`                         |
 | `zabbix.enabled`                                                            | Enable [Zabbix](https://github.com/cetic/helm-zabbix)                                                              | `false`                         |
 
 ## Contributing
