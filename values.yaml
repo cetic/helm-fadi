@@ -383,6 +383,11 @@ mlflow:
   enabled: false
   backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
 
+seldon-core-operator:
+  enabled: false
+  usageMetrics:
+    enabled: false
+
 zabbix:
   enabled: false
   postgresql:

@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.0
-appVersion: 0.2.0
+version: 0.2.1
+appVersion: 0.2.1
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -110,3 +110,7 @@ dependencies:
   version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
   condition: zabbix.enabled
+- name: seldon-core-operator
+  version: ~1.0.2
+  repository: https://storage.googleapis.com/seldon-charts/
+  condition: seldon-core-operator.enabled
