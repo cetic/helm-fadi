@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.1
-appVersion: 0.2.1
+version: 0.2.2
+appVersion: 0.2.2
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -31,7 +31,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: superset.enabled
 - name: postgresql
-  version: ~0.1.3
+  version: ~0.2.0
   repository: https://cetic.github.io/helm-charts/
   condition: postgresql.enabled
 - name: minio
