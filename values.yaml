@@ -267,6 +267,8 @@ nifi:
 
 openldap:
   enabled: true
+  persistence:
+    enabled: true
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -276,7 +278,6 @@ openldap:
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
   adminPassword: password1
   configPassword: password2
-
   customLdifFiles:
     1-default-users.ldif: |-
       # You can find an example ldif file.
