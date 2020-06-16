@@ -218,7 +218,7 @@ jupyterhub:
     enabled: true
   singleuser:
     storage:
-      type: none
+      capacity: 5Gi
   # Defines the default image
     image:
       name: jupyter/minimal-notebook
@@ -263,7 +263,7 @@ nifi:
   persistence:
     enabled: true
   zookeeper:
-    replicaCount: 1
+    replicaCount: 3
 
 openldap:
   enabled: true
