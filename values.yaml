@@ -2,6 +2,7 @@
 # Default values for FADI.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
 spark:
   enabled: true
   Master:
@@ -136,6 +137,7 @@ minio:
   enabled: true
   persistence:
     enabled: true
+    size: 50Gi
   service:
     type: NodePort
 
@@ -262,8 +264,6 @@ nifi:
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
     enabled: true
-  zookeeper:
-    replicaCount: 3
 
 openldap:
   enabled: true
@@ -296,7 +296,7 @@ kafka:
   external:
     enabled: false
   persistence:
-    enabled: false
+    enabled: true
   zookeeper:
     replicaCount: 1
     fullnameOverride: fadi-kafka-zookeeper
