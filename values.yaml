@@ -291,23 +291,23 @@ phpldapadmin:
 
 kafka:
   enabled: false
-  replicas: 1
+  replicas: 3
   affinity: {}
   external:
     enabled: false
   persistence:
     enabled: true
   zookeeper:
-    replicaCount: 1
+    replicaCount: 3
     fullnameOverride: fadi-kafka-zookeeper
 
 cassandra:
   enabled: false
   affinity: {}
-  config:
-    cluster_size: 1
-    seed_size: 1
-    start_rpc: true
+  # config:
+  #   cluster_size: 1
+  #   seed_size: 1
+  #   start_rpc: true
 
 elasticsearch:
   enabled: false
@@ -414,3 +414,13 @@ zabbix:
     POSTGRES_USER: admin
     POSTGRES_PASSWORD: password1
     POSTGRES_DB: postgres
+
+
+  tsorage:
+    enabled: false
+    kafka:
+      host: fadi-kafka.fadi.svc.cluster.local
+      port: 9092
+    cassandra:
+      host: fadi-cassandra.fadi.svc.cluster.local
+      port: 9042
