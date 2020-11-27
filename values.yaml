@@ -264,6 +264,26 @@ nifi:
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
     enabled: true
+  properties:
+    externalSecure: false
+    isNode: true
+    httpPort: 8080
+    httpsPort: null
+    webProxyHost:
+    clusterPort: 6007
+    clusterSecure: false
+  auth:
+    ldap:
+      enabled: false
+      host: ldap://<hostname>:<port>
+      searchBase: CN=Users,DC=example,DC=com
+      admin: cn=admin,dc=example,dc=be
+      pass: password
+      searchFilter: (objectClass=*)
+      userIdentityAttribute: cn
+  ingress:
+    enabled: false
+    hosts: []
 
 openldap:
   enabled: true
@@ -414,3 +434,5 @@ zabbix:
     POSTGRES_USER: admin
     POSTGRES_PASSWORD: password1
     POSTGRES_DB: postgres
+
+
