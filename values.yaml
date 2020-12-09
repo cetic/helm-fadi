@@ -436,3 +436,18 @@ zabbix:
     POSTGRES_DB: postgres
 
 
+drupal:
+  enabled: false
+  drupalUsername: admin
+  drupalPassword: password1
+  mariadb:
+    enabled: true
+  externalDatabase:
+    host:
+    port:
+    user:
+    database:
+    password:
+  ingress:
+    enabled: false
+    hostname:

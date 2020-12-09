@@ -31,7 +31,7 @@ dependencies:
   repository: https://charts.cloudposse.com/incubator/
   condition: superset.enabled
 - name: postgresql
-  version: ~0.2.0
+  version: ~0.2.1
   repository: https://cetic.github.io/helm-charts/
   condition: postgresql.enabled
 - name: minio
@@ -106,3 +106,10 @@ dependencies:
   version: ~0.1.2
   repository: https://cetic.github.io/helm-charts/
   condition: zabbix.enabled
+- name: drupal
+  version: ~10.0.5
+  repository: https://charts.bitnami.com/bitnami
+  condition: drupal.enabled
+
+
+
