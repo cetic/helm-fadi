@@ -382,17 +382,6 @@ swaggerui:
       url: http://api-tsimulus.fadi.minikube
       description: "TSIMULUS API"
 
-node-red:
-  enabled: false
-  service:
-    type: NodePort
-    port: 1880
-    nodePort: 31880
-  persistence:
-    enabled: true
-    accessMode: ReadWriteOnce
-    size: 5Gi
-
 adminer:
   enabled: true
   config:

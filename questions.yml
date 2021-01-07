@@ -104,12 +104,6 @@ questions:
   type: boolean
   required: true
   label: Enable swaggerui
-- variable: node-red.enabled
-  default: "false"
-  description: "Enable node-red"
-  type: boolean
-  required: true
-  label: Enable node-red
 - variable: adminer.enabled
   default: "false"
   description: "Enable adminer service"
