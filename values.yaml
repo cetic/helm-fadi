@@ -115,7 +115,7 @@ postgresql:
         create_options: NOLOGIN IN ROLE ldap_groups
         #grant_options:
     cron:
-      schedule: "*/1 * * * *"
+      schedule: "*/30 * * * *"
       repo: ceticasbl/pg-ldap-sync
       tag: latest
       restartPolicy: Never
