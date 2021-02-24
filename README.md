@@ -93,6 +93,8 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `mlflow.enabled`                                                            | Enable [MLFlow](https://github.com/cetic/helm-mlflow)                                                              | `false`                         |
 | `seldon-core-operator.enabled`                                              | Enable [Seldon-core](https://github.com/SeldonIO/seldon-core/tree/master/helm-charts/seldon-core-operator)         | `false`                         |
 | `zabbix.enabled`                                                            | Enable [Zabbix](https://github.com/cetic/helm-zabbix)                                                              | `false`                         |
+| `drupal.enabled`                                                            | Enable [drupal](https://github.com/cetic/helm-drupal)                                                              | `false`                         |
+| `airflow.enabled`                                                            | Enable [airflow](https://artifacthub.io/packages/helm/bitnami/airflow)                                                              | `false`                         |
 
 ## Contributing
 
