@@ -440,3 +440,15 @@ drupal:
   ingress:
     enabled: false
     hostname:
+
+airflow:
+  enabled: true
+  postgresql:
+    enabled: false
+  externalDatabase:
+    database: postgres
+    host: fadi-postgresql
+    password: password1
+    port: 5432
+    user: admin
+
