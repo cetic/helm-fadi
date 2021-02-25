@@ -99,7 +99,7 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: mlflow.enabled
 - name: zabbix
-  version: ~0.1.2
+  version: ~0.3.2
   repository: https://cetic.github.io/helm-charts/
   condition: zabbix.enabled
 - name: seldon-core-operator
