@@ -132,6 +132,7 @@ postgresql:
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
       psql -c "create role ldap_groups;" postgres admin
+      psql -c "create database zabbix;" postgres admin
 
 minio:
   enabled: true
@@ -222,9 +223,6 @@ jupyterhub:
     storage:
       capacity: 5Gi
   # Defines the default image
-    image:
-      name: jupyter/minimal-notebook
-      tag: 7d427e7a4dde
     profileList:
       - display_name: "Minimal environment"
         description: "To avoid too much bells and whistles: Python."
@@ -242,16 +240,19 @@ jupyterhub:
         kubespawner_override:
           image: jupyter/tensorflow-notebook:latest
   # ---- auth ----
-  auth:
-    type: ldap
-    ldap:
-      server:
-        address: fadi-openldap
-      dn:
-        templates:
-          - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
-          - 'uid={username},cn=admin,dc=ldap,dc=cetic,dc=be'
+  hub:
+    config:
+      JupyterHub:
+        authenticator_class: ldapauthenticator.LDAPAuthenticator
+      LDAPAuthenticator:
+        bind_dn_template:
           - 'cn={username},dc=ldap,dc=cetic,dc=be'
+          - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
+        escape_userdn: false
+        lookup_dn: false
+        server_address: fadi-openldap
+        user_attribute: cn
+        use_ssl: false
   # ---- auth ----
   prePuller:
     hook:
@@ -296,11 +297,13 @@ openldap:
     LDAP_TLS: "true"
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
+    LDAP_TLS_VERIFY_CLIENT: "try"
   adminPassword: password1
   configPassword: password2
   customLdifFiles:
     1-default-users.ldif: |-
       # You can find an example ldif file.
+
 
 phpldapadmin:
   enabled: true
@@ -406,7 +409,7 @@ zabbix:
     DB_SERVER_HOST: "fadi-postgresql"
     POSTGRES_USER: "admin"
     POSTGRES_PASSWORD: "password1"
-    POSTGRES_DB: "postgres"
+    POSTGRES_DB: "zabbix"
   zabbixagent:
     enabled: true
     ZBX_SERVER_HOST: 127.0.01
@@ -422,27 +425,17 @@ zabbix:
     DB_SERVER_PORT: 5432
     POSTGRES_USER: admin
     POSTGRES_PASSWORD: password1
-    POSTGRES_DB: postgres
+    POSTGRES_DB: zabbix
 
 
 drupal:
   enabled: false
-  drupalUsername: admin
-  drupalPassword: password1
-  mariadb:
-    enabled: true
-  externalDatabase:
-    host:
-    port:
-    user:
-    database:
-    password:
   ingress:
     enabled: false
     hostname:
 
 airflow:
-  enabled: true
+  enabled: false
   postgresql:
     enabled: false
   externalDatabase:
@@ -451,4 +444,3 @@ airflow:
     password: password1
     port: 5432
     user: admin
-
