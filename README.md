@@ -95,6 +95,8 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `zabbix.enabled`                                                            | Enable [Zabbix](https://github.com/cetic/helm-zabbix)                                                              | `false`                         |
 | `drupal.enabled`                                                            | Enable [drupal](https://github.com/cetic/helm-drupal)                                                              | `false`                         |
 | `airflow.enabled`                                                            | Enable [airflow](https://artifacthub.io/packages/helm/bitnami/airflow)                                                              | `false`                         |
+| `rabbitmq.enabled`                                                            | Enable [rabbitmq](https://artifacthub.io/packages/helm/bitnami/rabbitmq)                                                              | `false`                         |
+| `thingsboard.enabled`                                                            | Enable [thingsboard](https://github.com/cetic/helm-thingsboard)                                                              | `false`                         |
 
 ## Contributing
 
