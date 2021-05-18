@@ -4,7 +4,7 @@
 # Declare variables to be passed into your templates.
 
 spark:
-  enabled: true
+  enabled: false
   Master:
     Name: spark-master
   WebUi:
@@ -16,7 +16,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   service:
@@ -135,7 +135,7 @@ postgresql:
       psql -c "create database zabbix;" postgres admin
 
 minio:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
     size: 50Gi
@@ -168,6 +168,10 @@ grafana:
   # Enable persistence
   persistence:
     enabled: true
+  config:
+    useGrafanaIniFile: true
+    grafanaIniConfigMap: keycloakconfig
+    grafanaIniSecret:
   # Administrator credentials when not using an existing secret (see below)
   adminUser: admin
 
@@ -177,7 +181,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
-    enabled: true
+    enabled: false
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -212,7 +216,7 @@ grafana:
       email =  "email"
 
 jupyterhub:
-  enabled: true
+  enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -259,7 +263,7 @@ jupyterhub:
       enabled: false
 
 nifi:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
@@ -306,7 +310,7 @@ openldap:
 
 
 phpldapadmin:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   env:
@@ -444,3 +448,32 @@ airflow:
     password: password1
     port: 5432
     user: admin
+
+keycloak:
+  enabled: true
+  auth:
+    ## Create administrator user on boot.
+    ##
+    createAdminUser: true
+    ## Keycloak administrator user and password
+    ##
+    adminUser: admin
+    adminPassword: "password1"
+    ## Wildfly management user and password
+    ##
+    managementUser: manager
+    managementPassword: "password2"
+  postgresql:
+    enabled: false
+    postgresqlUsername: bn_keycloak
+    postgresqlPassword: some-password
+    postgresqlDatabase: keycloak
+    existingSecret:
+    persistence:
+      enabled: true
+  externalDatabase:
+    host: "fadi-postgresql"
+    port: 5432
+    user: admin
+    password: "password1"
+    database: postgres

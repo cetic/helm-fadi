@@ -39,8 +39,8 @@ dependencies:
   repository: https://helm.min.io/
   condition: minio.enabled
 - name: grafana
-  version: ~6.1.9
-  repository: https://grafana.github.io/helm-charts
+  version: ~5.2.4
+  repository: https://charts.bitnami.com/bitnami
   condition: grafana.enabled
 - name: jupyterhub
   version: ~0.11.1
@@ -114,3 +114,7 @@ dependencies:
   version: ~8.0.5
   repository: https://charts.bitnami.com/bitnami
   condition: airflow.enabled
+- name: keycloak
+  version: ~2.4.7
+  repository: https://charts.bitnami.com/bitnami
+  condition: keycloak.enabled
