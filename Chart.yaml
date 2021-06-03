@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.9
-appVersion: 0.2.9
+version: 0.2.10
+appVersion: 0.2.10
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -13,6 +13,7 @@ keywords:
   - grafana
   - cassandra
   - kafka
+  - mongodb
 home: https://github.com/cetic/fadi
 icon: https://raw.githubusercontent.com/cetic/fadi/master/doc/images/logo.png
 source:
@@ -114,3 +115,7 @@ dependencies:
   version: ~8.0.5
   repository: https://charts.bitnami.com/bitnami
   condition: airflow.enabled
+- name: mongodb
+  version: ~10.11.1
+  repository: https://charts.bitnami.com/bitnami
+  condition: mongodb.enabled

@@ -444,3 +444,18 @@ airflow:
     password: password1
     port: 5432
     user: admin
+
+mongodb:
+  enabled: false
+  persistence:
+    enabled: true
+  auth:
+    enabled: true
+    rootPassword: "password1"
+  initdbScripts:
+      create_admin_user.sh: |
+          $MONGODB_BIN_DIR/mongo admin --host 127.0.0.1 --port $MONGODB_PORT_NUMBER -u root -p $MONGODB_ROOT_PASSWORD << EOF
+          db.createUser({ user: "admin" , pwd: "password1", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
+          use mongodb
+          db.user.insert({name: "Ada Lovelace", age: 205})
+          EOF
