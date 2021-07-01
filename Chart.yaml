@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.9
-appVersion: 0.2.9
+version: 0.2.10
+appVersion: 0.2.10
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -95,7 +95,7 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: adminer.enabled
 - name: mlflow
-  version: ~1.4.0
+  version: ~1.5.0
   repository: https://cetic.github.io/helm-charts/
   condition: mlflow.enabled
 - name: zabbix
