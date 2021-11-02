@@ -447,3 +447,25 @@ airflow:
 
 influxdb:
   enabled: true
+  auth: 
+    admin:
+      username: admin
+      password: ""
+    user: 
+      username: ""
+      password: ""
+      bucket: ""
+  influxdb:
+    replicaCount: 1
+    service: ClusterIP
+    port: 8086
+    rpcPort: 8088
+  ingress: 
+    enabled: false
+    hostname: 
+  
+
+
+
+
+
