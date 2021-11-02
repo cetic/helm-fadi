@@ -4,7 +4,7 @@
 # Declare variables to be passed into your templates.
 
 spark:
-  enabled: true
+  enabled: false
   Master:
     Name: spark-master
   WebUi:
@@ -16,9 +16,9 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: true
+  enabled: false
   persistence:
-    enabled: true
+    enabled: false
   service:
     type: NodePort
   configFile: |-
@@ -60,11 +60,11 @@ superset:
     AUTH_LDAP_UID_FIELD = "cn"
 
 postgresql:
-  enabled: true
+  enabled: false
   persistence:
-    enabled: true
+    enabled: false
   ldap:
-    enabled: true
+    enabled: false
     pgldapconfig: |-
       # Reference: https://github.com/larskanis/pg-ldap-sync/blob/master/config/sample-config.yaml
       # Connection parameters to LDAP server
@@ -135,15 +135,15 @@ postgresql:
       psql -c "create database zabbix;" postgres admin
 
 minio:
-  enabled: true
+  enabled: false
   persistence:
-    enabled: true
+    enabled: false
     size: 50Gi
   service:
     type: NodePort
 
 grafana:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   grafana.ini:
@@ -177,7 +177,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
-    enabled: true
+    enabled: false
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -212,7 +212,7 @@ grafana:
       email =  "email"
 
 jupyterhub:
-  enabled: true
+  enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -259,7 +259,7 @@ jupyterhub:
       enabled: false
 
 nifi:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
@@ -287,9 +287,9 @@ nifi:
     hosts: []
 
 openldap:
-  enabled: true
+  enabled: false
   persistence:
-    enabled: true
+    enabled: false
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -306,7 +306,7 @@ openldap:
 
 
 phpldapadmin:
-  enabled: true
+  enabled: false
   service:
     type: NodePort
   env:
@@ -386,7 +386,7 @@ swaggerui:
       description: "TSIMULUS API"
 
 adminer:
-  enabled: true
+  enabled: false
   config:
     design: "pepa-linha"
   service:
@@ -444,3 +444,6 @@ airflow:
     password: password1
     port: 5432
     user: admin
+
+influxdb:
+  enabled: true
