@@ -394,7 +394,14 @@ adminer:
 
 mlflow:
   enabled: false
-  backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
+  db:
+    default:
+      enabled: false
+    host: fadi-postgresql
+    port: 5432
+    user: admin
+    password: password1
+    database: postgres
 
 seldon-core-operator:
   enabled: false
