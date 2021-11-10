@@ -40,8 +40,8 @@ helm install my-release cetic/fadi
 ```bash
 git clone https://github.com/cetic/helm-fadi.git fadi
 cd fadi
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+helm repo add stable https://charts.helm.sh/stable
+helm repo add incubator https://charts.helm.sh/incubator
 helm repo add cetic https://cetic.github.io/helm-charts
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
