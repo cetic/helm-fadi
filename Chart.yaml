@@ -13,6 +13,7 @@ keywords:
   - grafana
   - cassandra
   - kafka
+  - mongodb
 home: https://github.com/cetic/fadi
 icon: https://raw.githubusercontent.com/cetic/fadi/master/doc/images/logo.png
 source:
@@ -122,3 +123,7 @@ dependencies:
   version: ~0.1.1
   repository: https://cetic.github.io/helm-charts/
   condition: thingsboard.enabled
+- name: mongodb
+  version: ~10.11.1
+  repository: https://charts.bitnami.com/bitnami
+  condition: mongodb.enabled
