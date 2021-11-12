@@ -4,7 +4,7 @@
 # Declare variables to be passed into your templates.
 
 spark:
-  enabled: false
+  enabled: true
   Master:
     Name: spark-master
   WebUi:
@@ -16,7 +16,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: false
+  enabled: true
   persistence:
     enabled: false
   service:
@@ -60,7 +60,7 @@ superset:
     AUTH_LDAP_UID_FIELD = "cn"
 
 postgresql:
-  enabled: false
+  enabled: true
   persistence:
     enabled: false
   ldap:
@@ -135,7 +135,7 @@ postgresql:
       psql -c "create database zabbix;" postgres admin
 
 minio:
-  enabled: false
+  enabled: true
   persistence:
     enabled: false
     size: 50Gi
@@ -143,7 +143,7 @@ minio:
     type: NodePort
 
 grafana:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   grafana.ini:
@@ -212,7 +212,7 @@ grafana:
       email =  "email"
 
 jupyterhub:
-  enabled: false
+  enabled: true
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -259,7 +259,7 @@ jupyterhub:
       enabled: false
 
 nifi:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
@@ -287,7 +287,7 @@ nifi:
     hosts: []
 
 openldap:
-  enabled: false
+  enabled: true
   persistence:
     enabled: false
   env:
@@ -306,7 +306,7 @@ openldap:
 
 
 phpldapadmin:
-  enabled: false
+  enabled: true
   service:
     type: NodePort
   env:
@@ -386,7 +386,7 @@ swaggerui:
       description: "TSIMULUS API"
 
 adminer:
-  enabled: false
+  enabled: true
   config:
     design: "pepa-linha"
   service:
@@ -446,7 +446,7 @@ airflow:
     user: admin
 
 influxdb:
-  enabled: true
+  enabled: false
   auth: 
     admin:
       username: admin

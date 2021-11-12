@@ -95,6 +95,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `zabbix.enabled`                                                            | Enable [Zabbix](https://github.com/cetic/helm-zabbix)                                                              | `false`                         |
 | `drupal.enabled`                                                            | Enable [drupal](https://github.com/cetic/helm-drupal)                                                              | `false`                         |
 | `airflow.enabled`                                                            | Enable [airflow](https://artifacthub.io/packages/helm/bitnami/airflow)                                                              | `false`                         |
+| `influxdb.enabled`                                                            | Enable [influxdb](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)                                                              | `false`                         |
 
 ## Contributing
 
