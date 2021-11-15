@@ -394,7 +394,14 @@ adminer:
 
 mlflow:
   enabled: false
-  backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
+  db:
+    default:
+      enabled: false
+    host: fadi-postgresql
+    port: 5432
+    user: admin
+    password: password1
+    database: postgres
 
 seldon-core-operator:
   enabled: false
@@ -444,6 +451,85 @@ airflow:
     password: password1
     port: 5432
     user: admin
+  service:
+    type: NodePort
+    port: 8080
+  auth:
+    forcePassword: false
+    username: admin
+    password: password1
+    fernetKey: _WJG5F2fIZ6q5LH03MQE45stfYpuLpeqzYcqOIxvCbs=
+  ldap:
+    enabled: false
+    uri: 'ldap://fadi-openldap:389'
+    base: 'dc=ldap,dc=cetic,dc=be'
+    binddn: 'cn=admin,dc=ldap,dc=cetic,dc=be'
+    bindpw: 'password1'
+    uidField: 'cn'
+  redis:
+    enabled: true
+    password: 'password1'
+  metrics:
+    enabled: false
+  ingress:
+    enabled: false
+    hosts:
+      - name: airflow.example
+        path: /
+
+
+rabbitmq:
+  enabled: false
+  auth:
+    username: admin
+    password: password1
+  ldap:
+    enabled: false
+    servers: ldap-server
+    port: '389'
+    user_dn_pattern: cn=${username},dc=example,dc=org
+    tls:
+      enabled: false
+  service:
+    type: NodePort
+  ingress:
+    enabled: false
+    path: /
+    certManager: false
+    hostname: rabbitmq.example
+
+thingsboard:
+  enabled: false
+  rabbitmq:
+    enabled: false
+  TB_RABBIT_MQ:
+    TB_QUEUE_TYPE: rabbitmq
+    TB_QUEUE_RABBIT_MQ_USERNAME: admin
+    TB_QUEUE_RABBIT_MQ_PASSWORD: password1
+    TB_QUEUE_RABBIT_MQ_HOST: rabbitmq
+    TB_QUEUE_RABBIT_MQ_PORT: 5672
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 7
+  ingress:
+    enabled: true
+    annotations: {}
+    hosts:
+      - host: thingsboard.example
+
+mongodb:
+  enabled: false
+  persistence:
+    enabled: true
+  auth:
+    enabled: true
+    rootPassword: "password1"
+  initdbScripts:
+      create_admin_user.sh: |
+          $MONGODB_BIN_DIR/mongo admin --host 127.0.0.1 --port $MONGODB_PORT_NUMBER -u root -p $MONGODB_ROOT_PASSWORD << EOF
+          db.createUser({ user: "admin" , pwd: "password1", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
+          EOF
 
 influxdb:
   enabled: false

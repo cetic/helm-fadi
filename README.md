@@ -40,8 +40,8 @@ helm install my-release cetic/fadi
 ```bash
 git clone https://github.com/cetic/helm-fadi.git fadi
 cd fadi
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+helm repo add stable https://charts.helm.sh/stable
+helm repo add incubator https://charts.helm.sh/incubator
 helm repo add cetic https://cetic.github.io/helm-charts
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
@@ -95,8 +95,10 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `zabbix.enabled`                                                            | Enable [Zabbix](https://github.com/cetic/helm-zabbix)                                                              | `false`                         |
 | `drupal.enabled`                                                            | Enable [drupal](https://github.com/cetic/helm-drupal)                                                              | `false`                         |
 | `airflow.enabled`                                                            | Enable [airflow](https://artifacthub.io/packages/helm/bitnami/airflow)                                                              | `false`                         |
+| `mongodb.enabled`                                                            | Enable [mongodb](https://artifacthub.io/packages/helm/bitnami/mongodb)                                                              | `false`                         |
+| `rabbitmq.enabled`                                                            | Enable [rabbitmq](https://artifacthub.io/packages/helm/bitnami/rabbitmq)                                                              | `false`                         |
+| `thingsboard.enabled`                                                            | Enable [thingsboard](https://github.com/cetic/helm-thingsboard)                                                              | `false`                         |
 | `influxdb.enabled`                                                            | Enable [influxdb](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)                                                              | `false`                         |
-
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).

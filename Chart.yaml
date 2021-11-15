@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.10
-appVersion: 0.2.10
+version: 0.2.11
+appVersion: 0.2.11
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -13,6 +13,7 @@ keywords:
   - grafana
   - cassandra
   - kafka
+  - mongodb
 home: https://github.com/cetic/fadi
 icon: https://raw.githubusercontent.com/cetic/fadi/master/doc/images/logo.png
 source:
@@ -95,7 +96,7 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: adminer.enabled
 - name: mlflow
-  version: ~1.4.0
+  version: ~1.5.0
   repository: https://cetic.github.io/helm-charts/
   condition: mlflow.enabled
 - name: zabbix
@@ -111,9 +112,21 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: drupal.enabled
 - name: airflow
-  version: ~8.0.5
+  version: ~9.0.0
   repository: https://charts.bitnami.com/bitnami
   condition: airflow.enabled
+- name: rabbitmq
+  version: ~8.11.5
+  repository: https://charts.bitnami.com/bitnami
+  condition: rabbitmq.enabled
+- name: thingsboard
+  version: ~0.1.1
+  repository: https://cetic.github.io/helm-charts/
+  condition: thingsboard.enabled
+- name: mongodb
+  version: ~10.11.1
+  repository: https://charts.bitnami.com/bitnami
+  condition: mongodb.enabled
 - name: influxdb
   version: ^2.3.18
   repository: https://charts.bitnami.com/bitnami
