@@ -273,37 +273,76 @@ jupyterhub:
 nifi:
   enabled: true
   service:
+<<<<<<< HEAD
     type: ClusterIP
     nodePort: ""
+=======
+    type: clusterIP
+>>>>>>> e1545d6 (Update Nifi to 1.14.0 version)
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
-    enabled: true
+    enabled: false
   properties:
     externalSecure: false
+<<<<<<< HEAD
     isNode: true
     httpPort: 8080
     httpsPort: null
     webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
+=======
+    isNode: false # Set to false if it is a minikube cluster
+    httpsPort: 8443
+    webProxyHost:
+>>>>>>> e1545d6 (Update Nifi to 1.14.0 version)
     clusterPort: 6007
-    clusterSecure: false
+  # ---- auth ----
   auth:
+    admin: CN=admin, OU=NIFI
+    SSL:
+      keystorePasswd: changeMe
+      truststorePasswd: changeMe
+  # Automaticaly disabled if OIDC or LDAP enabled 
+    singleUser:
+      username: username
+      password: changemechangeme # Must to have at least 12 characters
     ldap:
+<<<<<<< HEAD
       enabled: true
+=======
+      enabled: false
+>>>>>>> e1545d6 (Update Nifi to 1.14.0 version)
       host: #ldap://<hostname>:<port>
       searchBase: #CN=admin,DC=ldap,DC=example,DC=be
       admin: #cn=admin,dc=ldap,dc=example,dc=be
       pass: #ChangeMe
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
+<<<<<<< HEAD
   # ---- ingress ----
   traefikIngress:
     enabled: true
     host: nifi.test.local 
+=======
+      authStrategy: SIMPLE # How the connection to the LDAP server is authenticated. Possible values are ANONYMOUS, SIMPLE, LDAPS, or START_TLS.
+      identityStrategy: USE_DN
+      authExpiration: 12 hours
+    oidc:
+      enabled: false
+      discoveryUrl: #http://<oidc_provider_address>:<oidc_provider_port>/auth/realms/<client_realm>/.well-known/openid-configuration
+      clientId: #<client_name_in_oidc_provider>
+      clientSecret: #<client_secret_in_oidc_provider>
+      claimIdentifyingUser: preferred_username
+      ## Request additional scopes, for example profile
+      additionalScopes:
+  ingress:
+    enabled: false
+    hosts: []
+>>>>>>> e1545d6 (Update Nifi to 1.14.0 version)
 
 openldap:
   enabled: true
   persistence:
-    enabled: true
+    enabled: false
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -311,7 +350,6 @@ openldap:
     LDAP_TLS: "true"
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
-    LDAP_TLS_VERIFY_CLIENT: "try"
   adminPassword: password1
   configPassword: password2
   customLdifFiles:
