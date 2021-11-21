@@ -274,16 +274,21 @@ nifi:
   enabled: true
   service:
 <<<<<<< HEAD
+<<<<<<< HEAD
     type: ClusterIP
     nodePort: ""
 =======
     type: clusterIP
 >>>>>>> e1545d6 (Update Nifi to 1.14.0 version)
+=======
+    type: ClusterIP
+>>>>>>> 95f84d9 (update values.yaml)
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
     enabled: false
   properties:
     externalSecure: false
+<<<<<<< HEAD
 <<<<<<< HEAD
     isNode: true
     httpPort: 8080
@@ -291,6 +296,9 @@ nifi:
     webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
 =======
     isNode: false # Set to false if it is a minikube cluster
+=======
+    isNode: true
+>>>>>>> 95f84d9 (update values.yaml)
     httpsPort: 8443
     webProxyHost:
 >>>>>>> e1545d6 (Update Nifi to 1.14.0 version)
