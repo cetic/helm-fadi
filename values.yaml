@@ -350,6 +350,7 @@ openldap:
     LDAP_TLS: "true"
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
+    LDAP_TLS_VERIFY_CLIENT: "try"
   adminPassword: password1
   configPassword: password2
   customLdifFiles:
