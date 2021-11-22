@@ -110,3 +110,9 @@ questions:
   type: boolean
   required: true
   label: Enable Adminer
+  - variable: influxdb.enabled
+  default: "false"
+  description: "Enable influxdb service"
+  type: boolean
+  required: true
+  label: Enable Influxdb

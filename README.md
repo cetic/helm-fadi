@@ -98,7 +98,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `mongodb.enabled`                                                            | Enable [mongodb](https://artifacthub.io/packages/helm/bitnami/mongodb)                                                              | `false`                         |
 | `rabbitmq.enabled`                                                            | Enable [rabbitmq](https://artifacthub.io/packages/helm/bitnami/rabbitmq)                                                              | `false`                         |
 | `thingsboard.enabled`                                                            | Enable [thingsboard](https://github.com/cetic/helm-thingsboard)                                                              | `false`                         |
-
+| `influxdb.enabled`                                                            | Enable [influxdb](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)                                                              | `false`                         |
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).

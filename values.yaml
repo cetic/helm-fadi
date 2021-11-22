@@ -530,3 +530,27 @@ mongodb:
           $MONGODB_BIN_DIR/mongo admin --host 127.0.0.1 --port $MONGODB_PORT_NUMBER -u root -p $MONGODB_ROOT_PASSWORD << EOF
           db.createUser({ user: "admin" , pwd: "password1", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
           EOF
+
+influxdb:
+  enabled: false
+  auth: 
+    admin:
+      username: admin
+      password: ""
+    user: 
+      username: ""
+      password: ""
+      bucket: ""
+  influxdb:
+    replicaCount: 1
+    service: 
+      type: ClusterIP
+      port: 8086
+      rpcPort: 8088
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 8Gi
+  ingress: 
+    enabled: false
+    hostname: 
