@@ -547,6 +547,10 @@ influxdb:
       type: ClusterIP
       port: 8086
       rpcPort: 8088
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 8Gi
   ingress: 
     enabled: false
     hostname: 
