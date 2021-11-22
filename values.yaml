@@ -18,7 +18,7 @@ spark:
 superset:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
   service:
     type: NodePort
   configFile: |-
@@ -62,9 +62,9 @@ superset:
 postgresql:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
   ldap:
-    enabled: false
+    enabled: true
     pgldapconfig: |-
       # Reference: https://github.com/larskanis/pg-ldap-sync/blob/master/config/sample-config.yaml
       # Connection parameters to LDAP server
@@ -137,7 +137,7 @@ postgresql:
 minio:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
     size: 50Gi
   service:
     type: NodePort
@@ -177,7 +177,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
-    enabled: false
+    enabled: true
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -289,7 +289,7 @@ nifi:
 openldap:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
