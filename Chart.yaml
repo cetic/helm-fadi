@@ -131,3 +131,7 @@ dependencies:
   version: ^2.3.18
   repository: https://charts.bitnami.com/bitnami
   condition: influxdb.enabled
+- name: traefik
+  version: ~10.6.2
+  repository: https://helm.traefik.io/traefik
+  condition: traefik.enabled

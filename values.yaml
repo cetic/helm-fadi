@@ -4,7 +4,7 @@
 # Declare variables to be passed into your templates.
 
 spark:
-  enabled: true
+  enabled: false
   Master:
     Name: spark-master
   WebUi:
@@ -16,11 +16,11 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   configFile: |-
     from flask_appbuilder.security.manager import AUTH_DB,AUTH_LDAP
     #---------------------------------------------------------
@@ -60,7 +60,7 @@ superset:
     AUTH_LDAP_UID_FIELD = "cn"
 
 postgresql:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
   ldap:
@@ -135,17 +135,17 @@ postgresql:
       psql -c "create database zabbix;" postgres admin
 
 minio:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
     size: 50Gi
   service:
-    type: NodePort
+    type: ClusterIP
 
 grafana:
   enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   grafana.ini:
     paths:
       data: /var/lib/grafana/data
@@ -167,7 +167,7 @@ grafana:
       config_file: /etc/grafana/ldap.toml
   # Enable persistence
   persistence:
-    enabled: true
+    enabled: false
   # Administrator credentials when not using an existing secret (see below)
   adminUser: admin
 
@@ -177,7 +177,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
-    enabled: true
+    enabled: false
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -212,7 +212,7 @@ grafana:
       email =  "email"
 
 jupyterhub:
-  enabled: true
+  enabled: false
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -261,25 +261,26 @@ jupyterhub:
 nifi:
   enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
+    nodePort: ""
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
-    enabled: true
+    enabled: false
   properties:
     externalSecure: false
     isNode: true
     httpPort: 8080
-    httpsPort: null
-    webProxyHost:
+    httpsPort: 9443 #null
+    webProxyHost: nifi.test.local
     clusterPort: 6007
-    clusterSecure: false
+    clusterSecure: true #false
   auth:
     ldap:
-      enabled: false
-      host: ldap://<hostname>:<port>
-      searchBase: CN=Users,DC=example,DC=com
-      admin: cn=admin,dc=example,dc=be
-      pass: password
+      enabled: true
+      host: ldap://fadi-openldap:389 #ldap://<hostname>:<port>
+      searchBase: cn=admin,dc=ldap,dc=cetic,dc=be #CN=admin,DC=ldap,DC=example,DC=be
+      admin: cn=admin,dc=ldap,dc=cetic,dc=be #cn=admin,dc=ldap,dc=example,dc=be
+      pass: Z2JHHezi4aCC #ChangeMe
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
   ingress:
@@ -289,7 +290,7 @@ nifi:
 openldap:
   enabled: true
   persistence:
-    enabled: true
+    enabled: false #true
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -298,7 +299,7 @@ openldap:
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
     LDAP_TLS_VERIFY_CLIENT: "try"
-  adminPassword: password1
+  adminPassword: Z2JHHezi4aCC
   configPassword: password2
   customLdifFiles:
     1-default-users.ldif: |-
@@ -306,9 +307,9 @@ openldap:
 
 
 phpldapadmin:
-  enabled: true
+  enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
   env:
     PHPLDAPADMIN_LDAP_HOSTS: "fadi-openldap"
 
@@ -343,7 +344,7 @@ kibana:
 nginx_ldapauth_proxy:
   enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
     externalPort: 5601
   proxy:
     port: 443
@@ -386,11 +387,11 @@ swaggerui:
       description: "TSIMULUS API"
 
 adminer:
-  enabled: true
+  enabled: false
   config:
     design: "pepa-linha"
   service:
-    type: NodePort
+    type: ClusterIP
 
 mlflow:
   enabled: false
@@ -452,7 +453,7 @@ airflow:
     port: 5432
     user: admin
   service:
-    type: NodePort
+    type: ClusterIP
     port: 8080
   auth:
     forcePassword: false
@@ -491,7 +492,7 @@ rabbitmq:
     tls:
       enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
   ingress:
     enabled: false
     path: /
@@ -554,3 +555,9 @@ influxdb:
   ingress: 
     enabled: false
     hostname: 
+
+traefik:
+  enabled: true
+  ingressRoute:
+    dashboard:
+      enabled: false
