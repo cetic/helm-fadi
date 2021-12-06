@@ -1,3 +1,5 @@
+{{- if .Values.traefik.enabled -}}
+{{- if .Values.grafana.traefikIngress.enabled -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -7,11 +9,14 @@ spec:
     - web
   routes:
   - kind: Rule
-    match: Host(`grafana.test.local`) && PathPrefix(`/`)
+    match: Host(`{{ .Values.grafana.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
-    - name: fadi-grafana
+    - name: {{ .Release.Name }}-grafana
       port: 80
+{{- end }}
 ---
+{{- if .Values.nifi.traefikIngress.enabled -}}
+{{- if .Values.nifi.properties.clusterSecure -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
 metadata:
@@ -20,9 +25,59 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: HostSNI(`nifi.test.local`)
+  - match: HostSNI(`{{ .Values.nifi.traefikIngress.host }}`)
     services:
-      - name: fadi-nifi
-        port: 9443
+      - name: {{ .Release.Name }}-nifi
+        port: {{ .Values.nifi.properties.httpsPort }}
   tls:
     passthrough: true
+{{- else }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nifi
+spec:
+  entryPoints:
+    - web
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.nifi.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: {{ .Release.Name }}-nifi
+      port: {{ .Values.nifi.properties.httpPort }}
+{{- end }}
+{{- end }}
+---
+{{- if .Values.jupyterhub.traefikIngress.enabled -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hub
+spec:
+  entryPoints:
+    - web
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.jupyterhub.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: hub
+      port: 8081
+{{- end }}
+---
+{{- if .Values.traefik.dashboardIngress.enabled -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ .Values.traefik.dashboardHost }}`)
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+{{- end }}
+
+{{- end }}

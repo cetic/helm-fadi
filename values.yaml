@@ -4,7 +4,7 @@
 # Declare variables to be passed into your templates.
 
 spark:
-  enabled: false
+  enabled: true
   Master:
     Name: spark-master
   WebUi:
@@ -16,7 +16,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -60,7 +60,7 @@ superset:
     AUTH_LDAP_UID_FIELD = "cn"
 
 postgresql:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   ldap:
@@ -135,7 +135,7 @@ postgresql:
       psql -c "create database zabbix;" postgres admin
 
 minio:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
     size: 50Gi
@@ -167,7 +167,7 @@ grafana:
       config_file: /etc/grafana/ldap.toml
   # Enable persistence
   persistence:
-    enabled: false
+    enabled: true
   # Administrator credentials when not using an existing secret (see below)
   adminUser: admin
 
@@ -177,7 +177,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
-    enabled: false
+    enabled: true
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -210,9 +210,13 @@ grafana:
       username = "cn"
       member_of = "memberOf"
       email =  "email"
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: grafana.test.local
 
 jupyterhub:
-  enabled: false
+  enabled: true
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -257,6 +261,10 @@ jupyterhub:
   prePuller:
     hook:
       enabled: false
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: hub.test.local
 
 nifi:
   enabled: true
@@ -265,7 +273,7 @@ nifi:
     nodePort: ""
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
-    enabled: false
+    enabled: true
   properties:
     externalSecure: false
     isNode: true
@@ -277,20 +285,21 @@ nifi:
   auth:
     ldap:
       enabled: true
-      host: ldap://fadi-openldap:389 #ldap://<hostname>:<port>
-      searchBase: cn=admin,dc=ldap,dc=cetic,dc=be #CN=admin,DC=ldap,DC=example,DC=be
-      admin: cn=admin,dc=ldap,dc=cetic,dc=be #cn=admin,dc=ldap,dc=example,dc=be
-      pass: Z2JHHezi4aCC #ChangeMe
+      host: #ldap://<hostname>:<port>
+      searchBase: #CN=admin,DC=ldap,DC=example,DC=be
+      admin: #cn=admin,dc=ldap,dc=example,dc=be
+      pass: #ChangeMe
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
-  ingress:
-    enabled: false
-    hosts: []
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: nifi.test.local 
 
 openldap:
   enabled: true
   persistence:
-    enabled: false #true
+    enabled: #true
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
@@ -299,7 +308,7 @@ openldap:
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
     LDAP_TLS_VERIFY_CLIENT: "try"
-  adminPassword: Z2JHHezi4aCC
+  adminPassword: password1
   configPassword: password2
   customLdifFiles:
     1-default-users.ldif: |-
@@ -307,7 +316,7 @@ openldap:
 
 
 phpldapadmin:
-  enabled: false
+  enabled: true
   service:
     type: ClusterIP
   env:
@@ -387,7 +396,7 @@ swaggerui:
       description: "TSIMULUS API"
 
 adminer:
-  enabled: false
+  enabled: true
   config:
     design: "pepa-linha"
   service:
@@ -557,7 +566,11 @@ influxdb:
     hostname: 
 
 traefik:
-  enabled: true
-  ingressRoute:
-    dashboard:
-      enabled: false
+  enabled: false
+  dashboardIngress:
+    enabled: true
+  dashboardHost: dashboard.test.local
+  # Uncomment these 2 lines below to access the dashboard through the ingness
+  # globalArguments:
+  #   - "--api.insecure=true"
+
