@@ -278,10 +278,10 @@ nifi:
     externalSecure: false
     isNode: true
     httpPort: 8080
-    httpsPort: 9443 #null
-    webProxyHost: nifi.test.local
+    httpsPort: #null
+    webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
-    clusterSecure: true #false
+    clusterSecure: false
   auth:
     ldap:
       enabled: true
@@ -299,7 +299,7 @@ nifi:
 openldap:
   enabled: true
   persistence:
-    enabled: #true
+    enabled: true
   env:
     LDAP_ORGANISATION: "Cetic"
     LDAP_DOMAIN: "ldap.cetic.be"
