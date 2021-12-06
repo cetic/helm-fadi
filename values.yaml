@@ -278,7 +278,7 @@ nifi:
     externalSecure: false
     isNode: true
     httpPort: 8080
-    httpsPort: #null
+    httpsPort: null
     webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
     clusterSecure: false
