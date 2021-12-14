@@ -79,5 +79,21 @@ spec:
         - name: api@internal
           kind: TraefikService
 {{- end }}
+---
+{{- if .Values.superset.traefikIngress.enabled -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: superset
+spec:
+  entryPoints:
+    - web
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.superset.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: {{ .Release.Name }}-superset
+      port: 9000
+{{- end }}
 
 {{- end }}

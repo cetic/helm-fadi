@@ -58,6 +58,10 @@ superset:
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_PASSWORD = "password1"
     AUTH_LDAP_UID_FIELD = "cn"
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: superset.test.local
 
 postgresql:
   enabled: true
@@ -566,7 +570,7 @@ influxdb:
     hostname: 
 
 traefik:
-  enabled: false
+  enabled: true
   dashboardIngress:
     enabled: true
   dashboardHost: dashboard.test.local
