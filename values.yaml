@@ -20,7 +20,7 @@ superset:
   persistence:
     enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   configFile: |-
     from flask_appbuilder.security.manager import AUTH_DB,AUTH_LDAP
     #---------------------------------------------------------
@@ -58,6 +58,10 @@ superset:
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_PASSWORD = "password1"
     AUTH_LDAP_UID_FIELD = "cn"
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: superset.test.local
 
 postgresql:
   enabled: true
@@ -140,12 +144,12 @@ minio:
     enabled: true
     size: 50Gi
   service:
-    type: NodePort
+    type: ClusterIP
 
 grafana:
   enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   grafana.ini:
     paths:
       data: /var/lib/grafana/data
@@ -210,6 +214,10 @@ grafana:
       username = "cn"
       member_of = "memberOf"
       email =  "email"
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: grafana.test.local
 
 jupyterhub:
   enabled: true
@@ -257,11 +265,16 @@ jupyterhub:
   prePuller:
     hook:
       enabled: false
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: hub.test.local
 
 nifi:
   enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
+    nodePort: ""
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
     enabled: true
@@ -270,21 +283,22 @@ nifi:
     isNode: true
     httpPort: 8080
     httpsPort: null
-    webProxyHost:
+    webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
     clusterSecure: false
   auth:
     ldap:
-      enabled: false
-      host: ldap://<hostname>:<port>
-      searchBase: CN=Users,DC=example,DC=com
-      admin: cn=admin,dc=example,dc=be
-      pass: password
+      enabled: true
+      host: #ldap://<hostname>:<port>
+      searchBase: #CN=admin,DC=ldap,DC=example,DC=be
+      admin: #cn=admin,dc=ldap,dc=example,dc=be
+      pass: #ChangeMe
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
-  ingress:
-    enabled: false
-    hosts: []
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: nifi.test.local 
 
 openldap:
   enabled: true
@@ -308,7 +322,7 @@ openldap:
 phpldapadmin:
   enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   env:
     PHPLDAPADMIN_LDAP_HOSTS: "fadi-openldap"
 
@@ -343,7 +357,7 @@ kibana:
 nginx_ldapauth_proxy:
   enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
     externalPort: 5601
   proxy:
     port: 443
@@ -390,7 +404,7 @@ adminer:
   config:
     design: "pepa-linha"
   service:
-    type: NodePort
+    type: ClusterIP
 
 mlflow:
   enabled: false
@@ -452,7 +466,7 @@ airflow:
     port: 5432
     user: admin
   service:
-    type: NodePort
+    type: ClusterIP
     port: 8080
   auth:
     forcePassword: false
@@ -491,7 +505,7 @@ rabbitmq:
     tls:
       enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
   ingress:
     enabled: false
     path: /
@@ -554,3 +568,13 @@ influxdb:
   ingress: 
     enabled: false
     hostname: 
+
+traefik:
+  enabled: true
+  dashboardIngress:
+    enabled: true
+  dashboardHost: dashboard.test.local
+  # Uncomment these 2 lines below to access the dashboard through the ingness
+  # globalArguments:
+  #   - "--api.insecure=true"
+
