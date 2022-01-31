@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.13
-appVersion: 0.2.13
+version: 0.2.14
+appVersion: 0.2.14
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -135,3 +135,7 @@ dependencies:
   version: ~10.6.2
   repository: https://helm.traefik.io/traefik
   condition: traefik.enabled
+- name: cert-manager
+  version: ~1.6.1
+  repository: https://charts.jetstack.io
+  condition: cert-manager.enabled

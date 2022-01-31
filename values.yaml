@@ -61,6 +61,7 @@ superset:
   # ---- ingress ----
   traefikIngress:
     enabled: true
+    tls: false
     host: superset.test.local
 
 postgresql:
@@ -217,6 +218,7 @@ grafana:
   # ---- ingress ----
   traefikIngress:
     enabled: true
+    tls: false
     host: grafana.test.local
 
 jupyterhub:
@@ -268,6 +270,7 @@ jupyterhub:
   # ---- ingress ----
   traefikIngress:
     enabled: true
+    tls: false
     host: hub.test.local
 
 nifi:
@@ -298,6 +301,7 @@ nifi:
   # ---- ingress ----
   traefikIngress:
     enabled: true
+    tls: false
     host: nifi.test.local 
 
 openldap:
@@ -572,9 +576,25 @@ influxdb:
 traefik:
   enabled: true
   dashboardIngress:
-    enabled: true
+    enabled: false
   dashboardHost: dashboard.test.local
+  service:
+    spec:
+      loadBalancerIP: "<your_public_IP>"
+  additionalArguments:
+    - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
+  # Uncomment these 2 lines below to redirect queries to HTTPS
+    # - "--entryPoints.web.http.redirections.entryPoint.to: websecure"
+    # - "--entryPoints.web.http.redirections.entryPoint.scheme: https"
   # Uncomment these 2 lines below to access the dashboard through the ingness
   # globalArguments:
   #   - "--api.insecure=true"
 
+cert-manager:
+  enabled: false
+  installCRDs: true
+
+clusterIssuer:
+  enabled: false
+  prod: false
+  email: <your e-mail address>

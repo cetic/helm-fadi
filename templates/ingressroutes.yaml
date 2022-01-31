@@ -1,21 +1,30 @@
 {{- if .Values.traefik.enabled -}}
-{{- if .Values.grafana.traefikIngress.enabled -}}
+{{- if and (.Values.grafana.enabled) (.Values.grafana.traefikIngress.enabled) -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: grafana
 spec:
   entryPoints:
+  {{- if .Values.grafana.traefikIngress.tls -}}
+    - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.grafana.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: {{ .Release.Name }}-grafana
       port: 80
-{{- end }}
+  {{- if .Values.grafana.traefikIngress.tls -}}
+  tls:
+    secretName: grafana.flaracc.cetic.be
+  {{- end }}
 ---
-{{- if .Values.nifi.traefikIngress.enabled -}}
+{{- end }}
+
+{{- if and (.Values.nifi.enabled) (.Values.nifi.traefikIngress.enabled) -}}
 {{- if .Values.nifi.properties.clusterSecure -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
@@ -31,6 +40,7 @@ spec:
         port: {{ .Values.nifi.properties.httpsPort }}
   tls:
     passthrough: true
+---
 {{- else }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -38,32 +48,50 @@ metadata:
   name: nifi
 spec:
   entryPoints:
+  {{- if .Values.nifi.traefikIngress.tls -}}
+    - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.nifi.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: {{ .Release.Name }}-nifi
       port: {{ .Values.nifi.properties.httpPort }}
-{{- end }}
-{{- end }}
+  {{- if .Values.nifi.traefikIngress.tls -}}
+  tls:
+    secretName: grafana.flaracc.cetic.be
+  {{- end }}
 ---
-{{- if .Values.jupyterhub.traefikIngress.enabled -}}
+{{- end }}
+{{- end }}
+
+{{- if and (.Values.jupyterhub.enabled) (.Values.jupyterhub.traefikIngress.enabled) -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: hub
 spec:
   entryPoints:
+  {{- if .Values.jupyterhub.traefikIngress.tls -}}
+    - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.jupyterhub.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: hub
       port: 8081
-{{- end }}
+  {{- if .Values.grafana.traefikIngress.tls -}}
+  tls:
+    secretName: jupyterhub.flaracc.cetic.be
+  {{- end }}
 ---
+{{- end }}
+
 {{- if .Values.traefik.dashboardIngress.enabled -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -78,22 +106,32 @@ spec:
       services:
         - name: api@internal
           kind: TraefikService
-{{- end }}
 ---
-{{- if .Values.superset.traefikIngress.enabled -}}
+{{- end }}
+
+{{- if and (.Values.superset.enabled) (.Values.superset.traefikIngress.enabled) -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: superset
 spec:
   entryPoints:
+  {{- if .Values.superset.traefikIngress.tls -}}
+    - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.superset.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: {{ .Release.Name }}-superset
       port: 9000
+  {{- if .Values.grafana.traefikIngress.tls -}}
+  tls:
+    secretName: superset.flaracc.cetic.be
+  {{- end }}
+---
 {{- end }}
 
 {{- end }}

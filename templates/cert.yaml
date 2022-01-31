@@ -1,0 +1,96 @@
+{{- if .Values.clusterIssuer.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: fadi-letsencrypt
+spec:
+  acme:
+    {{- if .Values.clusterIssuer.prod -}}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    {{ else }}
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    {{- end }}
+    email: {{ .Values.clusterIssuer.email }}
+    privateKeySecretRef:
+      name: fadi-letsencrypt-private-key
+    solvers:
+      - http01:
+          ingress:
+            ingressTemplate:
+              metadata:
+                annotations:
+                  kubernetes.io/ingress.class: traefik-cert-manager
+---
+{{- if .Values.grafana.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana.flaracc.cetic.be
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: grafana.flaracc.cetic.be
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - grafana.flaracc.cetic.be
+---
+{{- end }}
+
+{{- if .Values.superset.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: superset.flaracc.cetic.be
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: superset.flaracc.cetic.be
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - superset.flaracc.cetic.be
+---
+{{- end }}
+
+{{- if .Values.jupyterhub.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jupyterhub.flaracc.cetic.be
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: jupyterhub.flaracc.cetic.be
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - jupyterhub.flaracc.cetic.be
+---
+{{- end }}
+
+{{- if .Values.nifi.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nifi.flaracc.cetic.be
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: nifi.flaracc.cetic.be
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - nifi.flaracc.cetic.be
+---
+{{- end }}
+
+{{ end }}
