@@ -6,17 +6,20 @@ metadata:
   name: grafana
 spec:
   entryPoints:
+  {{- if .Values.grafana.traefikIngress.tls -}}
     - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.grafana.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: {{ .Release.Name }}-grafana
       port: 80
-  {{- if .Values.grafana.traefikIngress.tls }}
+  {{- if .Values.grafana.traefikIngress.tls -}}
   tls:
-    secretName: {{ .Values.grafana.traefikIngress.host }}
+    secretName: grafana.flaracc.cetic.be
   {{- end }}
 ---
 {{- end }}
@@ -45,17 +48,20 @@ metadata:
   name: nifi
 spec:
   entryPoints:
+  {{- if .Values.nifi.traefikIngress.tls -}}
     - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.nifi.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: {{ .Release.Name }}-nifi
       port: {{ .Values.nifi.properties.httpPort }}
-  {{- if .Values.nifi.traefikIngress.tls }}
+  {{- if .Values.nifi.traefikIngress.tls -}}
   tls:
-    secretName: {{ .Values.nifi.traefikIngress.host }}
+    secretName: grafana.flaracc.cetic.be
   {{- end }}
 ---
 {{- end }}
@@ -68,17 +74,20 @@ metadata:
   name: hub
 spec:
   entryPoints:
+  {{- if .Values.jupyterhub.traefikIngress.tls -}}
     - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.jupyterhub.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: hub
       port: 8081
-  {{- if .Values.grafana.traefikIngress.tls }}
+  {{- if .Values.grafana.traefikIngress.tls -}}
   tls:
-    secretName: {{ .Values.jupyterhub.traefikIngress.host }}
+    secretName: jupyterhub.flaracc.cetic.be
   {{- end }}
 ---
 {{- end }}
@@ -107,17 +116,20 @@ metadata:
   name: superset
 spec:
   entryPoints:
+  {{- if .Values.superset.traefikIngress.tls -}}
     - websecure
+  {{ else }}
     - web
+  {{- end }}
   routes:
   - kind: Rule
     match: Host(`{{ .Values.superset.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
     - name: {{ .Release.Name }}-superset
       port: 9000
-  {{- if .Values.grafana.traefikIngress.tls }}
+  {{- if .Values.grafana.traefikIngress.tls -}}
   tls:
-    secretName: {{ .Values.superset.traefikIngress.host }}
+    secretName: superset.flaracc.cetic.be
   {{- end }}
 ---
 {{- end }}

@@ -25,17 +25,17 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.grafana.traefikIngress.host }}
+  name: grafana.flaracc.cetic.be
   namespace: default
   labels:
     "use-http01-solver": "true"
 spec:
-  secretName: {{ .Values.grafana.traefikIngress.host }}
+  secretName: grafana.flaracc.cetic.be
   issuerRef:
     name: fadi-letsencrypt
     kind: ClusterIssuer
   dnsNames:
-    - {{ .Values.grafana.traefikIngress.host }}
+    - grafana.flaracc.cetic.be
 ---
 {{- end }}
 
@@ -43,17 +43,17 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.superset.traefikIngress.host }}
+  name: superset.flaracc.cetic.be
   namespace: default
   labels:
     "use-http01-solver": "true"
 spec:
-  secretName: {{ .Values.superset.traefikIngress.host }}
+  secretName: superset.flaracc.cetic.be
   issuerRef:
     name: fadi-letsencrypt
     kind: ClusterIssuer
   dnsNames:
-    - {{ .Values.superset.traefikIngress.host }}
+    - superset.flaracc.cetic.be
 ---
 {{- end }}
 
@@ -61,17 +61,17 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.jupyterhub.traefikIngress.host }}
+  name: jupyterhub.flaracc.cetic.be
   namespace: default
   labels:
     "use-http01-solver": "true"
 spec:
-  secretName: {{ .Values.jupyterhub.traefikIngress.host }}
+  secretName: jupyterhub.flaracc.cetic.be
   issuerRef:
     name: fadi-letsencrypt
     kind: ClusterIssuer
   dnsNames:
-    - {{ .Values.jupyterhub.traefikIngress.host }}
+    - jupyterhub.flaracc.cetic.be
 ---
 {{- end }}
 
@@ -79,17 +79,17 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.nifi.traefikIngress.host }}
+  name: nifi.flaracc.cetic.be
   namespace: default
   labels:
     "use-http01-solver": "true"
 spec:
-  secretName: {{ .Values.nifi.traefikIngress.host }}
+  secretName: nifi.flaracc.cetic.be
   issuerRef:
     name: fadi-letsencrypt
     kind: ClusterIssuer
   dnsNames:
-    - {{ .Values.nifi.traefikIngress.host }}
+    - nifi.flaracc.cetic.be
 ---
 {{- end }}
 

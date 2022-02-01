@@ -583,9 +583,6 @@ traefik:
       loadBalancerIP: "<your_public_IP>"
   additionalArguments:
     - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
-  # Uncomment these 2 lines below to redirect queries to HTTPS
-    # - "--entryPoints.web.http.redirections.entryPoint.to: websecure"
-    # - "--entryPoints.web.http.redirections.entryPoint.scheme: https"
   # Uncomment these 2 lines below to access the dashboard through the ingness
   # globalArguments:
   #   - "--api.insecure=true"
