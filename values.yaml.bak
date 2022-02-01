@@ -62,7 +62,7 @@ superset:
   traefikIngress:
     enabled: true
     tls: false
-    host: superset.flaracc.cetic.be
+    host: superset.test.local
 
 postgresql:
   enabled: true
@@ -271,7 +271,7 @@ jupyterhub:
   traefikIngress:
     enabled: true
     tls: false
-    host: jupyterhub.flaracc.cetic.be
+    host: hub.test.local
 
 nifi:
   enabled: true
@@ -301,8 +301,8 @@ nifi:
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    tls: true
-    host: nifi.flaracc.cetic.be
+    tls: false
+    host: nifi.test.local 
 
 openldap:
   enabled: true
