@@ -62,7 +62,7 @@ superset:
   traefikIngress:
     enabled: true
     tls: false
-    host: superset.flaracc.cetic.be
+    host: superset.fadi.cetic.be
 
 postgresql:
   enabled: true
@@ -219,7 +219,7 @@ grafana:
   traefikIngress:
     enabled: true
     tls: false
-    host: grafana.flaracc.cetic.be
+    host: grafana.fadi.cetic.be
 
 jupyterhub:
   enabled: true
@@ -271,7 +271,7 @@ jupyterhub:
   traefikIngress:
     enabled: true
     tls: false
-    host: jupyterhub.flaracc.cetic.be
+    host: jupyterhub.fadi.cetic.be
 
 nifi:
   enabled: true
@@ -302,7 +302,7 @@ nifi:
   traefikIngress:
     enabled: true
     tls: true
-    host: nifi.flaracc.cetic.be
+    host: nifi.fadi.cetic.be
 
 openldap:
   enabled: true
@@ -577,7 +577,7 @@ traefik:
   enabled: true
   dashboardIngress:
     enabled: false
-  dashboardHost: dashboard.test.local
+  dashboardHost: dashboard.fadi.cetic.be
   service:
     spec:
       loadBalancerIP: "<your_public_IP>"
