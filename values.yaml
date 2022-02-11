@@ -170,6 +170,19 @@ grafana:
       enabled: true
       allow_sign_up: true
       config_file: /etc/grafana/ldap.toml
+    auth.azuread:
+      name: Azure AD
+      enabled: false
+      allow_sign_up: true
+      client_id: <your_application_id>
+      client_secret: <your_client_secret>
+      scopes: openid email profile
+      auth_url: https://login.microsoftonline.com/<your_tenant_id>/oauth2/v2.0/authorize
+      token_url: https://login.microsoftonline.com/<your_tenant_id>/oauth2/v2.0/token
+      allowed_domains:
+      allowed_groups:
+    server:
+      root_url: https://graf.fadi.cetic.be
   # Enable persistence
   persistence:
     enabled: true
@@ -252,17 +265,24 @@ jupyterhub:
   # ---- auth ----
   hub:
     config:
+      # JupyterHub:
+      #   authenticator_class: ldapauthenticator.LDAPAuthenticator
+      # LDAPAuthenticator:
+      #   bind_dn_template:
+      #     - 'cn={username},dc=ldap,dc=cetic,dc=be'
+      #     - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
+      #   escape_userdn: false
+      #   lookup_dn: false
+      #   server_address: fadi-openldap
+      #   user_attribute: cn
+      #   use_ssl: false
+      AzureAdOAuthenticator:
+        client_id: <your_application_id>
+        client_secret: <your_client_secret>
+        oauth_callback_url: https://jupyterhub.fadi.cetic.be/hub/oauth_callback
+        tenant_id: <your_tenant_id>
       JupyterHub:
-        authenticator_class: ldapauthenticator.LDAPAuthenticator
-      LDAPAuthenticator:
-        bind_dn_template:
-          - 'cn={username},dc=ldap,dc=cetic,dc=be'
-          - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
-        escape_userdn: false
-        lookup_dn: false
-        server_address: fadi-openldap
-        user_attribute: cn
-        use_ssl: false
+        authenticator_class: azuread
   # ---- auth ----
   prePuller:
     hook:
@@ -275,33 +295,53 @@ jupyterhub:
 
 nifi:
   enabled: true
-  service:
-    type: ClusterIP
-    nodePort: ""
-  postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
-  persistence:
-    enabled: true
+  # service:
+  #   type: ClusterIP
+  #   nodePort: ""
+  # postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
+  # persistence:
+  #   enabled: false
   properties:
-    externalSecure: false
-    isNode: true
-    httpPort: 8080
-    httpsPort: null
-    webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
-    clusterPort: 6007
-    clusterSecure: false
+    # externalSecure: false
+    # isNode: true
+    # httpPort: null
+    # httpsPort: 9443
+    # webProxyHost: nifi.flaracc.cetic.be # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
+    # clusterPort: 6007
+    clusterSecure: true 
+    webProxyHost: nifi.fadi.cetic.be
+    # authorizer: managed-authorizer
+
   auth:
-    ldap:
+    # ldap:
+    #   enabled: false
+    #   host: ldap://fadi-openldap:389/ #ldap://<hostname>:<port>
+    #   searchBase: cn=admin,dc=ldap,dc=cetic,dc=be #CN=admin,DC=ldap,DC=example,DC=be
+    #   admin: cn=admin,dc=ldap,dc=cetic,dc=be #cn=admin,dc=ldap,dc=example,dc=be
+    #   pass: Z2JHHezi4aCC #ChangeMe
+    #   searchFilter: (objectClass=*)
+    #   userIdentityAttribute: cn
+    oidc:
+    #   enabled: false
+    #   discoveryUrl: https://login.microsoftonline.com/9250c240-e3e2-4d3e-a7e0-6ba24bc49058/v2.0/.well-known/openid-configuration
+    #   clientId: 57688b00-7c8d-4b66-b99e-e7a6c5267602
+    #   clientSecret: G8w7Q~xw8lLKxZIC.wu.eyCQyHjUAuxR.C31N
+    #   claimIdentifyingUser: upn
+    #   additionalScopes: profile
+      
       enabled: true
-      host: #ldap://<hostname>:<port>
-      searchBase: #CN=admin,DC=ldap,DC=example,DC=be
-      admin: #cn=admin,dc=ldap,dc=example,dc=be
-      pass: #ChangeMe
-      searchFilter: (objectClass=*)
-      userIdentityAttribute: cn
+      discoveryUrl: https://login.microsoftonline.com/<your_tenant_id>/v2.0/.well-known/openid-configuration #http://<oidc_provider_address>:<oidc_provider_port>/auth/realms/<client_realm>/.well-known/openid-configuration
+      clientId: <your_application_id>
+      clientSecret: <your_client_secret>
+      claimIdentifyingUser: email
+      admin: <your_admin_email>
+      ## Request additional scopes, for example profile
+      additionalScopes:
+      
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    tls: true
+    tls: false
     host: nifi.fadi.cetic.be
 
 openldap:
@@ -584,7 +624,7 @@ traefik:
   additionalArguments:
     - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
   # Uncomment these 2 lines below to access the dashboard through the ingness
-  # globalArguments:
+  # globalArguments: 
   #   - "--api.insecure=true"
 
 cert-manager:
