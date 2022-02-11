@@ -240,6 +240,8 @@ jupyterhub:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
       type: sqlite-memory
+    service:
+      type: ClusterIP
   rbac:
     enabled: true
   singleuser:

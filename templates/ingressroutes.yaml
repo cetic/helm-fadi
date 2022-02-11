@@ -74,8 +74,8 @@ spec:
   - kind: Rule
     match: Host(`{{ .Values.jupyterhub.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
-    - name: hub
-      port: 8081
+    - name: proxy-public
+      port: 80
   {{- if .Values.grafana.traefikIngress.tls }}
   tls:
     secretName: {{ .Values.jupyterhub.traefikIngress.host }}
