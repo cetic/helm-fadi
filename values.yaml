@@ -550,7 +550,8 @@ influxdb:
   auth: 
     admin:
       username: admin
-      password: ""
+      password: "" # Must be longer than 8 characters
+      token: "" # Set a long token
     user: 
       username: ""
       password: ""
@@ -564,10 +565,7 @@ influxdb:
   persistence:
     enabled: true
     storageClass: ""
-    size: 8Gi
-  ingress: 
-    enabled: false
-    hostname: 
+    size: 8Gi 
 
 traefik:
   enabled: true
