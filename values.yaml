@@ -626,14 +626,14 @@ traefik:
   dashboardIngress:
     enabled: false
   dashboardHost: <your_dashboard_domain_name>
-  service:
-    spec:
-      loadBalancerIP: "<your_public_IP>"
-  additionalArguments:
-    - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
   # Uncomment these 2 lines below to access the dashboard through the ingness
   # globalArguments: 
   #   - "--api.insecure=true"
+  additionalArguments:
+    - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
+  service:
+    spec:
+      loadBalancerIP: # "<your_public_IP>"
 
 cert-manager:
   enabled: false
