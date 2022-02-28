@@ -61,7 +61,7 @@ superset:
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    host: superset.test.local
+    host: <your_superset_domain_name>
 
 postgresql:
   enabled: true
@@ -217,7 +217,7 @@ grafana:
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    host: grafana.test.local
+    host: <your_grafana_domain_name>
 
 jupyterhub:
   enabled: true
@@ -268,7 +268,7 @@ jupyterhub:
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    host: hub.test.local
+    host: <your_jupyterhub_domain_name>
 
 nifi:
   enabled: true
@@ -279,26 +279,67 @@ nifi:
   persistence:
     enabled: true
   properties:
-    externalSecure: false
-    isNode: true
-    httpPort: 8080
-    httpsPort: null
-    webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
+    sensitiveKey: changeMechangeMe # Must have at least 12 characters
+    isNode: false
+    httpsPort: 8443
+    webProxyHost: <your_nifi_domain_name> # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
-    clusterSecure: false
+    customLibPath: "/opt/configuration_resources/custom_lib"
   auth:
+    admin: CN=admin, OU=NIFI
+    SSL:
+      keystorePasswd: changeMe
+      truststorePasswd: changeMe
+  # Automaticaly disabled if OIDC or LDAP enabled 
+    singleUser:
+      username: username
+      password: changemechangeme # Must to have at least 12 characters
     ldap:
-      enabled: true
+      enabled: false
       host: #ldap://<hostname>:<port>
-      searchBase: #CN=admin,DC=ldap,DC=example,DC=be
+      searchBase: #CN=Users,DC=ldap,DC=example,DC=be
       admin: #cn=admin,dc=ldap,dc=example,dc=be
       pass: #ChangeMe
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
+      authStrategy: SIMPLE # How the connection to the LDAP server is authenticated. Possible values are ANONYMOUS, SIMPLE, LDAPS, or START_TLS.
+      identityStrategy: USE_DN
+      authExpiration: 12 hours
+    oidc:
+      enabled: false
+      discoveryUrl: https://login.microsoftonline.com/<your_tenant_id>/v2.0/.well-known/openid-configuration
+      clientId: <your_application_id>
+      clientSecret: <your_client_secret>
+      claimIdentifyingUser: email
+      admin: <your_admin_email>
+      ## Request additional scopes, for example profile
+      additionalScopes: 
+  registry:
+    enabled: false
+  # ---- add new processors for InfluxDB ---
+  extraVolumeMounts:
+    - name: mycustomlibs
+      mountPath: /opt/configuration_resources/custom_lib
+  extraVolumes: # this will create the volume from the directory
+    - name: mycustomlibs
+      emptyDir: {}
+  initContainers: 
+    install-processor:
+      image: "ellerbrock/alpine-bash-curl-ssl"
+      imagePullPolicy: "IfNotPresent"
+      command:
+        - bash
+        - -c
+        - |
+          cd /data
+          wget https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar
+      volumeMounts:
+        - name: mycustomlibs
+          mountPath: /data
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    host: nifi.test.local 
+    host: <your_nifi_domain_name>
 
 openldap:
   enabled: true
@@ -571,7 +612,7 @@ traefik:
   enabled: true
   dashboardIngress:
     enabled: true
-  dashboardHost: dashboard.test.local
+  dashboardHost: <your_dashboard_domain_name>
   # Uncomment these 2 lines below to access the dashboard through the ingness
   # globalArguments:
   #   - "--api.insecure=true"

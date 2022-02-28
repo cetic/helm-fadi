@@ -13,10 +13,10 @@ spec:
     services:
     - name: {{ .Release.Name }}-grafana
       port: 80
-{{- end }}
 ---
+{{- end }}
+
 {{- if .Values.nifi.traefikIngress.enabled -}}
-{{- if .Values.nifi.properties.clusterSecure -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
 metadata:
@@ -31,23 +31,9 @@ spec:
         port: {{ .Values.nifi.properties.httpsPort }}
   tls:
     passthrough: true
-{{- else }}
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nifi
-spec:
-  entryPoints:
-    - web
-  routes:
-  - kind: Rule
-    match: Host(`{{ .Values.nifi.traefikIngress.host }}`) && PathPrefix(`/`)
-    services:
-    - name: {{ .Release.Name }}-nifi
-      port: {{ .Values.nifi.properties.httpPort }}
-{{- end }}
-{{- end }}
 ---
+{{- end }}
+
 {{- if .Values.jupyterhub.traefikIngress.enabled -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -62,8 +48,9 @@ spec:
     services:
     - name: hub
       port: 8081
-{{- end }}
 ---
+{{- end }}
+
 {{- if .Values.traefik.dashboardIngress.enabled -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -78,8 +65,9 @@ spec:
       services:
         - name: api@internal
           kind: TraefikService
-{{- end }}
 ---
+{{- end }}
+
 {{- if .Values.superset.traefikIngress.enabled -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -94,6 +82,7 @@ spec:
     services:
     - name: {{ .Release.Name }}-superset
       port: 9000
+---
 {{- end }}
 
 {{- end }}
