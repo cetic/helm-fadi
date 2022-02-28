@@ -167,45 +167,6 @@ spec:
 ---
 {{- end }}
 
-{{- if and (.Values.influxdb.enabled) (.Values.influxdb.traefikIngress.enabled) -}}
-{{- if .Values.influxdb.traefikIngress.tls }}
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: influxdb
-spec:
-  entryPoints:
-    - websecure
-  routes:
-  - kind: Rule
-    match: Host(`{{ .Values.influxdb.traefikIngress.host }}`) && PathPrefix(`/`)
-    services:
-    - name: {{ .Release.Name }}-influxdb
-      port: 8086
-  tls:
-    secretName: {{ .Values.influxdb.traefikIngress.host }}
----
-{{- end }}
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: influxdb-http
-spec:
-  entryPoints:
-    - web
-  routes:
-  - kind: Rule
-    match: Host(`{{ .Values.influxdb.traefikIngress.host }}`) && PathPrefix(`/`)
-    services:
-    - name: {{ .Release.Name }}-influxdb
-      port: 8086
-    {{- if .Values.influxdb.traefikIngress.tls }}
-    middlewares:
-      - name: https-redirect
-    {{- end }}
----
-{{- end }}
-
 {{- if .Values.clusterIssuer.enabled }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
