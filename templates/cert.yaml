@@ -75,22 +75,4 @@ spec:
 ---
 {{- end }}
 
-{{- if .Values.nifi.traefikIngress.tls -}}
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: {{ .Values.nifi.traefikIngress.host }}
-  namespace: default
-  labels:
-    "use-http01-solver": "true"
-spec:
-  secretName: {{ .Values.nifi.traefikIngress.host }}
-  issuerRef:
-    name: fadi-letsencrypt
-    kind: ClusterIssuer
-  dnsNames:
-    - {{ .Values.nifi.traefikIngress.host }}
----
-{{- end }}
-
 {{ end }}

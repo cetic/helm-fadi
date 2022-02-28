@@ -1,5 +1,6 @@
 {{- if .Values.traefik.enabled -}}
 {{- if and (.Values.grafana.enabled) (.Values.grafana.traefikIngress.enabled) -}}
+{{- if .Values.grafana.traefikIngress.tls }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -7,6 +8,22 @@ metadata:
 spec:
   entryPoints:
     - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.grafana.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+      - name: {{ .Release.Name }}-grafana
+        port: 80
+  tls:
+    secretName: {{ .Values.grafana.traefikIngress.host }}  
+---
+{{- end }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana-http
+spec:
+  entryPoints:
     - web
   routes:
   - kind: Rule
@@ -14,15 +31,14 @@ spec:
     services:
     - name: {{ .Release.Name }}-grafana
       port: 80
-  {{- if .Values.grafana.traefikIngress.tls }}
-  tls:
-    secretName: {{ .Values.grafana.traefikIngress.host }}
-  {{- end }}
+    {{- if .Values.grafana.traefikIngress.tls }}
+    middlewares:
+      - name: https-redirect
+    {{- end }}
 ---
 {{- end }}
 
 {{- if and (.Values.nifi.enabled) (.Values.nifi.traefikIngress.enabled) -}}
-{{- if .Values.nifi.properties.clusterSecure -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
 metadata:
@@ -38,30 +54,26 @@ spec:
   tls:
     passthrough: true
 ---
-{{- else }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: nifi
+  name: nifi-http
 spec:
   entryPoints:
-    - websecure
     - web
   routes:
   - kind: Rule
     match: Host(`{{ .Values.nifi.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
-    - name: {{ .Release.Name }}-nifi
-      port: {{ .Values.nifi.properties.httpPort }}
-  {{- if .Values.nifi.traefikIngress.tls }}
-  tls:
-    secretName: {{ .Values.nifi.traefikIngress.host }}
-  {{- end }}
+      - name: {{ .Release.Name }}-nifi
+        port: {{ .Values.nifi.properties.httpsPort }}
+    middlewares:
+      - name: https-redirect
 ---
-{{- end }}
 {{- end }}
 
 {{- if and (.Values.jupyterhub.enabled) (.Values.jupyterhub.traefikIngress.enabled) -}}
+{{- if .Values.jupyterhub.traefikIngress.tls }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -69,17 +81,33 @@ metadata:
 spec:
   entryPoints:
     - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.jupyterhub.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: proxy-public
+      port: 80
+  tls:
+    secretName: {{ .Values.jupyterhub.traefikIngress.host }}
+---
+{{- end }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hub-http
+spec:
+  entryPoints:
     - web
   routes:
   - kind: Rule
     match: Host(`{{ .Values.jupyterhub.traefikIngress.host }}`) && PathPrefix(`/`)
     services:
-    - name: hub
-      port: 8081
-  {{- if .Values.grafana.traefikIngress.tls }}
-  tls:
-    secretName: {{ .Values.jupyterhub.traefikIngress.host }}
-  {{- end }}
+    - name: proxy-public
+      port: 80
+    {{- if .Values.jupyterhub.traefikIngress.tls }}
+    middlewares:
+      - name: https-redirect
+    {{- end }}
 ---
 {{- end }}
 
@@ -101,6 +129,7 @@ spec:
 {{- end }}
 
 {{- if and (.Values.superset.enabled) (.Values.superset.traefikIngress.enabled) -}}
+{{- if .Values.superset.traefikIngress.tls }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -108,6 +137,22 @@ metadata:
 spec:
   entryPoints:
     - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.superset.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: {{ .Release.Name }}-superset
+      port: 9000
+  tls:
+    secretName: {{ .Values.superset.traefikIngress.host }}
+---
+{{- end }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: superset-http
+spec:
+  entryPoints:
     - web
   routes:
   - kind: Rule
@@ -115,11 +160,61 @@ spec:
     services:
     - name: {{ .Release.Name }}-superset
       port: 9000
-  {{- if .Values.grafana.traefikIngress.tls }}
-  tls:
-    secretName: {{ .Values.superset.traefikIngress.host }}
-  {{- end }}
+    {{- if .Values.superset.traefikIngress.tls }}
+    middlewares:
+      - name: https-redirect
+    {{- end }}
 ---
+{{- end }}
+
+{{- if and (.Values.influxdb.enabled) (.Values.influxdb.traefikIngress.enabled) -}}
+{{- if .Values.influxdb.traefikIngress.tls }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: influxdb
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.influxdb.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: {{ .Release.Name }}-influxdb
+      port: 8086
+  tls:
+    secretName: {{ .Values.influxdb.traefikIngress.host }}
+---
+{{- end }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: influxdb-http
+spec:
+  entryPoints:
+    - web
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.influxdb.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: {{ .Release.Name }}-influxdb
+      port: 8086
+    {{- if .Values.influxdb.traefikIngress.tls }}
+    middlewares:
+      - name: https-redirect
+    {{- end }}
+---
+{{- end }}
+
+{{- if .Values.clusterIssuer.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
 {{- end }}
 
 {{- end }}

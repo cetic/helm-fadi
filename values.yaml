@@ -62,7 +62,7 @@ superset:
   traefikIngress:
     enabled: true
     tls: false
-    host: superset.fadi.cetic.be
+    host: <your_superset_domain_name>
 
 postgresql:
   enabled: true
@@ -170,6 +170,19 @@ grafana:
       enabled: true
       allow_sign_up: true
       config_file: /etc/grafana/ldap.toml
+    auth.azuread:
+      name: Azure AD
+      enabled: false
+      allow_sign_up: true
+      client_id: <your_application_id>
+      client_secret: <your_client_secret>
+      scopes: openid email profile
+      auth_url: https://login.microsoftonline.com/<your_tenant_id>/oauth2/v2.0/authorize
+      token_url: https://login.microsoftonline.com/<your_tenant_id>/oauth2/v2.0/token
+      allowed_domains:
+      allowed_groups:
+    server:
+      root_url: https://<your_grafana_domain_name>
   # Enable persistence
   persistence:
     enabled: true
@@ -219,7 +232,7 @@ grafana:
   traefikIngress:
     enabled: true
     tls: false
-    host: grafana.fadi.cetic.be
+    host: <your_grafana_domain_name>
 
 jupyterhub:
   enabled: true
@@ -227,6 +240,8 @@ jupyterhub:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
       type: sqlite-memory
+    service:
+      type: ClusterIP
   rbac:
     enabled: true
   singleuser:
@@ -252,17 +267,26 @@ jupyterhub:
   # ---- auth ----
   hub:
     config:
-      JupyterHub:
-        authenticator_class: ldapauthenticator.LDAPAuthenticator
-      LDAPAuthenticator:
-        bind_dn_template:
-          - 'cn={username},dc=ldap,dc=cetic,dc=be'
-          - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
-        escape_userdn: false
-        lookup_dn: false
-        server_address: fadi-openldap
-        user_attribute: cn
-        use_ssl: false
+    # ---- Uncomment this blok to enable LDAP authentication ----
+      # JupyterHub:
+      #   authenticator_class: ldapauthenticator.LDAPAuthenticator
+      # LDAPAuthenticator:
+      #   bind_dn_template:
+      #     - 'cn={username},dc=ldap,dc=cetic,dc=be'
+      #     - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
+      #   escape_userdn: false
+      #   lookup_dn: false
+      #   server_address: fadi-openldap
+      #   user_attribute: cn
+      #   use_ssl: false
+    # ---- Uncomment this blok to enable AzureAD authentication ----
+      # AzureAdOAuthenticator:
+      #   client_id: <your_application_id>
+      #   client_secret: <your_client_secret>
+      #   oauth_callback_url: https://<your_jupyterhub_domain_name>/hub/oauth_callback
+      #   tenant_id: <your_tenant_id>
+      # JupyterHub:
+      #   authenticator_class: azuread
   # ---- auth ----
   prePuller:
     hook:
@@ -271,7 +295,7 @@ jupyterhub:
   traefikIngress:
     enabled: true
     tls: false
-    host: jupyterhub.fadi.cetic.be
+    host: <your_jupyterhub_domain_name>
 
 nifi:
   enabled: true
@@ -282,27 +306,69 @@ nifi:
   persistence:
     enabled: true
   properties:
-    externalSecure: false
-    isNode: true
-    httpPort: 8080
-    httpsPort: null
-    webProxyHost: # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
+    sensitiveKey: changeMechangeMe # Must have at least 12 characters
+    isNode: false
+    httpsPort: 8443
+    webProxyHost: <your_nifi_domain_name> # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
-    clusterSecure: false
+    customLibPath: "/opt/configuration_resources/custom_lib"
   auth:
+    admin: CN=admin, OU=NIFI
+    SSL:
+      keystorePasswd: changeMe
+      truststorePasswd: changeMe
+  
+  # Automaticaly disabled if OIDC or LDAP enabled 
+    singleUser:
+      username: username
+      password: changemechangeme # Must to have at least 12 characters
+
     ldap:
-      enabled: true
+      enabled: false
       host: #ldap://<hostname>:<port>
-      searchBase: #CN=admin,DC=ldap,DC=example,DC=be
+      searchBase: #CN=Users,DC=ldap,DC=example,DC=be
       admin: #cn=admin,dc=ldap,dc=example,dc=be
       pass: #ChangeMe
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
+      authStrategy: SIMPLE # How the connection to the LDAP server is authenticated. Possible values are ANONYMOUS, SIMPLE, LDAPS, or START_TLS.
+      identityStrategy: USE_DN
+      authExpiration: 12 hours
+    oidc:
+      enabled: false
+      discoveryUrl: https://login.microsoftonline.com/<your_tenant_id>/v2.0/.well-known/openid-configuration
+      clientId: <your_application_id>
+      clientSecret: <your_client_secret>
+      claimIdentifyingUser: email
+      admin: <your_admin_email>
+      ## Request additional scopes, for example profile
+      additionalScopes: 
+  registry:
+    enabled: false
+  # ---- add new processors for InfluxDB ---
+  extraVolumeMounts:
+    - name: mycustomlibs
+      mountPath: /opt/configuration_resources/custom_lib
+  extraVolumes: # this will create the volume from the directory
+    - name: mycustomlibs
+      emptyDir: {}
+  initContainers: 
+    install-processor:
+      image: "ellerbrock/alpine-bash-curl-ssl"
+      imagePullPolicy: "IfNotPresent"
+      command:
+        - bash
+        - -c
+        - |
+          cd /data
+          wget https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar
+      volumeMounts:
+        - name: mycustomlibs
+          mountPath: /data
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    tls: true
-    host: nifi.fadi.cetic.be
+    host: <your_nifi_domain_name>
 
 openldap:
   enabled: true
@@ -489,12 +555,6 @@ airflow:
     password: 'password1'
   metrics:
     enabled: false
-  ingress:
-    enabled: false
-    hosts:
-      - name: airflow.example
-        path: /
-
 
 rabbitmq:
   enabled: false
@@ -510,11 +570,6 @@ rabbitmq:
       enabled: false
   service:
     type: ClusterIP
-  ingress:
-    enabled: false
-    path: /
-    certManager: false
-    hostname: rabbitmq.example
 
 thingsboard:
   enabled: false
@@ -530,11 +585,6 @@ thingsboard:
     enabled: true
     initialDelaySeconds: 60
     periodSeconds: 7
-  ingress:
-    enabled: true
-    annotations: {}
-    hosts:
-      - host: thingsboard.example
 
 mongodb:
   enabled: false
@@ -554,7 +604,8 @@ influxdb:
   auth: 
     admin:
       username: admin
-      password: ""
+      password: "" # Must be longer than 8 characters
+      token: "" # Set a long token
     user: 
       username: ""
       password: ""
@@ -569,22 +620,19 @@ influxdb:
     enabled: true
     storageClass: ""
     size: 8Gi
-  ingress: 
-    enabled: false
-    hostname: 
 
 traefik:
   enabled: true
   dashboardIngress:
     enabled: false
-  dashboardHost: dashboard.fadi.cetic.be
+  dashboardHost: <your_dashboard_domain_name>
   service:
     spec:
       loadBalancerIP: "<your_public_IP>"
   additionalArguments:
     - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
   # Uncomment these 2 lines below to access the dashboard through the ingness
-  # globalArguments:
+  # globalArguments: 
   #   - "--api.insecure=true"
 
 cert-manager:
@@ -594,4 +642,4 @@ cert-manager:
 clusterIssuer:
   enabled: false
   prod: false
-  email: <your e-mail address>
+  email: <your_e-mail_address>
