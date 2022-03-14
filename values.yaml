@@ -345,26 +345,28 @@ nifi:
       additionalScopes: 
   registry:
     enabled: false
-  # ---- add new processors for InfluxDB ---
-  extraVolumeMounts:
-    - name: mycustomlibs
-      mountPath: /opt/configuration_resources/custom_lib
-  extraVolumes: # this will create the volume from the directory
-    - name: mycustomlibs
-      emptyDir: {}
-  initContainers: 
-    install-processor:
-      image: "ellerbrock/alpine-bash-curl-ssl"
-      imagePullPolicy: "IfNotPresent"
-      command:
-        - bash
-        - -c
-        - |
-          cd /data
-          wget https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar
-      volumeMounts:
-        - name: mycustomlibs
-          mountPath: /data
+  # ---- add new processors ----
+  # ---- example for InfluxDB processors ----
+  # extraVolumeMounts:
+  #   - name: mycustomlibs
+  #     mountPath: /opt/configuration_resources/custom_lib
+  # extraVolumes: # this will create the volume from the directory
+  #   - name: mycustomlibs
+  #     emptyDir: {} 
+  # initContainers: 
+  #   install-processor:
+  #     image: "ellerbrock/alpine-bash-curl-ssl"
+  #     imagePullPolicy: "IfNotPresent"
+  #     command:
+  #       - bash
+  #       - -c
+  #       - |
+  #         cd /data
+  #         wget https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar
+  #     volumeMounts:
+  #       - name: mycustomlibs
+  #         mountPath: /data
+  #
   # ---- ingress ----
   traefikIngress:
     enabled: true
