@@ -62,7 +62,7 @@ superset:
   traefikIngress:
     enabled: true
     tls: false
-    host: <your_superset_domain_name>
+    host: superset.example.cetic.be  # change to your superset domainname
 
 postgresql:
   enabled: true
@@ -182,7 +182,7 @@ grafana:
       allowed_domains:
       allowed_groups:
     server:
-      root_url: https://<your_grafana_domain_name>
+      root_url: https://grafana.example.cetic.be  # change to your grafana domainname
   # Enable persistence
   persistence:
     enabled: true
@@ -232,7 +232,7 @@ grafana:
   traefikIngress:
     enabled: true
     tls: false
-    host: <your_grafana_domain_name>
+    host: grafana.example.cetic.be  # change to your grafana domainname
 
 jupyterhub:
   enabled: true
@@ -267,18 +267,18 @@ jupyterhub:
   # ---- auth ----
   hub:
     config:
-    # ---- Uncomment this blok to enable LDAP authentication ----
-      # JupyterHub:
-      #   authenticator_class: ldapauthenticator.LDAPAuthenticator
-      # LDAPAuthenticator:
-      #   bind_dn_template:
-      #     - 'cn={username},dc=ldap,dc=cetic,dc=be'
-      #     - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
-      #   escape_userdn: false
-      #   lookup_dn: false
-      #   server_address: fadi-openldap
-      #   user_attribute: cn
-      #   use_ssl: false
+    # ---- Comment this blok to disable LDAP authentication ----
+      JupyterHub:
+        authenticator_class: ldapauthenticator.LDAPAuthenticator
+      LDAPAuthenticator:
+        bind_dn_template:
+          - 'cn={username},dc=ldap,dc=cetic,dc=be'
+          - 'cn={username},cn=admin,dc=ldap,dc=cetic,dc=be'
+        escape_userdn: false
+        lookup_dn: false
+        server_address: fadi-openldap
+        user_attribute: cn
+        use_ssl: false
     # ---- Uncomment this blok to enable AzureAD authentication ----
       # AzureAdOAuthenticator:
       #   client_id: <your_application_id>
@@ -295,7 +295,7 @@ jupyterhub:
   traefikIngress:
     enabled: true
     tls: false
-    host: <your_jupyterhub_domain_name>
+    host: jupyterhub.example.cetic.be  # change to your jupyterhub domainname
 
 nifi:
   enabled: true
@@ -309,7 +309,7 @@ nifi:
     sensitiveKey: changeMechangeMe # Must have at least 12 characters
     isNode: false
     httpsPort: 8443
-    webProxyHost: <your_nifi_domain_name> # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
+    webProxyHost: nifi.example.cetic.be # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
     customLibPath: "/opt/configuration_resources/custom_lib"
   auth:
@@ -324,11 +324,11 @@ nifi:
       password: changemechangeme # Must to have at least 12 characters
 
     ldap:
-      enabled: false
-      host: #ldap://<hostname>:<port>
-      searchBase: #CN=Users,DC=ldap,DC=example,DC=be
-      admin: #cn=admin,dc=ldap,dc=example,dc=be
-      pass: #ChangeMe
+      enabled: true
+      host: ldap://fadi-openldap:389 # change to your LDAP host
+      searchBase: cn=admin,dc=ldap,dc=cetic,dc=be # change to your LDAP searchBase
+      admin: cn=admin,dc=ldap,dc=example,dc=be # change to your LDAP admin
+      pass: Z2JHHezi4aAA # set a strong password
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
       authStrategy: SIMPLE # How the connection to the LDAP server is authenticated. Possible values are ANONYMOUS, SIMPLE, LDAPS, or START_TLS.
@@ -368,7 +368,7 @@ nifi:
   # ---- ingress ----
   traefikIngress:
     enabled: true
-    host: <your_nifi_domain_name>
+    host: nifi.example.cetic.be  # change to your nifi domainname
 
 openldap:
   enabled: true
@@ -382,7 +382,7 @@ openldap:
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
     LDAP_TLS_VERIFY_CLIENT: "try"
-  adminPassword: password1
+  adminPassword: Z2JHHezi4aAA
   configPassword: password2
   customLdifFiles:
     1-default-users.ldif: |-
