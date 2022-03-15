@@ -56,7 +56,7 @@ superset:
     AUTH_USER_REGISTRATION = True
     AUTH_LDAP_SEARCH = "dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
-    AUTH_LDAP_BIND_PASSWORD = "password1"
+    AUTH_LDAP_BIND_PASSWORD = "Z2JHHezi4aAA"
     AUTH_LDAP_UID_FIELD = "cn"
   # ---- ingress ----
   traefikIngress:
@@ -79,7 +79,7 @@ postgresql:
         auth:
           method: :simple
           username: CN=admin,DC=ldap,DC=cetic,DC=be
-          password: password1
+          password: Z2JHHezi4aAA
         # Search parameters for LDAP users which should be synchronized
       ldap_users:
         base: CN=admin,DC=ldap,DC=cetic,DC=be
@@ -103,7 +103,7 @@ postgresql:
         host: fadi-postgresql
         dbname: postgres # the db name is usually "postgres"
         user: admin # the user name is usually "postgres"
-        password: password1 # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
+        password: Z2JHHezi4aAA # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
       pg_users:
         # Filter for identifying LDAP generated users in the database.
         # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
@@ -128,11 +128,11 @@ postgresql:
       subPath: ""
   postgresql:
     username: admin
-    password: password1
+    password: Z2JHHezi4aAA
     database: postgres
     pghba: |-
-      local all all ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
-      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
+      local all all ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=Z2JHHezi4aAA  ldapsearchfilter=cn=$username
+      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=Z2JHHezi4aAA  ldapsearchfilter=cn=$username
     initdbscripts: |-
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
