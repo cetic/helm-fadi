@@ -20,7 +20,7 @@ superset:
   persistence:
     enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   configFile: |-
     from flask_appbuilder.security.manager import AUTH_DB,AUTH_LDAP
     #---------------------------------------------------------
@@ -56,8 +56,13 @@ superset:
     AUTH_USER_REGISTRATION = True
     AUTH_LDAP_SEARCH = "dc=ldap,dc=cetic,dc=be"
     AUTH_LDAP_BIND_USER = "cn=admin,dc=ldap,dc=cetic,dc=be"
-    AUTH_LDAP_BIND_PASSWORD = "password1"
+    AUTH_LDAP_BIND_PASSWORD = "Z2JHHezi4aAA"
     AUTH_LDAP_UID_FIELD = "cn"
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    tls: false
+    host: superset.example.cetic.be  # change to your superset domainname
 
 postgresql:
   enabled: true
@@ -74,7 +79,7 @@ postgresql:
         auth:
           method: :simple
           username: CN=admin,DC=ldap,DC=cetic,DC=be
-          password: password1
+          password: Z2JHHezi4aAA
         # Search parameters for LDAP users which should be synchronized
       ldap_users:
         base: CN=admin,DC=ldap,DC=cetic,DC=be
@@ -98,7 +103,7 @@ postgresql:
         host: fadi-postgresql
         dbname: postgres # the db name is usually "postgres"
         user: admin # the user name is usually "postgres"
-        password: password1 # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
+        password: Z2JHHezi4aAA # kubectl get secret --namespace fadi <pod_name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
       pg_users:
         # Filter for identifying LDAP generated users in the database.
         # It's the WHERE-condition to "SELECT rolname, oid FROM pg_roles"
@@ -123,11 +128,11 @@ postgresql:
       subPath: ""
   postgresql:
     username: admin
-    password: password1
+    password: Z2JHHezi4aAA
     database: postgres
     pghba: |-
-      local all all ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
-      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=password1  ldapsearchfilter=cn=$username
+      local all all ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=Z2JHHezi4aAA  ldapsearchfilter=cn=$username
+      host all all 0.0.0.0/0  ldap ldapserver=fadi-openldap  ldapport=389 ldaptls=0 ldapbasedn="dc=ldap,dc=cetic,dc=be" ldapbinddn="cn=admin,dc=ldap,dc=cetic,dc=be" ldapbindpasswd=Z2JHHezi4aAA  ldapsearchfilter=cn=$username
     initdbscripts: |-
       #!/bin/sh
       psql -c "create role ldap_users;" postgres admin
@@ -140,12 +145,12 @@ minio:
     enabled: true
     size: 50Gi
   service:
-    type: NodePort
+    type: ClusterIP
 
 grafana:
   enabled: true
   service:
-    type: NodePort
+    type: ClusterIP
   grafana.ini:
     paths:
       data: /var/lib/grafana/data
@@ -165,6 +170,19 @@ grafana:
       enabled: true
       allow_sign_up: true
       config_file: /etc/grafana/ldap.toml
+    auth.azuread:
+      name: Azure AD
+      enabled: false
+      allow_sign_up: true
+      client_id: <your_application_id>
+      client_secret: <your_client_secret>
+      scopes: openid email profile
+      auth_url: https://login.microsoftonline.com/<your_tenant_id>/oauth2/v2.0/authorize
+      token_url: https://login.microsoftonline.com/<your_tenant_id>/oauth2/v2.0/token
+      allowed_domains:
+      allowed_groups:
+    server:
+      root_url: https://grafana.example.cetic.be  # change to your grafana domainname
   # Enable persistence
   persistence:
     enabled: true
@@ -214,6 +232,11 @@ grafana:
       username = "cn"
       member_of = "memberOf"
       email =  "email"
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    tls: false
+    host: grafana.example.cetic.be  # change to your grafana domainname
 
 jupyterhub:
   enabled: false
@@ -221,6 +244,8 @@ jupyterhub:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
       type: sqlite-memory
+    service:
+      type: ClusterIP
   rbac:
     enabled: true
   singleuser:
@@ -246,6 +271,7 @@ jupyterhub:
   # ---- auth ----
   hub:
     config:
+    # ---- Comment this blok to disable LDAP authentication ----
       JupyterHub:
         authenticator_class: ldapauthenticator.LDAPAuthenticator
       LDAPAuthenticator:
@@ -257,38 +283,98 @@ jupyterhub:
         server_address: fadi-openldap
         user_attribute: cn
         use_ssl: false
+    # ---- Uncomment this blok to enable AzureAD authentication ----
+      # AzureAdOAuthenticator:
+      #   client_id: <your_application_id>
+      #   client_secret: <your_client_secret>
+      #   oauth_callback_url: https://<your_jupyterhub_domain_name>/hub/oauth_callback
+      #   tenant_id: <your_tenant_id>
+      # JupyterHub:
+      #   authenticator_class: azuread
   # ---- auth ----
   prePuller:
     hook:
       enabled: false
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    tls: false
+    host: jupyterhub.example.cetic.be  # change to your jupyterhub domainname
 
 nifi:
   enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
+    nodePort: ""
   postStart: /opt/nifi/psql; wget -P /opt/nifi/psql https://jdbc.postgresql.org/download/postgresql-42.2.6.jar
   persistence:
     enabled: true
   properties:
-    externalSecure: false
-    isNode: true
-    httpPort: 8080
-    httpsPort: null
-    webProxyHost:
+    sensitiveKey: changeMechangeMe # Must have at least 12 characters
+    isNode: false
+    httpsPort: 8443
+    webProxyHost: nifi.example.cetic.be # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
-    clusterSecure: false
+    customLibPath: "/opt/configuration_resources/custom_lib"
   auth:
+    admin: CN=admin, OU=NIFI
+    SSL:
+      keystorePasswd: changeMe
+      truststorePasswd: changeMe
+  
+  # Automaticaly disabled if OIDC or LDAP enabled 
+    singleUser:
+      username: username
+      password: changemechangeme # Must to have at least 12 characters
+
     ldap:
-      enabled: false
-      host: ldap://<hostname>:<port>
-      searchBase: CN=Users,DC=example,DC=com
-      admin: cn=admin,dc=example,dc=be
-      pass: password
+      enabled: true
+      host: ldap://fadi-openldap:389 # change to your LDAP host
+      searchBase: cn=admin,dc=ldap,dc=cetic,dc=be # change to your LDAP searchBase
+      admin: cn=admin,dc=ldap,dc=example,dc=be # change to your LDAP admin
+      pass: Z2JHHezi4aAA # set a strong password
       searchFilter: (objectClass=*)
       userIdentityAttribute: cn
-  ingress:
+      authStrategy: SIMPLE # How the connection to the LDAP server is authenticated. Possible values are ANONYMOUS, SIMPLE, LDAPS, or START_TLS.
+      identityStrategy: USE_DN
+      authExpiration: 12 hours
+    oidc:
+      enabled: false
+      discoveryUrl: https://login.microsoftonline.com/<your_tenant_id>/v2.0/.well-known/openid-configuration
+      clientId: <your_application_id>
+      clientSecret: <your_client_secret>
+      claimIdentifyingUser: email
+      admin: <your_admin_email>
+      ## Request additional scopes, for example profile
+      additionalScopes: 
+  registry:
     enabled: false
-    hosts: []
+  # ---- add new processors ----
+  # ---- example for InfluxDB processors ----
+  # extraVolumeMounts:
+  #   - name: mycustomlibs
+  #     mountPath: /opt/configuration_resources/custom_lib
+  # extraVolumes: # this will create the volume from the directory
+  #   - name: mycustomlibs
+  #     emptyDir: {} 
+  # initContainers: 
+  #   install-processor:
+  #     image: "ellerbrock/alpine-bash-curl-ssl"
+  #     imagePullPolicy: "IfNotPresent"
+  #     command:
+  #       - bash
+  #       - -c
+  #       - |
+  #         cd /data
+  #         wget https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar
+  #     volumeMounts:
+  #       - name: mycustomlibs
+  #         mountPath: /data
+  #
+  # ---- ingress ----
+  traefikIngress:
+    enabled: true
+    host: nifi.example.cetic.be  # change to your nifi domainname
 
 openldap:
   enabled: true
@@ -302,7 +388,7 @@ openldap:
     LDAP_TLS_ENFORCE: "false"
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
     LDAP_TLS_VERIFY_CLIENT: "try"
-  adminPassword: password1
+  adminPassword: Z2JHHezi4aAA
   configPassword: password2
   customLdifFiles:
     1-default-users.ldif: |-
@@ -312,7 +398,7 @@ openldap:
 phpldapadmin:
   enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
   env:
     PHPLDAPADMIN_LDAP_HOSTS: "fadi-openldap"
 
@@ -347,7 +433,7 @@ kibana:
 nginx_ldapauth_proxy:
   enabled: false
   service:
-    type: NodePort
+    type: ClusterIP
     externalPort: 5601
   proxy:
     port: 443
@@ -394,11 +480,18 @@ adminer:
   config:
     design: "pepa-linha"
   service:
-    type: NodePort
+    type: ClusterIP
 
 mlflow:
   enabled: false
-  backend_store_uri: "postgresql://admin:password1@fadi-postgresql.fadi.svc.cluster.local:5432"
+  db:
+    default:
+      enabled: false
+    host: fadi-postgresql
+    port: 5432
+    user: admin
+    password: password1
+    database: postgres
 
 seldon-core-operator:
   enabled: false
@@ -448,6 +541,114 @@ airflow:
     password: password1
     port: 5432
     user: admin
+  service:
+    type: ClusterIP
+    port: 8080
+  auth:
+    forcePassword: false
+    username: admin
+    password: password1
+    fernetKey: _WJG5F2fIZ6q5LH03MQE45stfYpuLpeqzYcqOIxvCbs=
+  ldap:
+    enabled: false
+    uri: 'ldap://fadi-openldap:389'
+    base: 'dc=ldap,dc=cetic,dc=be'
+    binddn: 'cn=admin,dc=ldap,dc=cetic,dc=be'
+    bindpw: 'password1'
+    uidField: 'cn'
+  redis:
+    enabled: true
+    password: 'password1'
+  metrics:
+    enabled: false
+
+rabbitmq:
+  enabled: false
+  auth:
+    username: admin
+    password: password1
+  ldap:
+    enabled: false
+    servers: ldap-server
+    port: '389'
+    user_dn_pattern: cn=${username},dc=example,dc=org
+    tls:
+      enabled: false
+  service:
+    type: ClusterIP
+
+thingsboard:
+  enabled: false
+  rabbitmq:
+    enabled: false
+  TB_RABBIT_MQ:
+    TB_QUEUE_TYPE: rabbitmq
+    TB_QUEUE_RABBIT_MQ_USERNAME: admin
+    TB_QUEUE_RABBIT_MQ_PASSWORD: password1
+    TB_QUEUE_RABBIT_MQ_HOST: rabbitmq
+    TB_QUEUE_RABBIT_MQ_PORT: 5672
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 7
+
+mongodb:
+  enabled: false
+  persistence:
+    enabled: true
+  auth:
+    enabled: true
+    rootPassword: "password1"
+  initdbScripts:
+      create_admin_user.sh: |
+          $MONGODB_BIN_DIR/mongo admin --host 127.0.0.1 --port $MONGODB_PORT_NUMBER -u root -p $MONGODB_ROOT_PASSWORD << EOF
+          db.createUser({ user: "admin" , pwd: "password1", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
+          EOF
+
+influxdb:
+  enabled: false
+  auth: 
+    admin:
+      username: admin
+      password: "" # Must be longer than 8 characters
+      token: "" # Set a long token
+    user: 
+      username: ""
+      password: ""
+      bucket: ""
+  influxdb:
+    replicaCount: 1
+    service: 
+      type: ClusterIP
+      port: 8086
+      rpcPort: 8088
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 8Gi
+
+traefik:
+  enabled: true
+  dashboardIngress:
+    enabled: false
+  dashboardHost: <your_dashboard_domain_name>
+  # Uncomment these 2 lines below to access the dashboard through the ingness
+  # globalArguments: 
+  #   - "--api.insecure=true"
+  additionalArguments:
+    - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
+  service:
+    spec:
+      loadBalancerIP: # "<your_public_IP>"
+
+cert-manager:
+  enabled: false
+  installCRDs: true
+
+clusterIssuer:
+  enabled: false
+  prod: false
+  email: <your_e-mail_address>
 
 keycloak:
   enabled: true
