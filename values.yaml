@@ -170,6 +170,17 @@ grafana:
       enabled: true
       allow_sign_up: true
       config_file: /etc/grafana/ldap.toml
+    auth.generic_oauth:
+      enabled: false
+      scopes: openid email profile
+      name: Keycloak
+      tls_skip_verify_insecure: false
+      allow_sign_up: true
+      client_id: <your_client_id>
+      client_secret: <your_client_secret>
+      auth_url: http://<your_keycloak_URL>/auth/realms/<your_realm>/protocol/openid-connect/auth
+      token_url: http://<your_keycloak_URL>/auth/realms/<your_realm>/protocol/openid-connect/token
+      api_url: http://<your_keycloak_URL>/auth/realms/<your_realm>/protocol/openid-connect/userinfo
     auth.azuread:
       name: Azure AD
       enabled: false
@@ -182,14 +193,10 @@ grafana:
       allowed_domains:
       allowed_groups:
     server:
-      root_url: https://grafana.example.cetic.be  # change to your grafana domainname
+      root_url: http://grafana.example.cetic.be  # change to your grafana domainname
   # Enable persistence
   persistence:
     enabled: true
-  config:
-    useGrafanaIniFile: true
-    grafanaIniConfigMap: keycloakconfig
-    grafanaIniSecret:
   # Administrator credentials when not using an existing secret (see below)
   adminUser: admin
 
@@ -199,7 +206,7 @@ grafana:
   ## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
   ## ref: http://docs.grafana.org/installation/ldap/#configuration
   ldap:
-    enabled: false
+    enabled: true
     # `existingSecret` is a reference to an existing secret containing the ldap configuration
     # for Grafana in a key `ldap-toml`.
     existingSecret: ""
@@ -291,7 +298,20 @@ jupyterhub:
       #   tenant_id: <your_tenant_id>
       # JupyterHub:
       #   authenticator_class: azuread
-  # ---- auth ----
+    # ---- Uncomment this blok to enable Keycloak authentication ----
+      # GenericOAuthenticator:
+      #   client_id: <your_client_id>
+      #   client_secret: <your_client_secret>
+      #   oauth_callback_url: http://<your_jupyterhub_domain_name>/hub/oauth_callback
+      #   authorize_url: http://<your_keycloak_URL>/auth/realms/<your_realm>/protocol/openid-connect/auth
+      #   token_url: http://<your_keycloak_URL>/auth/realms/<your_realm>/protocol/openid-connect/token
+      #   userdata_url: http://<your_keycloak_URL>/auth/realms/<your_realm>/protocol/openid-connect/userinfo
+      #   login_service: keycloak
+      #   username_key: email 
+      #   userdata_params:
+      #     state: state
+      # JupyterHub:
+      #   authenticator_class: generic-oauth
   prePuller:
     hook:
       enabled: false
@@ -315,7 +335,7 @@ nifi:
     httpsPort: 8443
     webProxyHost: nifi.example.cetic.be # set it by the same host than nifi.traefikIngress.host if traefik ingress is enabled
     clusterPort: 6007
-    customLibPath: "/opt/configuration_resources/custom_lib"
+    # customLibPath: "/opt/configuration_resources/custom_lib"
   auth:
     admin: CN=admin, OU=NIFI
     SSL:
@@ -340,8 +360,8 @@ nifi:
       authExpiration: 12 hours
     oidc:
       enabled: false
-      discoveryUrl: https://login.microsoftonline.com/<your_tenant_id>/v2.0/.well-known/openid-configuration
-      clientId: <your_application_id>
+      discoveryUrl: https://<your_keycloak_URL>/auth/realms/<your_realm>/.well-known/openid-configuration
+      clientId: <your_client_id>
       clientSecret: <your_client_secret>
       claimIdentifyingUser: email
       admin: <your_admin_email>
@@ -652,6 +672,8 @@ clusterIssuer:
 
 keycloak:
   enabled: true
+  service:
+    type: ClusterIP
   auth:
     ## Create administrator user on boot.
     ##
@@ -666,15 +688,13 @@ keycloak:
     managementPassword: "password2"
   postgresql:
     enabled: false
-    postgresqlUsername: bn_keycloak
-    postgresqlPassword: some-password
-    postgresqlDatabase: keycloak
-    existingSecret:
-    persistence:
-      enabled: true
   externalDatabase:
     host: "fadi-postgresql"
     port: 5432
     user: admin
-    password: "password1"
+    password: "Z2JHHezi4aAA"
     database: postgres
+  traefikIngress:
+    enabled: true
+    tls: false
+    host: keycloak.example.cetic.be  # change to your keycloak domainname

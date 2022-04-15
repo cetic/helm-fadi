@@ -167,6 +167,45 @@ spec:
 ---
 {{- end }}
 
+{{- if and (.Values.keycloak.enabled) (.Values.keycloak.traefikIngress.enabled) -}}
+{{- if .Values.keycloak.traefikIngress.tls }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.keycloak.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+      - name: {{ .Release.Name }}-keycloak
+        port: 80
+  tls:
+    secretName: {{ .Values.keycloak.traefikIngress.host }}  
+---
+{{- end }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak-http
+spec:
+  entryPoints:
+    - web
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.keycloak.traefikIngress.host }}`) && PathPrefix(`/`)
+    services:
+    - name: {{ .Release.Name }}-keycloak
+      port: 80
+    {{- if .Values.keycloak.traefikIngress.tls }}
+    middlewares:
+      - name: https-redirect
+    {{- end }}
+---
+{{- end }}
+
 {{- if .Values.clusterIssuer.enabled }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
