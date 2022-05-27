@@ -75,4 +75,22 @@ spec:
 ---
 {{- end }}
 
+{{- if .Values.keycloak.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.keycloak.traefikIngress.host }}
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: {{ .Values.keycloak.traefikIngress.host }}
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - {{ .Values.keycloak.traefikIngress.host }}
+---
+{{- end }}
+
 {{ end }}
