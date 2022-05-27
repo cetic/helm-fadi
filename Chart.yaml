@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.2.13
-appVersion: 0.2.13
+version: 0.3.0
+appVersion: 0.3.0
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -48,7 +48,7 @@ dependencies:
   repository: https://jupyterhub.github.io/helm-chart/
   condition: jupyterhub.enabled
 - name: nifi
-  version: ~0.6.1
+  version: ~1.0.6
   repository: https://cetic.github.io/helm-charts/
   condition: nifi.enabled
 - name: openldap
@@ -135,3 +135,7 @@ dependencies:
   version: ~10.6.2
   repository: https://helm.traefik.io/traefik
   condition: traefik.enabled
+- name: cert-manager
+  version: ~1.7.1
+  repository: https://charts.jetstack.io
+  condition: cert-manager.enabled

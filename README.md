@@ -99,6 +99,8 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `rabbitmq.enabled`                                                            | Enable [rabbitmq](https://artifacthub.io/packages/helm/bitnami/rabbitmq)                                                              | `false`                         |
 | `thingsboard.enabled`                                                            | Enable [thingsboard](https://github.com/cetic/helm-thingsboard)                                                              | `false`                         |
 | `influxdb.enabled`                                                            | Enable [influxdb](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)                                                              | `false`                         |
+| `traefik.enabled`                                                            | Enable [traefik](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)                                                              | `true`                         |
+| `cert-manager.enabled`                                                            | Enable [cert-manager](https://github.com/cert-manager/cert-manager)                                                              | `false`                         |
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).

@@ -1,0 +1,78 @@
+{{- if .Values.clusterIssuer.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: fadi-letsencrypt
+spec:
+  acme:
+    {{- if .Values.clusterIssuer.prod }}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    {{ else }}
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    {{- end }}
+    email: {{ .Values.clusterIssuer.email }}
+    privateKeySecretRef:
+      name: fadi-letsencrypt-private-key
+    solvers:
+      - http01:
+          ingress:
+            ingressTemplate:
+              metadata:
+                annotations:
+                  kubernetes.io/ingress.class: traefik-cert-manager
+---
+{{- if .Values.grafana.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.grafana.traefikIngress.host }}
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: {{ .Values.grafana.traefikIngress.host }}
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - {{ .Values.grafana.traefikIngress.host }}
+---
+{{- end }}
+
+{{- if .Values.superset.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.superset.traefikIngress.host }}
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: {{ .Values.superset.traefikIngress.host }}
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - {{ .Values.superset.traefikIngress.host }}
+---
+{{- end }}
+
+{{- if .Values.jupyterhub.traefikIngress.tls -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.jupyterhub.traefikIngress.host }}
+  namespace: default
+  labels:
+    "use-http01-solver": "true"
+spec:
+  secretName: {{ .Values.jupyterhub.traefikIngress.host }}
+  issuerRef:
+    name: fadi-letsencrypt
+    kind: ClusterIssuer
+  dnsNames:
+    - {{ .Values.jupyterhub.traefikIngress.host }}
+---
+{{- end }}
+
+{{ end }}

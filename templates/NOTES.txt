@@ -1,7 +1,7 @@
 Thank you for installing FADI!
 
 * To list the different services of fadi framework: `minikube service list`
-* To list the different fadi pods and their status: `kubectl get pods`
+* To list the different fadi pods and their status: `kubectl get pods -n fadi`
 * To access a service in your browser, type for instance: `minikube service -n fadi fadi-nifi` (if you are on minikube)
 * You can list all the addresses by typing: `kubectl get ingress -n fadi` (if you setup ingress definitions)
 
