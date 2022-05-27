@@ -4,7 +4,7 @@
 # Declare variables to be passed into your templates.
 
 spark:
-  enabled: false
+  enabled: true
   Master:
     Name: spark-master
   WebUi:
@@ -16,7 +16,7 @@ spark:
     Replicas: 0
 
 superset:
-  enabled: false
+  enabled: true
   persistence:
     enabled: true
   service:
@@ -246,7 +246,7 @@ grafana:
     host: grafana.example.cetic.be  # change to your grafana domainname
 
 jupyterhub:
-  enabled: false
+  enabled: true
   proxy:
     secretToken: 'af83775ec3bfaf0507ce596df51d491e7ed54450adc454038fa7405495465f19'
     db:
@@ -322,7 +322,7 @@ jupyterhub:
     host: jupyterhub.example.cetic.be  # change to your jupyterhub domainname
 
 nifi:
-  enabled: false
+  enabled: true
   service:
     type: ClusterIP
     nodePort: ""
@@ -416,7 +416,7 @@ openldap:
 
 
 phpldapadmin:
-  enabled: false
+  enabled: true
   service:
     type: ClusterIP
   env:
