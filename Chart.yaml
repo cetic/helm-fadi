@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
 name: fadi
-version: 0.3.1
-appVersion: 0.3.1
+version: 0.3.2
+appVersion: 0.3.2
 description: FADI is a Cloud Native platform for Big Data based on mature open source tools. 
 keywords:
   - fadi
@@ -14,6 +14,7 @@ keywords:
   - cassandra
   - kafka
   - mongodb
+  - fadeployer
 home: https://github.com/cetic/fadi
 icon: https://raw.githubusercontent.com/cetic/fadi/master/doc/images/logo.png
 source:
@@ -143,3 +144,7 @@ dependencies:
   version: ~2.4.7
   repository: https://charts.bitnami.com/bitnami
   condition: keycloak.enabled
+- name: fadeployer
+  version: 0.2.0
+  repository: https://git.cetic.be/api/v4/projects/1113/packages/helm/stables
+  condition: fadeployer.enabled

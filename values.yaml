@@ -141,6 +141,8 @@ postgresql:
 
 minio:
   enabled: false
+  accessKey: "TShGemD0Ix"
+  secretKey: "LcCbxVDXlD"
   persistence:
     enabled: true
     size: 50Gi
@@ -543,8 +545,7 @@ zabbix:
     POSTGRES_USER: admin
     POSTGRES_PASSWORD: password1
     POSTGRES_DB: zabbix
-
-
+    
 drupal:
   enabled: false
   ingress:
@@ -698,3 +699,18 @@ keycloak:
     enabled: true
     tls: false
     host: keycloak.example.cetic.be  # change to your keycloak domainname
+    
+fadeployer:
+  enabled: true
+  env:
+    DJANGO_LOGLEVEL: "info"
+    DEBUG: "True"
+    DATABASE_ENGINE: "postgresql_psycopg2"
+    DATABASE_NAME: "postgres"
+    DATABASE_USERNAME: "admin"
+    DATABASE_PASSWORD: "Z2JHHezi4aAA"
+    DATABASE_HOST: "fadi-postgresql"
+    MINIO_ENDPOINT: "fadi-minio:9000"
+    MINIO_EXTERNAL_ENDPOINT: "fadi-minio:9000"
+    MINIO_ACCESS_KEY: "TShGemD0Ix"
+    MINIO_SECRET_KEY: "LcCbxVDXlD"
