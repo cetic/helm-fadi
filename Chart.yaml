@@ -143,3 +143,7 @@ dependencies:
   version: ~2.4.7
   repository: https://charts.bitnami.com/bitnami
   condition: keycloak.enabled
+- name: fadeployer
+  version: 0.2.0
+  repository: https://git.cetic.be/api/v4/projects/1113/packages/helm/stable
+  condition: fadeployer.enabled
