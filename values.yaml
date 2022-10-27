@@ -140,7 +140,7 @@ postgresql:
       psql -c "create database zabbix;" postgres admin
 
 minio:
-  enabled: false
+  enabled: true
   accessKey: "TShGemD0Ix"
   secretKey: "LcCbxVDXlD"
   persistence:

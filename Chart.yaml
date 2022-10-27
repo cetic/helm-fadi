@@ -25,7 +25,7 @@ maintainers:
   - name: AyadiAmen
 dependencies:
 - name: spark
-  version: ~4.1.0
+  version: ~6.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: spark.enabled
 - name: superset
@@ -61,11 +61,11 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: phpldapadmin.enabled
 - name: kafka
-  version: ~12.2.1
+  version: ~16.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: kafka.enabled
 - name: cassandra
-  version: ~7.0.1
+  version: ~9.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: cassandra.enabled
 - name: elasticsearch
@@ -113,11 +113,11 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: drupal.enabled
 - name: airflow
-  version: ~9.0.0
+  version: 12.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: airflow.enabled
 - name: rabbitmq
-  version: ~8.11.5
+  version: 11.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: rabbitmq.enabled
 - name: thingsboard
@@ -125,7 +125,7 @@ dependencies:
   repository: https://cetic.github.io/helm-charts/
   condition: thingsboard.enabled
 - name: mongodb
-  version: ~10.11.1
+  version: ~13.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: mongodb.enabled
 - name: influxdb
@@ -141,7 +141,7 @@ dependencies:
   repository: https://charts.jetstack.io
   condition: cert-manager.enabled
 - name: keycloak
-  version: ~2.4.7
+  version: ~10.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: keycloak.enabled
 - name: fadeployer
