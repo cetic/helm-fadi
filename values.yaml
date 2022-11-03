@@ -566,4 +566,6 @@ fadeployer:
     MINIO_EXTERNAL_ENDPOINT: "fadi-minio:9000"
     MINIO_ACCESS_KEY: "admin"
     MINIO_SECRET_KEY: "R43SDcj1eRYYbPOd"
+    MINIO_DASHBOARD_URL: "http://minio.quadride.cetic.be:2080/"
+    AIRFLOW_DASHBOARD_URL: "http://airflow.cetic.be.quadride.cetic.be:2080/"
   imagePullSecrets: secret-nexus-docker-quadride
