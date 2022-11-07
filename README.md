@@ -101,6 +101,7 @@ Each requirement is configured with the options provided by that Chart. Please c
 | `influxdb.enabled`                                                            | Enable [influxdb](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)                                                              | `false`                         |
 | `traefik.enabled`                                                            | Enable [traefik](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)                                                              | `true`                         |
 | `cert-manager.enabled`                                                            | Enable [cert-manager](https://github.com/cert-manager/cert-manager)                                                              | `false`                         |
+| `fadeployer.enabled`                                                            | Enable [fadeployer](https://git.cetic.be/quadride/helm-fadeployer/-/tree/feature/fadeployer-in-fadi)                                                              | `false`                         |
 ## Contributing
 
 Feel free to contribute by making a [pull request](https://github.com/cetic/helm-fadi/pull/new/master).

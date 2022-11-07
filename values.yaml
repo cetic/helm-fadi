@@ -553,14 +553,14 @@ zabbix:
     ZBX_SERVER_PORT: 10051
     enabled: true
 fadeployer:
-  enabled: true
+  enabled: false
   env:
     DJANGO_LOGLEVEL: "info"
     DEBUG: "True"
     DATABASE_ENGINE: "postgresql_psycopg2"
     DATABASE_NAME: "postgres"
     DATABASE_USERNAME: "admin"
-    DATABASE_PASSWORD: "password1"
+    DATABASE_PASSWORD: "R43SDcj1eRYYbPOd"
     DATABASE_HOST: "fadi-postgresql"
     MINIO_ENDPOINT: "fadi-minio:9000"
     MINIO_EXTERNAL_ENDPOINT: "fadi-minio:9000"
@@ -569,3 +569,11 @@ fadeployer:
     MINIO_DASHBOARD_URL: "http://minio.quadride.cetic.be:2080/"
     AIRFLOW_DASHBOARD_URL: "http://airflow.cetic.be.quadride.cetic.be:2080/"
   imagePullSecrets: secret-nexus-docker-quadride
+clusterIssuer:
+  enabled: false  
+rabbitmq:
+  enabled: false
+keycloak:
+  enabled: false
+influxdb:
+  enabled: false
